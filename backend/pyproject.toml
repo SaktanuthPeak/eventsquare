@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "apiapp"
+version = "0.1.0"
+description = ""
+authors = ["jakee <jakee.indapanya@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+fastapi = ">=0.115.8,<0.116.0"
+pydantic-settings = "^2.7.1"
+loguru = "^0.7.3"
+pydantic = { extras = ["email"], version = "^2.11.9" }
+pymongo = "^4.15.1"
+jwcrypto = "^1.5.6"
+python-multipart = "^0.0.20"
+werkzeug = "^3.1.3"
+python-dotenv = "^1.0.1"
+beanie = "^1.29.0"
+python-jose = "^3.4.0"
+
+[tool.poetry.group.dev.dependencies]
+uvicorn = "^0.34.0"
+openapi-python-client = "^0.23.1"
+ruff = "^0.9.5"
+
+[tool.poetry.scripts]
+velo = "cli.main:main"
+controller = "apiapp.cmd.controller:main"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

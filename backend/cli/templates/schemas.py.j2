@@ -1,0 +1,28 @@
+"""
+{{ pascal_case }} module schemas (DTOs)
+"""
+from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+
+from ...core.base_schemas import BaseSchema
+
+
+class {{ pascal_case }}Request(BaseModel):
+    """Request schema for {{ feature_name }} operations"""
+    # TODO: Add your request fields here
+    pass
+
+
+class {{ pascal_case }}Response(BaseSchema):
+    """Response schema for {{ feature_name }} operations"""
+    id: str
+    # TODO: Add your response fields here
+
+    @classmethod
+    def from_entity(cls, entity) -> "{{ pascal_case }}Response":
+        """Convert entity to response schema"""
+        return cls(
+            id=str(entity.id),
+            # TODO: Map entity fields to response fields
+        )

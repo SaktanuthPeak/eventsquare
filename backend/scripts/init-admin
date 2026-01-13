@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+import sys
+
+from apiapp.modules.user.model import User
+import datetime
+from apiapp.infrastructure.database import init_beanie
+import asyncio
+
+
+async def create_user_admin():
+    class Setting:
+        def __init__(self):
+            self.DATABASE_URI = "mongodb://localhost/appdb"
+
+    settings = Setting()
+    if len(sys.argv) > 1:
+        settings.DATABASE_URI = "mongodb://mongodb/appdb"
+
+    await init_beanie(settings)
+
+    print("start check admin")
+    user = await User.find_one(User.username == "admin")
+
+    if user:
+        print("Found admin user", user)
+        return
+    print("end check admin")
+
+    print("start create admin")
+    user = User(
+        email="admin@example.com",
+        username="admin",
+        hashed_password="",
+        name="admin system",
+        role="admin",
+        is_active=True,
+    )
+    print(user.email)
+    user.set_password("p@ssw0rd")
+    await user.save()
+    print("finish")
+
+
+if __name__ == "__main__":
+    asyncio.run(create_user_admin())

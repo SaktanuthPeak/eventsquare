@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.env.local
+.env.dev
+
+# Poetry
+.poetry/
+poetry.lock
+
+# FastAPI logs
+logs/
+*.log
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+*.cover
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.swp
+
+# Database
+*.sqlite3
+
+# Mypy
+.mypy_cache/
+
+# Pytest cache
+.pytest_cache/
+
+# Docker
+*.dockerignore
+docker-compose.override.yml

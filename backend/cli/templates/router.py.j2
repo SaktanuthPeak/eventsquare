@@ -1,0 +1,25 @@
+"""
+{{ pascal_case }} API router with REST endpoints
+"""
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_pagination import Page, Params
+
+from .use_case import get_{{ feature_name }}_use_case, {{ pascal_case }}UseCase
+from .schemas import {{ pascal_case }}Request, {{ pascal_case }}Response
+
+
+router = APIRouter(prefix="/v1/{{ feature_name }}", tags=["{{ pascal_case }}"])
+
+
+@router.get("/", dependencies=[Depends(Params)], response_model=Page[{{ pascal_case }}Response])
+async def get_{{ feature_name }}_list(
+    use_case: {{ pascal_case }}UseCase = Depends(get_{{ feature_name }}_use_case),
+):
+    """
+    Get a list of {{ feature_name }}.
+    This endpoint retrieves paginated list of {{ feature_name }} with filtering.
+    """
+    # ✅ Base get_list method returns Page[{{ pascal_case }}Response] automatically
+    return await use_case.get_list()
+
+# TODO: Add your additional API endpoints here
