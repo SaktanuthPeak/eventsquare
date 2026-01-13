@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@100..900&display=swap');
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@plugin "daisyui";
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+@layer base {
+  html {
+    font-family: "Noto Sans Thai", sans-serif;
+  }
+}
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    prefersdark: true;
+    color-scheme: "dark";
+    --color-base-100: oklch(98% 0.003 247.858);
+    --color-base-200: oklch(96% 0.003 264.542);
+    --color-base-300: oklch(96% 0.001 286.375);
+    --color-base-content: #212121;
+    --color-primary: #212121;
+    --color-primary-content: oklch(98% 0.003 247.858);
+    --color-secondary: #C6FE00;
+    --color-secondary-content: #212121;
+    --color-accent: oklch(54% 0.281 293.009);
+    --color-accent-content: oklch(98% 0.003 247.858);
+    --color-neutral: #212121;
+    --color-neutral-content: #C6FE00;
+    --color-info: oklch(74% 0.16 232.661);
+    --color-info-content: #212121;
+    --color-success: oklch(76% 0.177 163.223);
+    --color-success-content: oklch(37% 0.077 168.94);
+    --color-warning: oklch(82% 0.189 84.429);
+    --color-warning-content: #212121;
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 2rem;
+    --radius-field: 1.25rem;
+    --radius-box: 1rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 1;
+    --noise: 0;
+    
+  }
+  
+  .admin-navbar {
+    @apply fixed z-[30] top-0 bg-primary text-base-100 min-w-screen max-w-screen h-[60px] content-center flex items-center justify-between px-6;
+  }
+
+  .manager-navbar {
+    @apply fixed z-[30] top-0 bg-primary text-base-100 min-w-screen max-w-screen h-[60px] content-center flex items-center justify-between px-6;
+  }
+  
+    .event-navbar{
+      @apply   top-0 bg-base-100 text-primary min-w-screen
+       max-w-screen h-[125px] justify-center content-end flex flex-row
+        items-end px-[170px] pb-0 mt-[20px] ;
+    }
+
+  .admin-navbar-button {
+    @apply bg-primary w-[90px] cursor-pointer rounded-full outline-1 outline-base-100 transition-all hover:bg-[#313131] px-4 py-2 text-sm;
+  }
+
+  .login-navbar-button {
+    @apply btn w-[90px] h-[35px] cursor-pointer rounded-full outline-base-100 transition-all px-4 text-sm;
+  }
+
+  .button {
+    @apply bg-primary w-[220px] cursor-pointer rounded-full transition-all hover:bg-[#313131] px-4 py-2;
+  }
+
+  .event-navbar-event-ctrl-btn{
+    @apply  flex py-[8px] self-center justify-center w-[150px] 
+     text-[#676D75] font-medium text-[16px] 
+     hover:text-primary hover:shadow-[0_2px_0_0_currentColor]
+     focus:text-primary focus:shadow-[0_2px_0_0_currentColor]
+     active:text-primary active:shadow-[0_2px_0_0_currentColor]
+     cursor-pointer transition-all duration-100;
+  }
+  
+  .table-header-center{
+    @apply   w-[125px];
+  }
+
+
+  .create-org-modal {
+    @apply flex flex-col bg-base-100 text-primary px-[40px] py-[20px] w-[600px] max-w-2xl gap-[20px] 
+  }
+
+  .create-org-label {
+    @apply w-[160px] text-[12px] font-semibold text-start self-center
+  }
+
+  .create-org-input {
+    @apply border-[1px] border-black/10 rounded-sm w-full h-[32px] text-[12px] text-black/75 px-2 self-start
+  }
+
+  .create-org-form-section {
+    @apply pb-[10px]
+  }
+
+  .create-org-form-section-title {
+    @apply font-extrabold text-start text-[18px] my-1.5
+  }
+
+  .create-org-form-section-container {
+    @apply grid gap-[10px] py-[5px] items-center
+  }
+
+  .create-org-form-section-content {
+    @apply  flex flex-col sm:flex-row w-full justify-center items-center
+  }
+
+  .hideScroll::-webkit-scrollbar { display: none; }
+	.hidescroll {
+  	-ms-overflow-style: none;  /* IE and Edge */
+  	scrollbar-width: none;     /* Firefox */
+	}
+	.spacer { height: 10vh; }
+	#scrollingBlock {
+		border: 2px solid black;
+		/*box-shadow: 10px 5px 5px red;*/
+		overflow-y: scroll;
+	}
+
+  .modal {
+    z-index: 40;
+  }
+
+  
+
+  .modal-backdrop{
+    z-index: 30;
+  }
+
+  .bits-popover-content {
+    z-index: 60 !important;
+    position: relative;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .create-ticket-modal {
+    @apply flex flex-col bg-base-100 text-primary px-[40px] py-[20px] w-[1000px] max-w-5xl gap-[20px] 
+  }
