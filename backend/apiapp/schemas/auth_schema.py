@@ -2,13 +2,14 @@ import datetime
 
 import typing as t
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
-from ...core.base_schemas import BaseSchema
+from ..utils.schema import PydanticObjectId
+from ..schemas import BaseSchema
+from ..schemas.user_schema import LoginUserResponse
 
 
-
-class Token(BaseModel):
+class TokenResponse(BaseSchema):
     access_token: str
     refresh_token: str
     token_type: str
@@ -18,16 +19,13 @@ class Token(BaseModel):
     issued_at: datetime.datetime
 
 
-class TokenData(BaseModel):
-    user_id: str | None = None
-
-
 class SignIn(BaseSchema):
     username: str
     password: str
 
 
 class Payload(BaseSchema):
+    id: PydanticObjectId = Field(alias="_id", serialization_alias="id")
     roles: t.List[str]
 
 
@@ -39,7 +37,7 @@ class AccessTokenResponse(BaseSchema):
 
 
 class SignInResponse(AccessTokenResponse):
-    # user_info: LoginUserResponse
+    user_info: LoginUserResponse
     access_token_expires_in: int
     ...
 
@@ -47,8 +45,3 @@ class SignInResponse(AccessTokenResponse):
 class RefreshToken(BaseSchema):
     grant_type: str
     refresh_token: str
-
-
-class GetAccessTokenResponse(BaseModel):
-    access_token: str
-    token_type: str

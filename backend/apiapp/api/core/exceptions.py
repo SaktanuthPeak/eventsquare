@@ -33,13 +33,8 @@ class NotFoundError(HTTPException):
 
 class ValidationError(HTTPException):
     def __init__(
-        self, 
-        detail: t.Any = None, 
-        headers: t.Optional[t.Dict[str, t.Any]] = None,
-        field: t.Optional[str] = None
+        self, detail: t.Any = None, headers: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
-        if field:
-            detail = {"message": detail, "field": field}
         super().__init__(status.HTTP_422_UNPROCESSABLE_ENTITY, detail, headers)
 
 
@@ -55,15 +50,3 @@ class NoPermission(HTTPException):
         self, detail: t.Any = None, headers: t.Optional[t.Dict[str, t.Any]] = None
     ) -> None:
         super().__init__(status.HTTP_403_FORBIDDEN, detail, headers)
-
-
-class BusinessLogicError(HTTPException):
-    def __init__(
-        self,
-        detail: t.Any = None,
-        headers: t.Optional[t.Dict[str, t.Any]] = None,
-        code: t.Optional[str] = None,
-    ) -> None:
-        if code:
-            detail = {"message": detail, "code": code}
-        super().__init__(status.HTTP_400_BAD_REQUEST, detail, headers)
