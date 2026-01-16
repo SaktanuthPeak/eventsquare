@@ -1,46 +1,44 @@
 #!/usr/bin/env python3
 import sys
-import mongoengine as me
+
+from api_app import models
 import datetime
-from app import models
+import asyncio
 
 
-def create_admin():
-    print("create admin")
+async def create_user_admin():
+    class Setting:
+        def __init__(self):
+            self.DATABASE_URI = "mongodb://localhost/appdb"
 
-    # address = models.Address(
-    #     address="-",
-    #     building="-",
-    #     floor="-",
-    #     moo="-",
-    #     village="-",
-    #     alley="-",
-    #     road="-",
-    #     subdistrict="-",
-    #     district="-",
-    #     province="-",
-    #     zipcode="-",
-    # )
+    settings = Setting()
+    if len(sys.argv) > 1:
+        settings.DATABASE_URI = "mongodb://mongodb/appdb"
+
+    await models.init_beanie(settings)
+
+    print("start check admin")
+    user = await models.User.find_one(models.User.username == "admin")
+
+    if user:
+        print("Found admin user", user)
+        return
+    print("end check admin")
+
+    print("start create admin")
     user = models.User(
         email="admin@example.com",
         username="admin",
-        title_name="นาย",
+        password="",
         first_name="admin",
-        last_name="admin",
-        status="active",
+        last_name="system",
         roles=["user", "admin"],
+        status="active",
     )
-
-    user.password = user.set_password("p@ssw0rd")
-    user.save()
-    print("create admin success")
+    await user.set_password("p@ssw0rd")
+    await user.save()
+    print("finish")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        me.connect(db="appdb", host=sys.argv[1])
-    else:
-        me.connect(db="appdb")
-    print("start create")
-    create_admin()
-    print("success")
+    asyncio.run(create_user_admin())
