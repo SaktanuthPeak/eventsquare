@@ -16,4 +16,5 @@ from .event_schema import (
     TicketTypeInput,
     TicketTypeDB,
     EventBase,
+    EventSearch,
 )

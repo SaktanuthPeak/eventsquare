@@ -6,16 +6,20 @@ from .base_repo import BaseRepository
 from api_app.api.core.exceptions import ValidationError
 
 from loguru import logger
+from ..utils.schema import PydanticObjectId
+from fastapi_pagination.ext.beanie import paginate as beanie_paginate
+from fastapi_pagination import Page, Params
 
 
 class EventRepository(BaseRepository):
     def __init__(self):
         super().__init__(models.Event)
 
-    async def get_event_by_id(self, event_id: str) -> Document | None:
-        try:
-            item = self.model.objects(id=ObjectId(event_id)).first()
-        except Exception:
-            raise ValidationError(detail="Invalid event ID")
+    async def get_event_by_id(self, event_id: str) -> Document:
+        if not ObjectId.is_valid(event_id):
+            raise ValidationError("Invalid ObjectId")
 
+        item = await self.model.get(PydanticObjectId(event_id))
+        if not item:
+            raise ValidationError(f"ObjectId('{event_id}') not found")
         return item

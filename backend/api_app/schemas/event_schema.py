@@ -51,3 +51,10 @@ class EventUpdate(BaseModel):
 class EventResponse(EventBase):
     id: PydanticObjectId
     ticket_types: t.List[TicketTypeDB] = []
+
+
+class EventSearch(BaseModel):
+    name: Optional[str] = Field(None, example="Music Festival")
+    event_type: Optional[str] = Field(None, example="concert")
+    start_date_from: Optional[str] = Field(None, example="2025-01-01")
+    start_date_to: Optional[str] = Field(None, example="2025-01-01")
