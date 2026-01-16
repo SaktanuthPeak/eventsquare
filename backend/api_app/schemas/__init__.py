@@ -9,3 +9,11 @@ from .user_schema import (
     UpdatedUser,
     TokenData,
 )
+from .event_schema import (
+    EventCreate,
+    EventUpdate,
+    EventResponse,
+    TicketTypeInput,
+    TicketTypeDB,
+    EventBase,
+)

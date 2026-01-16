@@ -1,4 +1,5 @@
 from .user_model import User
+from .event_model import Event
 
 import sys
 from typing import Sequence, Type, TypeVar

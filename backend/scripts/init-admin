@@ -9,11 +9,11 @@ import asyncio
 async def create_user_admin():
     class Setting:
         def __init__(self):
-            self.DATABASE_URI = "mongodb://localhost/appdb"
+            self.DATABASE_URI = "mongodb://localhost/eventsquaredb"
 
     settings = Setting()
     if len(sys.argv) > 1:
-        settings.DATABASE_URI = "mongodb://mongodb/appdb"
+        settings.DATABASE_URI = "mongodb://mongodb/eventsquaredb"
 
     await models.init_beanie(settings)
 
@@ -30,6 +30,7 @@ async def create_user_admin():
         email="admin@example.com",
         username="admin",
         password="",
+        phone_number="0000000000",
         first_name="admin",
         last_name="system",
         roles=["user", "admin"],

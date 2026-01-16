@@ -79,7 +79,7 @@ project/
     DEBUG=True
     TITLE="IMPs FastAPI"
     VERSION="0.1.0"
-    DATABASE_URI="mongodb://localhost:27017/appdb"
+    DATABASE_URI="mongodb://localhost:27017/eventsquaredb"
     SECRET_KEY="Th1s_1s_my_3xampl3_0f_s3cr3t_k3y_0123456789"
     ```
     

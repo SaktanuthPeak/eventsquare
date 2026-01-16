@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     DB_HOST: str = "localhost"
     DB_PORT: str = "27017"
     DB_USER: str = ""
-    DB_NAME: str = "appdb"
+    DB_NAME: str = "eventsquaredb"
     DB_PASSWORD: str = ""
     DB_ENGINE: str = DB_ENGINE_MAPPER[DB]
     DATABASE_URI_FORMAT: str = (
