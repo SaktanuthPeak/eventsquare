@@ -67,6 +67,24 @@ class Settings(BaseSettings):
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
     DATE_FORMAT: str = "%Y-%m-%d"
 
+    # Redis
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    REDIS_PASSWORD: str = ""
+    REDIS_URL: str = ""
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Build Redis URL if not provided
+        if not self.REDIS_URL:
+            if self.REDIS_PASSWORD:
+                self.REDIS_URL = f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+            else:
+                self.REDIS_URL = (
+                    f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+                )
+
     model_config = SettingsConfigDict(
         case_sensitive=True,
         env_file=(

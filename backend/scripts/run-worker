@@ -1,0 +1,9 @@
+#!/bin/bash
+# Script to run Redis worker
+
+cd "$(dirname "$0")/.."
+
+echo "Starting Redis Worker..."
+echo "Press Ctrl+C to stop"
+
+poetry run python -m api_app.cmd.worker

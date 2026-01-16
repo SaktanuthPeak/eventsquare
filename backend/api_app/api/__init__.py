@@ -5,6 +5,7 @@ from .utils import http_error, validation_error
 from contextlib import asynccontextmanager
 from . import middlewares, routers
 from api_app.models import init_beanie
+from api_app.api.core.redis import redis_client
 from loguru import logger
 from .core.app_settings import AppSettings, get_app_settings
 from dotenv import load_dotenv
@@ -40,9 +41,24 @@ async def lifespan(app: FastAPI):
     settings: AppSettings = get_app_settings()
     await routers.init_router(app, settings=settings)
     await init_beanie(settings)
+
+    # Initialize Redis connection
+    try:
+        await redis_client.connect()
+        logger.info("Redis connected successfully")
+    except Exception as e:
+        logger.warning(f"Redis connection failed: {e}. Continuing without Redis.")
+
     await use_route_names_as_operation_ids(app)
     add_pagination(app)
+
     yield
+
+    # Cleanup on shutdown
+    try:
+        await redis_client.disconnect()
+    except Exception as e:
+        logger.error(f"Error disconnecting Redis: {e}")
 
 
 async def use_route_names_as_operation_ids(app: FastAPI) -> None:
