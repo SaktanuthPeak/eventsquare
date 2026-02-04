@@ -1,8 +1,5 @@
-import { getEventById, getOrganizerCompleteInfo } from '$lib/client';
-import { superValidate } from 'sveltekit-superforms';
+import { getEventById, } from '$lib/client';
 import type { PageServerLoad } from './$types';
-import { selectTicketSchema } from './schema';
-import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = (async ({params , locals}) => {
     const { client } = locals;
@@ -14,15 +11,8 @@ export const load = (async ({params , locals}) => {
         }
     });
 
-    const orgRes = await getOrganizerCompleteInfo({
-        client: client,
-        path:{
-            organizer_id:res.data?.organizer_id
-        }
-    })
-
     const user = locals.user;
  
-    return {eventId: params.event,eventData:res.data,userData:user,orgData:orgRes.data};
+    return {eventId: params.event,eventData:res.data,userData:user,};
 }) satisfies PageServerLoad;
 

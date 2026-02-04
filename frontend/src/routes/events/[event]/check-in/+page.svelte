@@ -6,16 +6,11 @@
 	import { checkInSchema } from './schema';
 	import TextInput from '$lib/components/ui/forms/TextInput.svelte';
 	import { toast } from 'svelte-sonner';
-	import LoginModal from '../../../login/+page.svelte';
-	import SignupModal from '../../../register/+page.svelte';
-	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 	let showCheckInModal: boolean = $state(false);
-	let showLoginModal: boolean = $state(false);
-	let showSignupModal: boolean = $state(false);
 	let returnUrl = $derived(page.url.pathname);
 	let returnEventData = $state<Object[]>([]);
 
@@ -25,11 +20,9 @@
 			if (result.type === 'success') {
 				toast.success('You Welcome to the event');
 				returnEventData = result.data?.returnData;
-				showCheckInModal = true;
 			} else if (result.type === 'failure') {
 				if (result.status === 401) {
 					toast.error('Check-in failed,Please Login before check-in');
-					showLoginModal = true;
 				} else {
 					toast.error(result.data?.error ?? 'Unknown error occurred during check-in');
 				}
@@ -40,13 +33,6 @@
 
 	$formData.eventId = data.eventId.event;
 
-	$effect(() => {
-		if (data?.userData) {
-			showLoginModal = false;
-		} else {
-			showLoginModal = true;
-		}
-	});
 </script>
 
 {#if showCheckInModal}
@@ -62,7 +48,6 @@
 		</div>
 	</div>
 {:else}
-	<!-- Check-in Form Modal -->
 	<div class="modal modal-open">
 		<div class="modal-box">
 			<h2 class="text-xl font-semibold mb-2">Event Check-in</h2>
@@ -70,7 +55,7 @@
 				By checking in, you agree to give consent for participating in the event.
 				<button
 					class="text-blue-500 cursor-pointer hover:underline"
-					onclick={() => ((showSignupModal = true), (showLoginModal = false))}
+					onclick={() => goto('/account/login', { replaceState: true, invalidateAll: true })}
 				>
 					prolicy & term of service
 				</button>
@@ -90,5 +75,4 @@
 		</div>
 	</div>
 {/if}
-<LoginModal {returnUrl} bind:showLoginModal bind:showSignupModal />
-<SignupModal {returnUrl} bind:showSignupModal />
+

@@ -2,11 +2,10 @@
 	import { CaretDown } from 'phosphor-svelte';
 	import { User } from 'phosphor-svelte';
 	import { page } from '$app/state';
-	import LoginModal from '../../../routes/login/+page.svelte';
-	import SignupModal from '../../../routes/register/+page.svelte';
+	import { goto } from '$app/navigation';
+
+
 	let { userData } = $props();
-	let showLoginModal: boolean = $state(false);
-	let showSignupModal: boolean = $state(false);
 	let scroll: boolean = $state(false);
 	let menuOpen = $state(false);
 
@@ -134,28 +133,27 @@
 			<div class="flex gap-[12px]">
 				<button
 					class={'login-navbar-button ' + (scroll ? '' : 'bg-transparent text-white')}
-					onclick={() => (showLoginModal = true)}
+					onclick={() => goto('/account/login', { replaceState: true, invalidateAll: true })}
 				>
 					Login
 				</button>
 				<button
 					class={'login-navbar-button ' + (scroll ? ' ' : 'bg-transparent text-white')}
-					onclick={() => (showSignupModal = true)}
+					onclick={() => goto('/account/signup', { replaceState: true, invalidateAll: true })}
 				>
 					Sign up
 				</button>
 			</div>
 		</div>
 		<div class="flex md:hidden">
-			<button class="mr-4" onclick={() => (showLoginModal = true)} aria-label="Login"
+			<button class="mr-4" onclick={() => goto('/account/login', { replaceState: true, invalidateAll: true })} aria-label="Login"
 				>Login
 			</button>
 			|
-			<button class="ml-4" onclick={() => (showSignupModal = true)} aria-label="Sign up"
+			<button class="ml-4" onclick={() => goto('/account/signup', { replaceState: true, invalidateAll: true })} aria-label="Sign up"
 				>Sign up</button
 			>
 		</div>
 	{/if}
 </header>
-<LoginModal bind:showLoginModal />
-<SignupModal bind:showSignupModal />
+

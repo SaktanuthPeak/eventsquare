@@ -24,8 +24,8 @@
 	<SearchBar {defaultQuery} customClass="max-w-[70%] md:max-w-[45%]  relative bottom-[25px]" />
 	<CategoryFilter initialCategory={selectedCategory} on:categoryChange={handleCategoryChange} />
 	<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 p-6 max-w-screen-xl mx-auto">
-		{#if data.events && data.events.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_category?.includes(selectedCategory)).length > 0}
-			{#each data.events.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_category?.includes(selectedCategory)) as event}
+		{#if data.events && data.events.filter((cat:any) => !selectedCategory || selectedCategory === 'All' || cat.event_type?.includes(selectedCategory)).length > 0}
+			{#each data.events.filter((cat:any) => !selectedCategory || selectedCategory === 'All' || cat.event_type?.includes(selectedCategory)) as event}
 				<EventCards {event} />
 			{/each}
 		{:else}

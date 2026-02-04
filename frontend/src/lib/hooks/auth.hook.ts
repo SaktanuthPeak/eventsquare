@@ -5,6 +5,10 @@ import { logout } from '$lib/shares/logout';
 import type { Handle } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 
+interface RefreshTokenResponse {
+	access_token?: string;
+}
+
 // --- HELPER FUNCTIONS (TOP LEVEL) ---
 
 function isProtectedRoute(path: string | null): boolean {
@@ -67,7 +71,7 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 					headers: {
 						Authorization: `Bearer ${refreshToken}`,
 					}
-				});
+				}) as { data: RefreshTokenResponse };
 				if (data?.access_token) {
 					logger.debug('Refresh token is valid, updating access token');
 					cookies.set('access_token', data.access_token, constructCookieOptions(30 * 60)); // 1 day

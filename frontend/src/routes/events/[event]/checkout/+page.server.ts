@@ -3,7 +3,6 @@ import type { PageServerLoad } from './$types';
 import { checkoutSchema } from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, superValidate } from 'sveltekit-superforms';
-import { createOrder, uploadSlip } from '$lib/client';
 
 
 export const load = (async (params) => {

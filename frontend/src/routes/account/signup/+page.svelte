@@ -34,11 +34,14 @@
 	const { form: formData, allErrors, submitting, enhance } = form;
 </script>
 
-<div class="flex min-h-screen w-full flex-col items-center justify-center p-2">
+<div class="flex min-h-screen w-full flex-col items-center justify-center p-2 mt-12">
 	<div
 		class="card card-border border-base-content/5 rounded-4xl flex w-[55%] items-center justify-center bg-white p-4 shadow"
-	>
-		<img src="/LogoWeSense.png" alt="Logo" class="h-[107px] w-[410px] object-cover" />
+	><h1
+				class="w-[180px] h-fit text-3xl font-extrabold cursor-pointer focus:outline-none focus:border-transparent focus:ring-0 border-0"
+			>
+				EventSquare
+			</h1>
 		<h1 class="text-2xl font-medium">Register / สมัครสมาชิก</h1>
 		<form method="POST" use:enhance class="flex w-full flex-col gap-4 p-4">
 			<div class="flex flex-col items-center justify-center gap-0.5">
@@ -79,17 +82,6 @@
 							onchange={() => {
 								$formData.email = $formData.username + '@gmail.com';
 							}}
-						/>
-					</div>
-					<div class="w-full">
-						<TextInput
-							{form}
-							name="phone_number"
-							label="Phone no."
-							type="tel"
-							placeholder="เบอร์โทรศัพท์"
-							class="input  w-full  rounded-md"
-							bind:value={$formData.phone_number}
 						/>
 					</div>
 				</div>

@@ -46,6 +46,14 @@ export const actions = {
 			const access_token = loginRes?.data?.access_token;
 			const refresh_token = loginRes?.data?.refresh_token;
 
+			if (!access_token || !refresh_token) {
+				return fail(500, {
+					form,
+					type: 'failure',
+					errors: 'ไม่สามารถรับ token ได้ กรุณาลองใหม่อีกครั้ง'
+				});
+			}
+
 			const accessTokenMaxAge = 60 * 10;
 			const refreshTokencookieMaxAge = 60 * 60 * 24 * 10;
 

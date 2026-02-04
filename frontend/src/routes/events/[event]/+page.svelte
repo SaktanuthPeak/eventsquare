@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { setContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import { MapTrifold, PhoneCall, User, Calendar, Ticket, Info, Warning } from 'phosphor-svelte';
+	import { Calendar, Ticket, Info, Warning } from 'phosphor-svelte';
 	import EventDetailsCard from '$lib/components/cards/EventCardDetails.svelte';
 	import MobileEventDetailsCard from '$lib/components/cards/EventCardDetailsMobile.svelte';
 	import { cn } from '$lib/utils/tw-utils';
@@ -227,7 +227,7 @@
 						<button
 							class="btn btn-primary w-full"
 							disabled={!selectedTicketType || !agreedToTerms}
-							on:click={() => handleSelectTicket(selectedTicketType)}
+							onClick={() => handleSelectTicket(selectedTicketType)}
 						>
 							Purchase Tickets
 						</button>

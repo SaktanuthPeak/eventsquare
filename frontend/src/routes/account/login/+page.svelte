@@ -35,9 +35,13 @@
 </script>
 
 <div class="flex h-screen w-full flex-col items-center justify-center">
-	<div class="card card-border border-base-content/5 rounded-4xl mt-10 bg-white p-4 shadow">
+	<div class="card card-border border-base-content/5 rounded-4xl mt-10 bg-white min-w-md p-4 shadow">
 		<form method="post" use:enhance>
-			<img src="/LogoWeSense.png" alt="Logo" class="h-[107px] w-[410px] object-cover" />
+			<h1
+				class="w-full h-fit text-3xl font-extrabold cursor-pointer focus:outline-none focus:border-transparent focus:ring-0 border-0"
+			>
+				EventSquare
+			</h1>
 			<div class="card-body">
 				<h2 class="card-title flexx justify-center text-2xl">Member login</h2>
 				<TextInput

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
         if (searchQuery) {
             const eventSearchRes = await getEvents({
                 query: {
-                    search_query: searchQuery,
+                    name: searchQuery,
                     page,
                     size
                 }
