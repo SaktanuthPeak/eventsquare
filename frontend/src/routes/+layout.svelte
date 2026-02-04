@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { Toaster } from 'svelte-sonner';
-	import AdminNavbar from '$lib/components/navbar/navbar.svelte';
 	import Footer from '$lib/components/footer/footer.svelte';
-	import LoginModal from './login/+page.svelte';
+	import LoginModal from './account/login/+page.svelte';
 	import SignupModal from './register/+page.svelte';
 	import '../app.css';
 	import Navbar from '$lib/components/navbar/navbar.svelte';

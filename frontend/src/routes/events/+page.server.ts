@@ -1,7 +1,5 @@
-import { getAllEvents, type EventResponse } from '$lib/client';
-import { get } from 'svelte/store';
+import {  getEvents, type EventResponse } from '$lib/client';
 import type { PageServerLoad } from './$types';
-import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ params, url, locals }) => {
     const { client } = locals;
@@ -13,8 +11,7 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
         let events: EventResponse[] | undefined;
 
         if (searchQuery) {
-            const eventSearchRes = await getAllEvents({
-                client: client,
+            const eventSearchRes = await getEvents({
                 query: {
                     search_query: searchQuery,
                     page,
@@ -23,30 +20,9 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
             });
             events = eventSearchRes.data?.items ?? [];
         } else {
-            const res = await getAllEvents({client: client});
+            const res = await getEvents({client: client});
             events = res.data?.items ?? [];
         }
-
-        const eventsWithImages = [];
-        for (const event of events) {
-            if (event.image?.file_id) {
-                try {
-                    eventsWithImages.push({
-                        ...event,
-                        image_url: `${env.API_URL}/v1/events/image/${event.image.file_id}`
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
-            } else {
-                eventsWithImages.push({
-                    ...event,
-                    image_url: null
-                });
-            }
-        }
-
-        return { events: eventsWithImages.filter((event) => event.event_status === 'active') };
 
     } catch (err) {
         console.error("Error loading events:", err);
