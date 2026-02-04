@@ -1,6 +1,9 @@
 from fastapi import (
     Request,
 )
+from redis.asyncio import Redis
+from typing import Optional
+from loguru import logger
 
 from ..repositories import EventRepository
 
@@ -26,8 +29,30 @@ class EventService(BaseService):
     async def create_event(
         self,
         event_create: schemas.EventCreate,
+        redis: Optional[Redis] = None,
     ) -> schemas.EventResponse:
         event = await self._repository.create(event_create)
+
+        # Initialize Redis inventory if Redis client is provided
+        if redis:
+            from ..api.core.redis_lock import TicketInventory
+
+            inventory = TicketInventory(redis)
+
+            for ticket_type in event.ticket_types:
+                try:
+                    await inventory.initialize_inventory(
+                        event_id=str(event.id),
+                        ticket_type_id=ticket_type.ticket_id,
+                        total_tickets=ticket_type.remaining,
+                    )
+                    logger.info(
+                        f"Initialized inventory: event={event.id}, "
+                        f"ticket={ticket_type.ticket_id}, total={ticket_type.remaining}"
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to initialize inventory: {str(e)}")
+
         return event
 
     async def get_events(
