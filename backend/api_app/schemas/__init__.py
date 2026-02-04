@@ -17,4 +17,12 @@ from .event_schema import (
     TicketTypeDB,
     EventBase,
     EventSearch,
+    TicketBooking,
+)
+
+from .user_ticket_schema import (
+    BaseUserTicket,
+    UserTicketCreate,
+    UserTicketResponse,
+    UserTicketDetailResponse,
 )

@@ -51,13 +51,3 @@ async def get_events(
     events = await service.get_events(params, search_params=search_params)
 
     return events
-
-
-@router.post("/search")
-async def search_events(
-    search_params: schemas.EventSearch,
-    params: Params = Depends(),
-    service: EventService = Depends(EventService),
-) -> Page[schemas.EventResponse]:
-    events = await service.search_events(search_params, params)
-    return events

@@ -58,3 +58,14 @@ class EventSearch(BaseModel):
     event_type: Optional[str] = Field(None, example="concert")
     start_date_from: Optional[str] = Field(None, example="2025-01-01")
     start_date_to: Optional[str] = Field(None, example="2025-01-01")
+
+
+class TicketBooking(BaseModel):
+    event_id: str = Field(..., description="Event ID")
+    ticket_type_name: str = Field(..., description="Ticket name")
+    ticket_type_id: str = Field(..., description="Ticket type ID")
+    quantity: int = Field(
+        ..., gt=0, le=10, description="Number of tickets (max 10 per booking)"
+    )
+    price_per_ticket: int = Field(..., description="Price per ticket")
+    total_price: int = Field(..., description="Total price for the booking")
