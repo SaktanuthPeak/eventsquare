@@ -1,1 +1,3 @@
-export const isDev = process.env.NODE_ENV === 'development';
+import { dev } from '$app/environment';
+
+export const isDev = dev;
