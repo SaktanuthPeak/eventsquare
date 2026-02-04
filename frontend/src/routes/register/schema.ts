@@ -11,6 +11,6 @@ export const signupSchema = z
     last_name: z.string().default(""),
   })
   .refine((data) => data.password === data.confirm_password, {
-    message: "Password does not match",
+    message: "Passwords do not match",
     path: ["confirm_password"],
   });

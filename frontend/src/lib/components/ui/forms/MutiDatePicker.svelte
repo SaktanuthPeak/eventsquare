@@ -22,10 +22,8 @@
     formatter?: DateFormatter;
     selectableYears?: number[];
     selectable?: boolean;
+
     onValuesChange?: (value: string[] | undefined) => void; // Emits ISO string
-    name?: string; // Added name property
-    required?: boolean; // Added required attribute
-    form?: any; // Added form property for form libraries
   };
 
   let {
@@ -34,9 +32,6 @@
     placeholder = "Pick a date",
     formatter = df,
     onValuesChange,
-    name = $bindable(undefined),
-    required = $bindable(false),
-    form = $bindable(undefined),
   }: Props = $props();
 
   // Convert ISO string to DateValue for Calendar
@@ -67,30 +62,13 @@
 </script>
 
 <div class="w-full space-y-2">
-  <!-- Added hidden input field for form submission -->
-  <input
-    type="hidden"
-    {name}
-    {required}
-    value={values?.join(",")}
-    data-form-type="multi-date"
-    aria-hidden="true"
-  />
-
   <Popover.Root>
-    <Popover.Trigger
-      class="input cursor-pointer items-center w-full"
-      data-required={required}
-    >
+    <Popover.Trigger class="input cursor-pointer items-center w-full">
       <CalendarBlank class="size-5" />
       {#if values?.length > 0}
         <span class="ml-2">{values.length} dates selected</span>
       {:else}
         {placeholder}
-      {/if}
-
-      {#if required}
-        <span class="text-red-500 ml-1">*</span>
       {/if}
     </Popover.Trigger>
     <Popover.Portal>

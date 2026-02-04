@@ -13,9 +13,9 @@ export const load = (async (event) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-  default: async ({ locals,request,cookies }) => {
+  default: async ({ request, cookies, locals }) => {
     const form = await superValidate(request , zod(loginSchema))
-    const { client } = locals;
+    const {client} = locals;
 
     if (!form.valid){
       return{
@@ -42,8 +42,15 @@ export const actions = {
         });
       }
 
+      const refresh_token = res.data?.refresh_token;
       const access_token = res.data?.access_token;
 
+      if (!refresh_token) {
+        return { 
+          form,
+          type: error,
+          errors: 'Login failed. Please check your credentials.' };
+      }
       if (!access_token) {
         return { 
           form,
@@ -52,6 +59,14 @@ export const actions = {
       }
 
       cookies.set('access_token', access_token, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: env.SECURE === 'true',
+        maxAge: 60 * 60 * 24 * 30
+      });
+
+      cookies.set('refresh_token', refresh_token, {
         path: '/',
         httpOnly: true,
         sameSite: 'strict',

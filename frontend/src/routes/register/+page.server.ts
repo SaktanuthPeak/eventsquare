@@ -1,4 +1,4 @@
-import { fail, redirect, type Actions } from "@sveltejs/kit";
+ import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server";
 import { zod } from "sveltekit-superforms/adapters";
 import { signupSchema } from "./schema";
@@ -13,16 +13,16 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-  default: async ({locals,request}) => {
+  default: async (request) => {
     const form = await superValidate(request, zod(signupSchema));
-    const { client } = locals;
+
     if (!form.valid) {
       return fail(400, { form });
     }
 
     try {
       const signup_res = await create({
-        client: client,
+        client: request.locals.client,
         body: {
           email: form.data.email,
           username: form.data.username,
@@ -33,7 +33,7 @@ export const actions: Actions = {
           last_name: form.data.last_name,
         },
       });
-
+      
       if (!signup_res.response.ok) {
         return fail(signup_res.response.status, {
           form,
@@ -42,7 +42,7 @@ export const actions: Actions = {
         });
       }
 
-      return {
+      return{
         form,
         type: "success",
       }
@@ -50,6 +50,9 @@ export const actions: Actions = {
     } catch (e) {
       console.log(e);
       return setError(form, "username", `${e}`);
-    }
+    } 
+    // finally {
+    //   throw redirect(302, "/");
+    // }
   },
 };

@@ -480,7 +480,7 @@ export const OrganizerRole = {
 
 export type PageEventResponse = {
     items: Array<EventResponse>;
-    total?: number | null;
+    total: number | null;
     page: number | null;
     size: number | null;
     pages?: number | null;
@@ -488,7 +488,7 @@ export type PageEventResponse = {
 
 export type PagePublicTicketVerificationLog = {
     items: Array<PublicTicketVerificationLog>;
-    total?: number | null;
+    total: number | null;
     page: number | null;
     size: number | null;
     pages?: number | null;
@@ -496,7 +496,7 @@ export type PagePublicTicketVerificationLog = {
 
 export type PageTicketVerificationLog = {
     items: Array<TicketVerificationLog>;
-    total?: number | null;
+    total: number | null;
     page: number | null;
     size: number | null;
     pages?: number | null;
@@ -867,6 +867,498 @@ export type GetHealthResponses = {
      */
     200: unknown;
 };
+
+export type LoginForAccessTokenData = {
+    body: BodyLoginForAccessTokenV1AuthTokenPost;
+    path?: never;
+    query?: never;
+    url: '/v1/auth/token';
+};
+
+export type LoginForAccessTokenErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LoginForAccessTokenError = LoginForAccessTokenErrors[keyof LoginForAccessTokenErrors];
+
+export type LoginForAccessTokenResponses = {
+    /**
+     * Successful Response
+     */
+    200: Token;
+};
+
+export type LoginForAccessTokenResponse = LoginForAccessTokenResponses[keyof LoginForAccessTokenResponses];
+
+export type AuthenticationData = {
+    body: BodyAuthenticationV1AuthLoginPost;
+    path?: never;
+    query?: {
+        name?: unknown;
+    };
+    url: '/v1/auth/login';
+};
+
+export type AuthenticationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AuthenticationError = AuthenticationErrors[keyof AuthenticationErrors];
+
+export type AuthenticationResponses = {
+    /**
+     * Successful Response
+     */
+    200: Token;
+};
+
+export type AuthenticationResponse = AuthenticationResponses[keyof AuthenticationResponses];
+
+export type RefreshTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/auth/refresh_token';
+};
+
+export type RefreshTokenResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type CreateOrderData = {
+    body: CreateOrder;
+    path?: never;
+    query?: never;
+    url: '/v1/orders';
+};
+
+export type CreateOrderErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateOrderError = CreateOrderErrors[keyof CreateOrderErrors];
+
+export type CreateOrderResponses = {
+    /**
+     * Successful Response
+     */
+    200: HetuModelsOrderModelOrder;
+};
+
+export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
+
+export type UpdateOrderData = {
+    body: PartialUpdateOrder;
+    path: {
+        order_id: string;
+    };
+    query?: never;
+    url: '/v1/orders/{order_id}';
+};
+
+export type UpdateOrderErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateOrderError = UpdateOrderErrors[keyof UpdateOrderErrors];
+
+export type UpdateOrderResponses = {
+    /**
+     * Successful Response
+     */
+    200: HetuSchemasOrderSchemaOrder;
+};
+
+export type UpdateOrderResponse = UpdateOrderResponses[keyof UpdateOrderResponses];
+
+export type UploadSlipData = {
+    body: BodyUploadSlipV1OrdersOrderIdUploadSlipPost;
+    path: {
+        order_id: string;
+    };
+    query?: never;
+    url: '/v1/orders/{order_id}/upload-slip';
+};
+
+export type UploadSlipErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UploadSlipError = UploadSlipErrors[keyof UploadSlipErrors];
+
+export type UploadSlipResponses = {
+    /**
+     * Successful Response
+     */
+    200: SlipUploadResponse;
+};
+
+export type UploadSlipResponse = UploadSlipResponses[keyof UploadSlipResponses];
+
+export type ConfirmOrderData = {
+    body?: never;
+    path: {
+        order_id: string;
+    };
+    query?: never;
+    url: '/v1/orders/{order_id}/confirm-order';
+};
+
+export type ConfirmOrderErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ConfirmOrderError = ConfirmOrderErrors[keyof ConfirmOrderErrors];
+
+export type ConfirmOrderResponses = {
+    /**
+     * Successful Response
+     */
+    200: ConfirmOrderResponse;
+};
+
+export type ConfirmOrderResponse2 = ConfirmOrderResponses[keyof ConfirmOrderResponses];
+
+export type CancelOrderData = {
+    body?: never;
+    path: {
+        order_id: string;
+    };
+    query?: never;
+    url: '/v1/orders/{order_id}/cancel-order';
+};
+
+export type CancelOrderErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CancelOrderError = CancelOrderErrors[keyof CancelOrderErrors];
+
+export type CancelOrderResponses = {
+    /**
+     * Successful Response
+     */
+    200: CancelOrderResponse;
+};
+
+export type CancelOrderResponse2 = CancelOrderResponses[keyof CancelOrderResponses];
+
+export type GetSlipImageData = {
+    body?: never;
+    path: {
+        file_id: string;
+    };
+    query?: never;
+    url: '/v1/orders/slip-image/{file_id}';
+};
+
+export type GetSlipImageErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetSlipImageError = GetSlipImageErrors[keyof GetSlipImageErrors];
+
+export type GetSlipImageResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type CreateHardTicketData = {
+    body: HardTicketInput;
+    path?: never;
+    query?: never;
+    url: '/v1/hard_ticket';
+};
+
+export type CreateHardTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateHardTicketError = CreateHardTicketErrors[keyof CreateHardTicketErrors];
+
+export type CreateHardTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: HardTicketOutput;
+};
+
+export type CreateHardTicketResponse = CreateHardTicketResponses[keyof CreateHardTicketResponses];
+
+export type GenerateTicketsData = {
+    body?: never;
+    path: {
+        hard_ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/hard_ticket/{hard_ticket_id}/generate-tickets';
+};
+
+export type GenerateTicketsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GenerateTicketsError = GenerateTicketsErrors[keyof GenerateTicketsErrors];
+
+export type GenerateTicketsResponses = {
+    /**
+     * Successful Response
+     */
+    200: GenarateHardTicketResponse;
+};
+
+export type GenerateTicketsResponse = GenerateTicketsResponses[keyof GenerateTicketsResponses];
+
+export type DeleteHardTicketData = {
+    body?: never;
+    path: {
+        hard_ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/hard_ticket/{hard_ticket_id}';
+};
+
+export type DeleteHardTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteHardTicketError = DeleteHardTicketErrors[keyof DeleteHardTicketErrors];
+
+export type DeleteHardTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: DeleteHardTicket;
+};
+
+export type DeleteHardTicketResponse = DeleteHardTicketResponses[keyof DeleteHardTicketResponses];
+
+export type GetRenderedTicketsData = {
+    body?: never;
+    path: {
+        hard_ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/hard_ticket/{hard_ticket_id}/generated-tickets';
+};
+
+export type GetRenderedTicketsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetRenderedTicketsError = GetRenderedTicketsErrors[keyof GetRenderedTicketsErrors];
+
+export type GetRenderedTicketsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<RenderedTickets>;
+};
+
+export type GetRenderedTicketsResponse = GetRenderedTicketsResponses[keyof GetRenderedTicketsResponses];
+
+export type CreateTicketData = {
+    body: CreateTicket;
+    path?: never;
+    query?: never;
+    url: '/v1/tickets';
+};
+
+export type CreateTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateTicketError = CreateTicketErrors[keyof CreateTicketErrors];
+
+export type CreateTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: Ticket;
+};
+
+export type CreateTicketResponse = CreateTicketResponses[keyof CreateTicketResponses];
+
+export type DeleteTicketByIdData = {
+    body?: never;
+    path: {
+        ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/{ticket_id}';
+};
+
+export type DeleteTicketByIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteTicketByIdError = DeleteTicketByIdErrors[keyof DeleteTicketByIdErrors];
+
+export type DeleteTicketByIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: DeleteTicket;
+};
+
+export type DeleteTicketByIdResponse = DeleteTicketByIdResponses[keyof DeleteTicketByIdResponses];
+
+export type GetTicketInfoData = {
+    body?: never;
+    path: {
+        ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/{ticket_id}';
+};
+
+export type GetTicketInfoErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetTicketInfoError = GetTicketInfoErrors[keyof GetTicketInfoErrors];
+
+export type GetTicketInfoResponses = {
+    /**
+     * Successful Response
+     */
+    200: TicketInfo;
+};
+
+export type GetTicketInfoResponse = GetTicketInfoResponses[keyof GetTicketInfoResponses];
+
+export type UpdateTicketData = {
+    body: PatchTicket;
+    path: {
+        ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/{ticket_id}';
+};
+
+export type UpdateTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateTicketError = UpdateTicketErrors[keyof UpdateTicketErrors];
+
+export type UpdateTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: Ticket;
+};
+
+export type UpdateTicketResponse = UpdateTicketResponses[keyof UpdateTicketResponses];
+
+export type ScanTicketData = {
+    body?: never;
+    path: {
+        ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/{ticket_id}/scan';
+};
+
+export type ScanTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ScanTicketError = ScanTicketErrors[keyof ScanTicketErrors];
+
+export type ScanTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScanTicket;
+};
+
+export type ScanTicketResponse = ScanTicketResponses[keyof ScanTicketResponses];
+
+export type SignUpTicketData = {
+    body?: never;
+    path: {
+        ticket_id: string;
+    };
+    query: {
+        owner_id: string;
+    };
+    url: '/v1/tickets/{ticket_id}/sign-up-ticket/{user_id}';
+};
+
+export type SignUpTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SignUpTicketError = SignUpTicketErrors[keyof SignUpTicketErrors];
+
+export type SignUpTicketResponses = {
+    /**
+     * Successful Response
+     */
+    200: SignUpTicketResponse;
+};
+
+export type SignUpTicketResponse2 = SignUpTicketResponses[keyof SignUpTicketResponses];
 
 export type CreateOrganizerData = {
     body: OrganizerCreate;
@@ -1307,724 +1799,6 @@ export type GetOrdersByOrganizerResponses = {
 };
 
 export type GetOrdersByOrganizerResponse = GetOrdersByOrganizerResponses[keyof GetOrdersByOrganizerResponses];
-
-export type CreateHardTicketData = {
-    body: HardTicketInput;
-    path?: never;
-    query?: never;
-    url: '/v1/hard_ticket';
-};
-
-export type CreateHardTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateHardTicketError = CreateHardTicketErrors[keyof CreateHardTicketErrors];
-
-export type CreateHardTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: HardTicketOutput;
-};
-
-export type CreateHardTicketResponse = CreateHardTicketResponses[keyof CreateHardTicketResponses];
-
-export type GenerateTicketsData = {
-    body?: never;
-    path: {
-        hard_ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/hard_ticket/{hard_ticket_id}/generate-tickets';
-};
-
-export type GenerateTicketsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GenerateTicketsError = GenerateTicketsErrors[keyof GenerateTicketsErrors];
-
-export type GenerateTicketsResponses = {
-    /**
-     * Successful Response
-     */
-    200: GenarateHardTicketResponse;
-};
-
-export type GenerateTicketsResponse = GenerateTicketsResponses[keyof GenerateTicketsResponses];
-
-export type DeleteHardTicketData = {
-    body?: never;
-    path: {
-        hard_ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/hard_ticket/{hard_ticket_id}';
-};
-
-export type DeleteHardTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type DeleteHardTicketError = DeleteHardTicketErrors[keyof DeleteHardTicketErrors];
-
-export type DeleteHardTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: DeleteHardTicket;
-};
-
-export type DeleteHardTicketResponse = DeleteHardTicketResponses[keyof DeleteHardTicketResponses];
-
-export type GetRenderedTicketsData = {
-    body?: never;
-    path: {
-        hard_ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/hard_ticket/{hard_ticket_id}/generated-tickets';
-};
-
-export type GetRenderedTicketsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetRenderedTicketsError = GetRenderedTicketsErrors[keyof GetRenderedTicketsErrors];
-
-export type GetRenderedTicketsResponses = {
-    /**
-     * Successful Response
-     */
-    200: Array<RenderedTickets>;
-};
-
-export type GetRenderedTicketsResponse = GetRenderedTicketsResponses[keyof GetRenderedTicketsResponses];
-
-export type CreateOrderData = {
-    body: CreateOrder;
-    path?: never;
-    query?: never;
-    url: '/v1/orders';
-};
-
-export type CreateOrderErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateOrderError = CreateOrderErrors[keyof CreateOrderErrors];
-
-export type CreateOrderResponses = {
-    /**
-     * Successful Response
-     */
-    200: HetuModelsOrderModelOrder;
-};
-
-export type CreateOrderResponse = CreateOrderResponses[keyof CreateOrderResponses];
-
-export type UpdateOrderData = {
-    body: PartialUpdateOrder;
-    path: {
-        order_id: string;
-    };
-    query?: never;
-    url: '/v1/orders/{order_id}';
-};
-
-export type UpdateOrderErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UpdateOrderError = UpdateOrderErrors[keyof UpdateOrderErrors];
-
-export type UpdateOrderResponses = {
-    /**
-     * Successful Response
-     */
-    200: HetuSchemasOrderSchemaOrder;
-};
-
-export type UpdateOrderResponse = UpdateOrderResponses[keyof UpdateOrderResponses];
-
-export type UploadSlipData = {
-    body: BodyUploadSlipV1OrdersOrderIdUploadSlipPost;
-    path: {
-        order_id: string;
-    };
-    query?: never;
-    url: '/v1/orders/{order_id}/upload-slip';
-};
-
-export type UploadSlipErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UploadSlipError = UploadSlipErrors[keyof UploadSlipErrors];
-
-export type UploadSlipResponses = {
-    /**
-     * Successful Response
-     */
-    200: SlipUploadResponse;
-};
-
-export type UploadSlipResponse = UploadSlipResponses[keyof UploadSlipResponses];
-
-export type ConfirmOrderData = {
-    body?: never;
-    path: {
-        order_id: string;
-    };
-    query?: never;
-    url: '/v1/orders/{order_id}/confirm-order';
-};
-
-export type ConfirmOrderErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ConfirmOrderError = ConfirmOrderErrors[keyof ConfirmOrderErrors];
-
-export type ConfirmOrderResponses = {
-    /**
-     * Successful Response
-     */
-    200: ConfirmOrderResponse;
-};
-
-export type ConfirmOrderResponse2 = ConfirmOrderResponses[keyof ConfirmOrderResponses];
-
-export type CancelOrderData = {
-    body?: never;
-    path: {
-        order_id: string;
-    };
-    query?: never;
-    url: '/v1/orders/{order_id}/cancel-order';
-};
-
-export type CancelOrderErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CancelOrderError = CancelOrderErrors[keyof CancelOrderErrors];
-
-export type CancelOrderResponses = {
-    /**
-     * Successful Response
-     */
-    200: CancelOrderResponse;
-};
-
-export type CancelOrderResponse2 = CancelOrderResponses[keyof CancelOrderResponses];
-
-export type GetSlipImageData = {
-    body?: never;
-    path: {
-        file_id: string;
-    };
-    query?: never;
-    url: '/v1/orders/slip-image/{file_id}';
-};
-
-export type GetSlipImageErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetSlipImageError = GetSlipImageErrors[keyof GetSlipImageErrors];
-
-export type GetSlipImageResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
-};
-
-export type GetMeData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/users/me';
-};
-
-export type GetMeResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type GetMeResponse = GetMeResponses[keyof GetMeResponses];
-
-export type GetByIdData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}';
-};
-
-export type GetByIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetByIdError = GetByIdErrors[keyof GetByIdErrors];
-
-export type GetByIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type GetByIdResponse = GetByIdResponses[keyof GetByIdResponses];
-
-export type GetAllData = {
-    body?: never;
-    path?: never;
-    query?: {
-        current_page?: number;
-        limit?: number;
-        username?: string | null;
-        email?: string | null;
-    };
-    url: '/v1/users';
-};
-
-export type GetAllErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetAllError = GetAllErrors[keyof GetAllErrors];
-
-export type GetAllResponses = {
-    /**
-     * Successful Response
-     */
-    200: UserList;
-};
-
-export type GetAllResponse = GetAllResponses[keyof GetAllResponses];
-
-export type CreateData = {
-    body: RegisteredUser;
-    path?: never;
-    query?: never;
-    url: '/v1/users/';
-};
-
-export type CreateErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateError = CreateErrors[keyof CreateErrors];
-
-export type CreateResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type CreateResponse = CreateResponses[keyof CreateResponses];
-
-export type ChangePasswordData = {
-    body: ChangedPassword;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}/change_password';
-};
-
-export type ChangePasswordErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ChangePasswordError = ChangePasswordErrors[keyof ChangePasswordErrors];
-
-export type ChangePasswordResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type ChangePasswordResponse = ChangePasswordResponses[keyof ChangePasswordResponses];
-
-export type UpdateData = {
-    body: UpdatedUser;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}/update';
-};
-
-export type UpdateErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UpdateError = UpdateErrors[keyof UpdateErrors];
-
-export type UpdateResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type UpdateResponse = UpdateResponses[keyof UpdateResponses];
-
-export type SetStatusData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: {
-        status?: string;
-    };
-    url: '/v1/users/{user_id}/set_status';
-};
-
-export type SetStatusErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type SetStatusError = SetStatusErrors[keyof SetStatusErrors];
-
-export type SetStatusResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type SetStatusResponse = SetStatusResponses[keyof SetStatusResponses];
-
-export type SetRoleData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query: {
-        role: string;
-        action: string;
-    };
-    url: '/v1/users/{user_id}/set_role';
-};
-
-export type SetRoleErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type SetRoleError = SetRoleErrors[keyof SetRoleErrors];
-
-export type SetRoleResponses = {
-    /**
-     * Successful Response
-     */
-    200: User;
-};
-
-export type SetRoleResponse = SetRoleResponses[keyof SetRoleResponses];
-
-export type GetTicketsByUserIdData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}/tickets';
-};
-
-export type GetTicketsByUserIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetTicketsByUserIdError = GetTicketsByUserIdErrors[keyof GetTicketsByUserIdErrors];
-
-export type GetTicketsByUserIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: Array<TicketInfo>;
-};
-
-export type GetTicketsByUserIdResponse = GetTicketsByUserIdResponses[keyof GetTicketsByUserIdResponses];
-
-export type GetAffliateWithData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}/organizers';
-};
-
-export type GetAffliateWithErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetAffliateWithError = GetAffliateWithErrors[keyof GetAffliateWithErrors];
-
-export type GetAffliateWithResponses = {
-    /**
-     * Successful Response
-     */
-    200: Array<AffiliatedOrganizerResponse>;
-};
-
-export type GetAffliateWithResponse = GetAffliateWithResponses[keyof GetAffliateWithResponses];
-
-export type GetOrdersByUserIdData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/v1/users/{user_id}/orders';
-};
-
-export type GetOrdersByUserIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetOrdersByUserIdError = GetOrdersByUserIdErrors[keyof GetOrdersByUserIdErrors];
-
-export type GetOrdersByUserIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: Array<OrderInfo>;
-};
-
-export type GetOrdersByUserIdResponse = GetOrdersByUserIdResponses[keyof GetOrdersByUserIdResponses];
-
-export type CreateTicketData = {
-    body: CreateTicket;
-    path?: never;
-    query?: never;
-    url: '/v1/tickets';
-};
-
-export type CreateTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateTicketError = CreateTicketErrors[keyof CreateTicketErrors];
-
-export type CreateTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: Ticket;
-};
-
-export type CreateTicketResponse = CreateTicketResponses[keyof CreateTicketResponses];
-
-export type DeleteTicketByIdData = {
-    body?: never;
-    path: {
-        ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/tickets/{ticket_id}';
-};
-
-export type DeleteTicketByIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type DeleteTicketByIdError = DeleteTicketByIdErrors[keyof DeleteTicketByIdErrors];
-
-export type DeleteTicketByIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: DeleteTicket;
-};
-
-export type DeleteTicketByIdResponse = DeleteTicketByIdResponses[keyof DeleteTicketByIdResponses];
-
-export type GetTicketInfoData = {
-    body?: never;
-    path: {
-        ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/tickets/{ticket_id}';
-};
-
-export type GetTicketInfoErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetTicketInfoError = GetTicketInfoErrors[keyof GetTicketInfoErrors];
-
-export type GetTicketInfoResponses = {
-    /**
-     * Successful Response
-     */
-    200: TicketInfo;
-};
-
-export type GetTicketInfoResponse = GetTicketInfoResponses[keyof GetTicketInfoResponses];
-
-export type UpdateTicketData = {
-    body: PatchTicket;
-    path: {
-        ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/tickets/{ticket_id}';
-};
-
-export type UpdateTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UpdateTicketError = UpdateTicketErrors[keyof UpdateTicketErrors];
-
-export type UpdateTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: Ticket;
-};
-
-export type UpdateTicketResponse = UpdateTicketResponses[keyof UpdateTicketResponses];
-
-export type ScanTicketData = {
-    body?: never;
-    path: {
-        ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/tickets/{ticket_id}/scan';
-};
-
-export type ScanTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ScanTicketError = ScanTicketErrors[keyof ScanTicketErrors];
-
-export type ScanTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: ScanTicket;
-};
-
-export type ScanTicketResponse = ScanTicketResponses[keyof ScanTicketResponses];
-
-export type SignUpTicketData = {
-    body?: never;
-    path: {
-        ticket_id: string;
-    };
-    query: {
-        owner_id: string;
-    };
-    url: '/v1/tickets/{ticket_id}/sign-up-ticket/{user_id}';
-};
-
-export type SignUpTicketErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type SignUpTicketError = SignUpTicketErrors[keyof SignUpTicketErrors];
-
-export type SignUpTicketResponses = {
-    /**
-     * Successful Response
-     */
-    200: SignUpTicketResponse;
-};
-
-export type SignUpTicketResponse2 = SignUpTicketResponses[keyof SignUpTicketResponses];
 
 export type DeleteEventByIdData = {
     body?: never;
@@ -2508,72 +2282,6 @@ export type PublicCheckInResponses = {
 
 export type PublicCheckInResponse2 = PublicCheckInResponses[keyof PublicCheckInResponses];
 
-export type LoginForAccessTokenData = {
-    body: BodyLoginForAccessTokenV1AuthTokenPost;
-    path?: never;
-    query?: never;
-    url: '/v1/auth/token';
-};
-
-export type LoginForAccessTokenErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type LoginForAccessTokenError = LoginForAccessTokenErrors[keyof LoginForAccessTokenErrors];
-
-export type LoginForAccessTokenResponses = {
-    /**
-     * Successful Response
-     */
-    200: Token;
-};
-
-export type LoginForAccessTokenResponse = LoginForAccessTokenResponses[keyof LoginForAccessTokenResponses];
-
-export type AuthenticationData = {
-    body: BodyAuthenticationV1AuthLoginPost;
-    path?: never;
-    query?: {
-        name?: unknown;
-    };
-    url: '/v1/auth/login';
-};
-
-export type AuthenticationErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type AuthenticationError = AuthenticationErrors[keyof AuthenticationErrors];
-
-export type AuthenticationResponses = {
-    /**
-     * Successful Response
-     */
-    200: Token;
-};
-
-export type AuthenticationResponse = AuthenticationResponses[keyof AuthenticationResponses];
-
-export type RefreshTokenData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/v1/auth/refresh_token';
-};
-
-export type RefreshTokenResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
-};
-
 export type CreateTicketTypeData = {
     body: CreateTicketType;
     path?: never;
@@ -2679,6 +2387,298 @@ export type RemoveTicketDateResponses = {
 };
 
 export type RemoveTicketDateResponse = RemoveTicketDateResponses[keyof RemoveTicketDateResponses];
+
+export type GetMeData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v1/users/me';
+};
+
+export type GetMeResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type GetMeResponse = GetMeResponses[keyof GetMeResponses];
+
+export type GetByIdData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}';
+};
+
+export type GetByIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetByIdError = GetByIdErrors[keyof GetByIdErrors];
+
+export type GetByIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type GetByIdResponse = GetByIdResponses[keyof GetByIdResponses];
+
+export type GetAllData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current_page?: number;
+        limit?: number;
+        username?: string | null;
+        email?: string | null;
+    };
+    url: '/v1/users';
+};
+
+export type GetAllErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetAllError = GetAllErrors[keyof GetAllErrors];
+
+export type GetAllResponses = {
+    /**
+     * Successful Response
+     */
+    200: UserList;
+};
+
+export type GetAllResponse = GetAllResponses[keyof GetAllResponses];
+
+export type CreateData = {
+    body: RegisteredUser;
+    path?: never;
+    query?: never;
+    url: '/v1/users/';
+};
+
+export type CreateErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateError = CreateErrors[keyof CreateErrors];
+
+export type CreateResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type CreateResponse = CreateResponses[keyof CreateResponses];
+
+export type ChangePasswordData = {
+    body: ChangedPassword;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}/change_password';
+};
+
+export type ChangePasswordErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ChangePasswordError = ChangePasswordErrors[keyof ChangePasswordErrors];
+
+export type ChangePasswordResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type ChangePasswordResponse = ChangePasswordResponses[keyof ChangePasswordResponses];
+
+export type UpdateData = {
+    body: UpdatedUser;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}/update';
+};
+
+export type UpdateErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateError = UpdateErrors[keyof UpdateErrors];
+
+export type UpdateResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type UpdateResponse = UpdateResponses[keyof UpdateResponses];
+
+export type SetStatusData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: {
+        status?: string;
+    };
+    url: '/v1/users/{user_id}/set_status';
+};
+
+export type SetStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SetStatusError = SetStatusErrors[keyof SetStatusErrors];
+
+export type SetStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type SetStatusResponse = SetStatusResponses[keyof SetStatusResponses];
+
+export type SetRoleData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query: {
+        role: string;
+        action: string;
+    };
+    url: '/v1/users/{user_id}/set_role';
+};
+
+export type SetRoleErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SetRoleError = SetRoleErrors[keyof SetRoleErrors];
+
+export type SetRoleResponses = {
+    /**
+     * Successful Response
+     */
+    200: User;
+};
+
+export type SetRoleResponse = SetRoleResponses[keyof SetRoleResponses];
+
+export type GetTicketsByUserIdData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}/tickets';
+};
+
+export type GetTicketsByUserIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetTicketsByUserIdError = GetTicketsByUserIdErrors[keyof GetTicketsByUserIdErrors];
+
+export type GetTicketsByUserIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<TicketInfo>;
+};
+
+export type GetTicketsByUserIdResponse = GetTicketsByUserIdResponses[keyof GetTicketsByUserIdResponses];
+
+export type GetAffliateWithData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}/organizers';
+};
+
+export type GetAffliateWithErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetAffliateWithError = GetAffliateWithErrors[keyof GetAffliateWithErrors];
+
+export type GetAffliateWithResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<AffiliatedOrganizerResponse>;
+};
+
+export type GetAffliateWithResponse = GetAffliateWithResponses[keyof GetAffliateWithResponses];
+
+export type GetOrdersByUserIdData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/v1/users/{user_id}/orders';
+};
+
+export type GetOrdersByUserIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetOrdersByUserIdError = GetOrdersByUserIdErrors[keyof GetOrdersByUserIdErrors];
+
+export type GetOrdersByUserIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<OrderInfo>;
+};
+
+export type GetOrdersByUserIdResponse = GetOrdersByUserIdResponses[keyof GetOrdersByUserIdResponses];
 
 export type ClientOptions = {
     baseUrl: 'http://localhost:9000' | (string & {});

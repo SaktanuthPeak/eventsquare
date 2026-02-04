@@ -3003,7 +3003,7 @@ export const Page_EventResponse_Schema = {
         }
     },
     type: 'object',
-    required: ['items', 'page', 'size'],
+    required: ['items', 'total', 'page', 'size'],
     title: 'Page[EventResponse]'
 } as const;
 
@@ -3066,7 +3066,7 @@ export const Page_PublicTicketVerificationLog_Schema = {
         }
     },
     type: 'object',
-    required: ['items', 'page', 'size'],
+    required: ['items', 'total', 'page', 'size'],
     title: 'Page[PublicTicketVerificationLog]'
 } as const;
 
@@ -3129,7 +3129,7 @@ export const Page_TicketVerificationLog_Schema = {
         }
     },
     type: 'object',
-    required: ['items', 'page', 'size'],
+    required: ['items', 'total', 'page', 'size'],
     title: 'Page[TicketVerificationLog]'
 } as const;
 
