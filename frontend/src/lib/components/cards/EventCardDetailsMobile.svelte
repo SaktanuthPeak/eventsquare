@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CalendarIcon, MapPinIcon, TagIcon, GlobeIcon, ImageIcon } from 'phosphor-svelte';
+	import { Calendar, MapPin, Tag, Globe, Image } from 'phosphor-svelte';
 	import { cn } from '$lib/utils/tw-utils';
 	import { env } from '$env/dynamic/public';
 	import { fade, fly } from 'svelte/transition';
@@ -91,7 +91,7 @@
 			<div
 				class="w-full h-full bg-gradient-to-br from-base-200 to-base-300 flex flex-col items-center justify-center p-4"
 			>
-				<ImageIcon size={48} weight="thin" class="text-base-content/30 mb-2" />
+				<Image size={48} weight="thin" class="text-base-content/30 mb-2" />
 				<p class="text-base-content/50 text-center">No Image Available</p>
 			</div>
 		{/if}
@@ -117,7 +117,7 @@
 					<!-- Date -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<CalendarIcon size={18} weight="fill" class="text-primary" />
+							<Calendar size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="text-sm">
 							{formatDate(eventData?.start_date, eventData?.end_date)}
@@ -127,7 +127,7 @@
 					<!-- Location -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<MapPinIcon size={18} weight="fill" class="text-primary" />
+							<MapPin size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="text-sm line-clamp-1">{eventData?.location}</span>
 					</div>
@@ -135,7 +135,7 @@
 					<!-- Category -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<TagIcon size={18} weight="fill" class="text-primary" />
+							<Tag size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="badge badge-accent text-accent-content">{eventData?.event_category}</span>
 					</div>

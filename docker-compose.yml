@@ -52,6 +52,7 @@ services:
       dockerfile: Dockerfile
     container_name: eventsquare-backend
     restart: unless-stopped
+    command: ${BACKEND_COMMAND:-poetry run fastapi run api_app/cmd/api.py --host 0.0.0.0 --port 9000}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -76,8 +77,7 @@ services:
     ports:
       - "${BACKEND_PORT:-9000}:9000"
     volumes:
-      - ./backend:/app
-      - backend_logs:/app/logs
+      - ${BACKEND_VOLUME:-backend_logs}:/app/logs
     networks:
       - eventsquare-network
     healthcheck:
@@ -112,8 +112,7 @@ services:
       REDIS_DB: ${REDIS_DB:-0}
       GCP_PROJECT_ID: ${GCP_PROJECT_ID:-eventsquare-backend}
     volumes:
-      - ./backend:/app
-      - worker_logs:/app/logs
+      - ${WORKER_VOLUME:-worker_logs}:/app/logs
     networks:
       - eventsquare-network
 
@@ -122,22 +121,27 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: ${FRONTEND_TARGET:-production}
+      args:
+        API_ENDPOINT: ${PUBLIC_API_URL:-http://localhost:9000}
+        PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:9000}
     container_name: eventsquare-frontend
     restart: unless-stopped
+    command: ${FRONTEND_COMMAND:-node build}
     depends_on:
       - backend
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-production}
       PORT: 3000
       HOST: 0.0.0.0
       ORIGIN: ${FRONTEND_URL:-http://localhost:3000}
       PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:9000}
+      API_ENDPOINT: ${PUBLIC_API_URL:-http://localhost:9000}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
+      - "${VITE_HMR_PORT:-5173}:5173"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/build
+      - ${FRONTEND_VOLUME:-/app/build}:/app/build
     networks:
       - eventsquare-network
     healthcheck:
@@ -146,29 +150,7 @@ services:
       timeout: 10s
       retries: 3
 
-  # Nginx Reverse Proxy (Disabled - can be enabled later)
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: eventsquare-nginx
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - backend
-  #     - frontend
-  #   ports:
-  #     - "${NGINX_HTTP_PORT:-80}:80"
-  #     - "${NGINX_HTTPS_PORT:-443}:443"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-  #     - ./nginx/conf.d:/etc/nginx/conf.d:ro
-  #     - nginx_logs:/var/log/nginx
-  #     - ./nginx/ssl:/etc/nginx/ssl:ro
-  #   networks:
-  #     - eventsquare-network
-  #   healthcheck:
-  #     test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
+
 
 volumes:
   mongodb_data:
