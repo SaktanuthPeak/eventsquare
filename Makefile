@@ -26,6 +26,12 @@ help:
 	@echo "  make clean      - Remove containers and volumes"
 	@echo "  make prune      - Clean up Docker system"
 	@echo ""
+	@echo "Rebuild Commands:"
+	@echo "  make rebuild-backend  - Rebuild backend only"
+	@echo "  make rebuild-frontend - Rebuild frontend only"
+	@echo "  make rebuild-worker   - Rebuild worker only"
+	@echo "  make rebuild-all      - Rebuild all services"
+	@echo ""
 	@echo "Database Commands:"
 	@echo "  make db-shell   - Access MongoDB shell"
 	@echo "  make db-backup  - Backup database"
@@ -67,7 +73,7 @@ dev:
 	FRONTEND_COMMAND="npm run dev -- --host 0.0.0.0 --port 3000" \
 	FRONTEND_VOLUME=./frontend \
 	NODE_ENV=development \
-	docker-compose up -d
+	docker compose up -d
 	@echo "Development environment started!"
 	@echo "Frontend: http://localhost:3000"
 	@echo "Backend API: http://localhost:9000/docs"
@@ -75,10 +81,10 @@ dev:
 	@echo "Redis: localhost:6379"
 
 dev-logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 dev-down:
-	docker-compose down
+	docker compose down
 
 dev-rebuild:
 	@echo "Rebuilding development environment..."
@@ -92,66 +98,66 @@ dev-rebuild:
 	FRONTEND_COMMAND="npm run dev -- --host 0.0.0.0 --port 3000" \
 	FRONTEND_VOLUME=./frontend \
 	NODE_ENV=development \
-	docker-compose up -d --build
+	docker compose up -d --build
 
 # Production
 prod: build
-	docker-compose up -d
+	docker compose up -d
 	@echo "Production environment started!"
 	@echo "Frontend: http://localhost:3000"
 	@echo "Backend API: http://localhost:9000/docs"
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 down:
-	docker-compose down
+	docker compose down
 
 restart:
-	docker-compose restart
+	docker compose restart
 
 # Logs
 logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 logs-backend:
-	docker-compose logs -f backend
+	docker compose logs -f backend
 
 logs-frontend:
-	docker-compose logs -f frontend
+	docker compose logs -f frontend
 
 logs-worker:
-	docker-compose logs -f worker
+	docker compose logs -f worker
 
 # Status
 ps:
-	docker-compose ps
+	docker compose ps
 
 # Database
 db-shell:
-	docker-compose exec mongodb mongosh -u admin -p
+	docker compose exec mongodb mongosh -u admin -p
 
 db-backup:
 	@mkdir -p backups
-	docker-compose exec mongodb mongodump --out=/data/backup-$(shell date +%Y%m%d-%H%M%S)
+	docker compose exec mongodb mongodump --out=/data/backup-$(shell date +%Y%m%d-%H%M%S)
 	@echo "Backup created in MongoDB container"
 
 redis-cli:
-	docker-compose exec redis redis-cli
+	docker compose exec redis redis-cli
 
 # Application
 init-admin:
-	docker-compose exec backend poetry run python scripts/init-admin
+	docker compose exec backend poetry run python scripts/init-admin
 
 backend-shell:
-	docker-compose exec backend bash
+	docker compose exec backend bash
 
 frontend-shell:
-	docker-compose exec frontend sh
+	docker compose exec frontend sh
 
 # Cleanup
 clean:
-	docker-compose down -v
+	docker compose down -v
 	@echo "Containers and volumes removed"
 
 prune:
@@ -168,6 +174,27 @@ health:
 update: build down up
 	@echo "Application updated!"
 
+# Rebuild specific services
+rebuild-backend:
+	@echo "Rebuilding backend..."
+	docker compose up -d --build backend
+	@echo "Backend rebuilt!"
+
+rebuild-frontend:
+	@echo "Rebuilding frontend..."
+	docker compose up -d --build frontend
+	@echo "Frontend rebuilt!"
+
+rebuild-worker:
+	@echo "Rebuilding worker..."
+	docker compose up -d --build worker
+	@echo "Worker rebuilt!"
+
+rebuild-all:
+	@echo "Rebuilding all services..."
+	docker compose up -d --build
+	@echo "All services rebuilt!"
+
 # Scale
 scale-workers:
-	docker-compose up -d --scale worker=3
+	docker compose up -d --scale worker=3

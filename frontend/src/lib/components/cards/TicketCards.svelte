@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/tw-utils';
-	import { User, UserCirclePlus, Calendar, MapPin } from 'phosphor-svelte';
+	import { User, Calendar, BookBookmark } from 'phosphor-svelte';
 	import { formatAllowedDates } from '$lib/utils/allowed-date-utils';
 	let { ticket } = $props();
 </script>
-
+<!-- Ph.bookBookmark.regular
+    .frame(width: 32, height: 32) -->
+    
 <div
 	class="card w-full bg-gradient-to-tr from-pink-100 to-40% hover:shadow-lg transition-all border border-base-200"
 >
@@ -23,20 +25,25 @@
 			<div class=" space-y-1">
 				<div class="flex items-center gap-2">
 					<User size={18} class="text-primary/60" />
- 					<span class="text-sm">Owner: {`${ticket?.first_name} ${ticket?.last_name}` || 'Ticket Owner'}</span>
+ 					<span class="text-sm">Owner: {`${ticket?.user?.first_name || 'Unknown'} ${ticket?.user?.last_name || ''}`}</span>
 				</div>
 
 
 				<div class="flex items-center gap-2">
 					<Calendar size={18} class="text-primary/60" />
 					<span class="text-sm">
-						{formatAllowedDates(ticket?.allowed_dates) || 'Event Date'}
+						{formatAllowedDates({
+							date_range: {
+								start_date: ticket?.event_start_date || "Wed Feb 04 2026 14:44:24 GMT+0700 (Indochina Time)",
+								end_date: ticket?.event_end_date || "Wed Feb 10 2026 18:00:00 GMT+0700 (Indochina Time)"
+							}
+						})}
 					</span>
 				</div>
 
 				<div class="flex items-center gap-2">
-					<MapPin size={18} class="text-primary/60" />
-					<span class="text-sm">{ticket?.event?.location || 'Event Location'}</span>
+					<BookBookmark size={18} class="text-primary/60" />
+					<span class="text-sm">check-in: {ticket?.is_checked_in ? 'Checked In' : 'Not Checked In'}</span>
 				</div>
 			</div>
 
@@ -46,21 +53,30 @@
 				<div>
 					<p class="text-sm font-medium">Ticket Type:</p>
 					<p class="text-primary font-semibold">
-						{ticket?.ticket_type_name || 'General Admission'}
+						{ticket?.ticket_name || 'General Admission'}
 					</p>
 				</div>
 				<div>
 					<p class="text-sm font-medium">Quantity:</p>
-					<p class="text-primary font-semibold">{ticket?.total_audience}</p>
+					<p class="text-primary items-center justify-center font-semibold">{ticket?.quantity}</p>
 				</div>
 			</div>
 
-			<!-- todo make user can get the qr code for the ticket -->
-			<div class="card-actions md:justify-end md:gap-2 mt-2">
-				<a href={`/tickets/${ticket?.id || ''}`} class="btn btn-sm btn-secondary w-full"
-					>Get QR Code</a
-				>
+			<div class="card-actions justify-between md:gap-2 mt-2">
+				<a href={`/events/${ticket?.event?.id || ''}`} class="btn btn-sm btn-primary flex-1">
+					View Event
+				</a>
+				{#if ticket?.is_checked_in}
+					<button class="btn btn-sm btn-success flex-1" style="background-color: #ffcccc;" disabled>
+						✓ Checked In
+					</button>
+				{:else}
+					<a href={`/events/${ticket?.event?.id || ''}/check-in/${ticket?.id || ''}`} class="btn btn-sm btn-secondary flex-1">
+						Check-in
+					</a>
+				{/if}
 			</div>
+			
 		</div>
 	</div>
 </div>

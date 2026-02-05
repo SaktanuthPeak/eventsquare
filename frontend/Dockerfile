@@ -20,7 +20,7 @@ ARG PUBLIC_API_URL=http://localhost:9000
 ENV API_ENDPOINT=${API_ENDPOINT}
 ENV PUBLIC_API_URL=${PUBLIC_API_URL}
 
-# Build the application
+# Build the application (OpenAPI client should be pre-generated)
 RUN npm run build
 
 # Production stage

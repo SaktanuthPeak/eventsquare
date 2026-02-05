@@ -27,20 +27,27 @@
 					class="card bg-gradient-to-tl to-45% from-success/20 hover:shadow-md transition-all border border-primary/10"
 				>
 					<div class="card-body p-4">
-						<h2 class="card-title text-lg truncate w-full">{checkIn.event_name}</h2>
+						<h2 class="card-title text-lg truncate w-full">{checkIn.event.name}</h2>
+						<h2 class="card-title text-sm truncate w-full">{checkIn.ticket_name}</h2>
 						<div class="badge badge-success text-success-content font-medium">Checked In</div>
 
 						<div class="flex items-center gap-2 mt-2">
 							<Calendar size={18} class="text-primary flex-shrink-0" />
-							<span class="text-sm truncate">{formatDateTime(checkIn.created_date)}</span>
+							<span class="text-sm truncate">{formatDateTime(checkIn.checked_in_date)}</span>
+						</div>
+						<div class="flex items-center gap-2 mt-1">
+							<Clock size={18} class="text-primary flex-shrink-0" />
+							<span class="text-sm truncate">{formatDateTime(checkIn.event_start_date)} - {formatDateTime(checkIn.event_end_date)}</span>
 						</div>
 
-						{#if checkIn.location}
+						<a href={`/events/${checkIn.event.id}`} class="btn btn-success mt-4">View Event Details</a>
+
+						<!-- {#if checkIn.location}
 							<div class="flex items-center gap-2">
 								<Buildings size={18} class="text-primary flex-shrink-0" />
 								<span class="text-sm truncate">{checkIn.location}</span>
 							</div>
-						{/if}
+						{/if} -->
 					</div>
 				</div>
 			{/each}

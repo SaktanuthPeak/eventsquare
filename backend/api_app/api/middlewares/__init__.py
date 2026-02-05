@@ -22,6 +22,11 @@ def init_middleware(app: FastAPI, settings: AppSettings) -> None:
 
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
+        # Allow health check requests
+        if request.url.path in ["/docs", "/health", "/redoc", "/"]:
+            response: Response = await call_next(request)
+            return response
+
         user_agent = request.headers.get("user-agent", "").lower()
         client_ip = request.client.host
 
@@ -32,10 +37,13 @@ def init_middleware(app: FastAPI, settings: AppSettings) -> None:
         ALLOWED_SCANNER_AGENTS = ["python-requests"]
         ALLOWED_SCANNER_IPS = ["172.30.81.146"]
 
-        if any(agent in user_agent for agent in ALLOWED_SCANNER_AGENTS) or client_ip in ALLOWED_SCANNER_IPS:
+        if (
+            any(agent in user_agent for agent in ALLOWED_SCANNER_AGENTS)
+            or client_ip in ALLOWED_SCANNER_IPS
+        ):
             response: Response = await call_next(request)
             return response
-        
+
         for agent in settings.DISALLOW_AGENTS:
             if agent in user_agent:
                 logger.warning({"detail": "Client is not allow to uses."})

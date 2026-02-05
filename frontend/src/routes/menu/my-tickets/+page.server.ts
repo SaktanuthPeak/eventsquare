@@ -8,8 +8,11 @@ export const load: PageServerLoad = (async ({locals}) => {
             client: client,
             path: {user_id: locals?.user?.id}
         });
+        
+        const tickets = ticketsRes.data || [];
 
-        return { tickets: ticketsRes.data };
+        console.log("User tickets response:", tickets);
+        return { tickets };
 
     } catch (error) {
         console.error('Error fetching tickets:', error);
