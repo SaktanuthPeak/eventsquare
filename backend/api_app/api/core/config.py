@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     OPENAPI_PREFIX: str = ""
     OPENAPI_URL: str = "/openapi.json"
     REDOC_URL: str = "/redoc"
-    TITLE: str = "IMPs FastAPI"
+    TITLE: str = "Eventsquare FastAPI"
     VERSION: str = "0.1.0"
 
     DB_ENGINE_MAPPER: dict = {

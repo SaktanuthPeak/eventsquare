@@ -21,6 +21,8 @@ python-dotenv = "^1.0.1"
 beanie = "^1.29.0"
 python-jose = "^3.4.0"
 redis = "^7.1.0"
+google-cloud-pubsub = "^2.34.0"
+google-cloud-storage = "^3.9.0"
 
 [tool.poetry.group.dev.dependencies]
 uvicorn = "^0.34.0"
