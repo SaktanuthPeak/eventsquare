@@ -48,10 +48,10 @@ setup:
 
 # Build
 build:
-	docker-compose build
+	docker compose build
 
 build-no-cache:
-	docker-compose build --no-cache
+	docker compose build --no-cache
 
 # Development
 dev:

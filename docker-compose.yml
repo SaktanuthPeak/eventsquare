@@ -122,6 +122,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       target: ${FRONTEND_TARGET:-production}
+      args:
+        API_ENDPOINT: ${PUBLIC_API_URL:-http://localhost:9000}
+        PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:9000}
     container_name: eventsquare-frontend
     restart: unless-stopped
     command: ${FRONTEND_COMMAND:-node build}
@@ -133,6 +136,7 @@ services:
       HOST: 0.0.0.0
       ORIGIN: ${FRONTEND_URL:-http://localhost:3000}
       PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:9000}
+      API_ENDPOINT: ${PUBLIC_API_URL:-http://localhost:9000}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
       - "${VITE_HMR_PORT:-5173}:5173"

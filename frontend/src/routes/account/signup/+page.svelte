@@ -6,7 +6,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import TextInput from '$lib/components/ui/forms/TextInput.svelte';
 	import { userSchema } from '$lib/schemas/userSchema';
-	import { XCircleIcon } from 'phosphor-svelte';
+	import { XCircle } from 'phosphor-svelte';
 
 	let { data }: { data: PageData } = $props();
 	let acceptTerms = $state(false);
@@ -126,7 +126,7 @@
 				<div class="rounded-lg border border-red-100 bg-red-50 p-4">
 					<div class="flex">
 						<div class="flex-shrink-0">
-							<XCircleIcon size={22} weight="fill" class="text-red-500" />
+							<XCircle size={22} weight="fill" class="text-red-500" />
 						</div>
 						<div class="ml-1">
 							<h3 class="text-sm font-medium text-red-800">

@@ -1,8 +1,10 @@
 import { error, isRedirect, redirect, type RequestEvent } from '@sveltejs/kit';
 import { ACCESS_TOKEN_COOKIE_NAME } from './global';
-import { API_ENDPOINT } from '$env/static/private';
+import { PUBLIC_API_URL } from '$env/static/public';
 
 const DEFAULT_PAGE_SIZE = 10;
+
+const API_ENDPOINT = PUBLIC_API_URL;
 
 export type IPaginate<T> = {
 	items: T[];

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CaretDownIcon, UserIcon } from 'phosphor-svelte';
+	import { CaretDown, User } from 'phosphor-svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import ButtonMenuMobile from '$lib/components/btn/ButtonMenuMobile.svelte';
@@ -77,7 +77,7 @@
 							class="w-full h-full object-cover"
 						/>
 					{:else}
-						<UserIcon size={24} weight="bold" class={scroll ? 'text-neutral-content' : 'text-white'} />
+						<User size={24} weight="bold" class={scroll ? 'text-neutral-content' : 'text-white'} />
 					{/if}
 				</div>
 			</button>
@@ -109,14 +109,14 @@
 									class="w-full h-full object-cover"
 								/>
 							{:else}
-								<UserIcon
+								<User
 									size={24}
 									weight="bold"
 									class={scroll ? 'text-neutral-content  ' : 'text-white'}
 								/>
 							{/if}
 						</div>
-						<CaretDownIcon
+						<CaretDown
 							size={12}
 							weight="bold"
 							class={scroll ? 'text-neutral-content  ' : 'text-white'}

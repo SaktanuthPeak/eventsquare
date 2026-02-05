@@ -6,9 +6,9 @@
   import FileInput from "$lib/components/ui/forms/FileInput.svelte";
   import { eventCategories } from "$lib/static/event";
   import {
-    ImageIcon,
-    XCircleIcon,
-    InfoIcon,
+    Image,
+    XCircle,
+    Info,
   } from "phosphor-svelte";
   import type { SuperForm } from "sveltekit-superforms";
   import SuperDebug, { fileProxy } from "sveltekit-superforms";
@@ -47,7 +47,7 @@
     <!-- Details Section -->
       <div class="space-y-6 p-6 border border-primary/20 rounded-lg">
         <div class="flex gap-1 text-gray-700">
-          <InfoIcon size={24} weight="fill" />
+          <Info size={24} weight="fill" />
           <h3 class="text-lg font-semibold text-gray-700">Event Details</h3>
           <span class="text-error">*</span>
         </div>
@@ -146,11 +146,11 @@
         </div>
       </div>
 
-      <!-- Event ImageIcon -->
+      <!-- Event Image -->
       <div class="p-6 border border-primary/20 rounded-lg flex flex-col gap-1">
         <div class="flex gap-1 text-gray-700">
           <h3 class="text-lg text-gray-700 font-semibold flex gap-2">
-            <ImageIcon size={24} weight="fill" />
+            <Image size={24} weight="fill" />
             Event Image
           </h3>
           {#if mode === 'create'}
@@ -162,7 +162,7 @@
           {form}
           bind:files={$file}
           name="image"
-          label="Upload ImageIcon"
+          label="Upload Image"
           description="JPEG or PNG, max 5MB"
         />
       </div>
@@ -172,7 +172,7 @@
         <div class="bg-red-50 p-4 rounded-lg border border-red-100">
           <div class="flex">
             <div class="flex-shrink-0">
-              <XCircleIcon size={22} weight="fill" class="text-red-500" />
+              <XCircle size={22} weight="fill" class="text-red-500" />
             </div>
             <div class="ml-1">
               <h3 class="text-sm font-medium text-red-800">
