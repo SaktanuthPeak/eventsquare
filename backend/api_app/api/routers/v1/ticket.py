@@ -1,5 +1,3 @@
-"""Ticket booking endpoints with race condition prevention."""
-
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -9,6 +7,7 @@ from api_app.services.ticket_booking_service import TicketBookingService
 from api_app.api.core import dependencies
 from api_app.api.core.redis import get_redis
 from redis.asyncio import Redis
+from api_app.api.utils.google import pubsub_client
 
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -26,6 +25,25 @@ async def book_tickets(
         user=current_user,
     )
 
+    booking_details = result.get("booking_details", {})
+
+    payload = schemas.TicketPayloadSchema(
+        event_name=booking_details.get("event_name", ""),
+        ticket_type_name=booking.ticket_type_name,
+        quantity=booking.quantity,
+        total_price=booking.total_price,
+        price_per_ticket=booking.price_per_ticket,
+        first_name=current_user.first_name,
+        last_name=current_user.last_name,
+        email=current_user.email,
+    )
+    try:
+        msg_id = pubsub_client.publish_message(
+            topic_name="ticket-bookings",
+            data=payload,
+        )
+    except Exception as e:
+        print(f"Failed to publish message to Pub/Sub: {str(e)}")
     return result
 
 

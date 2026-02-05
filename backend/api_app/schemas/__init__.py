@@ -18,6 +18,7 @@ from .event_schema import (
     EventBase,
     EventSearch,
     TicketBooking,
+    TicketPayloadSchema,
 )
 
 from .user_ticket_schema import (

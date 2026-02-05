@@ -80,3 +80,14 @@ class TicketBooking(BaseModel):
     )
     price_per_ticket: int = Field(..., description="Price per ticket")
     total_price: int = Field(..., description="Total price for the booking")
+
+
+class TicketPayloadSchema(BaseModel):
+    event_name: str = Field(..., description="Name of the event")
+    ticket_type_name: str = Field(..., description="Name of the ticket type")
+    quantity: int = Field(..., description="Number of tickets booked")
+    total_price: int = Field(..., description="Total price for the booked tickets")
+    price_per_ticket: int = Field(..., description="Price per ticket")
+    email: str
+    first_name: str
+    last_name: str
