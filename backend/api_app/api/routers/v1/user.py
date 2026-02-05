@@ -52,7 +52,7 @@ async def get_all(
 async def create(
     user_register: schemas.RegisteredUser,
 ) -> schemas.User:
-    user = await schemas.User.find_one(schemas.User.username == user_register.username)
+    user = await models.User.find_one(models.User.username == user_register.username)
 
     if user:
         raise HTTPException(
@@ -60,7 +60,7 @@ async def create(
             detail="This username is exists.",
         )
 
-    user = schemas.User(**user_register.dict())
+    user = models.User(**user_register.dict())
     await user.set_password(user_register.password)
     await user.insert()
 
