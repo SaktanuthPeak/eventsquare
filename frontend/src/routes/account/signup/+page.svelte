@@ -21,7 +21,7 @@
 					invalidateAll: true
 				});
 			} else if (result?.type === 'failure') {
-				toast.error(`Error: ${result?.data?.statusCode} ไม่สามารถเพิ่มผู้ใช้งานได้`, {
+				toast.error(`Error: ${result?.data?.status} ไม่สามารถเพิ่มผู้ใช้งานได้`, {
 					description: result.data?.message || 'กรุณาตรวจสอบข้อมูลและลองอีกครั้ง'
 				});
 			} else {
@@ -86,18 +86,17 @@
 					</div>
 				</div>
 				<div class="flex w-full gap-2">
-					<!-- todo make this to be the Serach select dropdown -->
-					<!-- <div class="w-full">
+					<div class="w-full">
 						<TextInput
 							{form}
-							name="company_name"
-							label="Company"
-							type="text"
-							placeholder="บริษัท"
-							bind:value={$formData.company_name}
-							class="input w-full rounded-md"
+							name="email"
+							label="Email"
+							type="email"
+							placeholder="อีเมล"
+							class="input  w-full  rounded-md"
+							bind:value={$formData.email}
 						/>
-					</div> -->
+					</div>
 				</div>
 				<div class="flex w-full gap-2">
 					<div class="w-full">
@@ -182,6 +181,7 @@
 					มีบัญชีผู้ใช้แล้ว? เข้าสู่ระบบ
 				</a>
 			</div>
+
 		</form>
 	</div>
 </div>
