@@ -34,6 +34,7 @@ async def create_user_admin():
         first_name="admin",
         last_name="system",
         roles=["user", "admin"],
+        credit=9999999,
         status="active",
     )
     await user.set_password("p@ssw0rd")

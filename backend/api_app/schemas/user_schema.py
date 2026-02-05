@@ -11,6 +11,7 @@ class BaseUser(BaseModel):
     first_name: str = Field(example="Firstname")
     last_name: str = Field(example="Lastname")
     status: str = Field(example="active")
+    credit: int = Field(example=100)
 
 
 class User(BaseSchema, BaseUser):
