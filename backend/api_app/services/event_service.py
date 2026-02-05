@@ -33,7 +33,6 @@ class EventService(BaseService):
     ) -> schemas.EventResponse:
         event = await self._repository.create(event_create)
 
-        # Initialize Redis inventory if Redis client is provided
         if redis:
             from ..api.core.redis_lock import TicketInventory
 

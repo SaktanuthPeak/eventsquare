@@ -26,20 +26,31 @@ class EventBase(BaseModel):
     image_id: Optional[PydanticObjectId] = None
     description: Optional[str]
     event_type: str
+    location: Optional[str] = None
+    start_date: datetime.datetime
+    end_date: datetime.datetime
+    booking_start_date: datetime.datetime
+    booking_end_date: datetime.datetime
+    created_by: Optional[PydanticObjectId] = None
+
+
+class EventCreate(BaseModel):
+    name: str
+    description: Optional[str]
+    event_type: str
+    location: Optional[str] = None
+    ticket_types: Optional[t.List[TicketTypeInput]] = None
     start_date: datetime.datetime
     end_date: datetime.datetime
     booking_start_date: datetime.datetime
     booking_end_date: datetime.datetime
 
 
-class EventCreate(EventBase):
-    ticket_types: Optional[t.List[TicketTypeInput]] = None
-
-
 class EventUpdate(BaseModel):
     name: Optional[str]
     image_id: Optional[PydanticObjectId]
     description: Optional[str]
+    location: Optional[str]
     event_type: Optional[str]
     start_date: Optional[datetime.datetime]
     end_date: Optional[datetime.datetime]
