@@ -1,10 +1,10 @@
-import { getUserTicketById } from '$lib/client';
+import { getUserTickets } from '$lib/client';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = (async ({locals}) => {
     try {
         const { client } = locals;
-        const ticketsRes = await getUserTicketById({
+        const ticketsRes = await getUserTickets({
             client: client,
             path: {user_id: locals?.user?.id}
         });
