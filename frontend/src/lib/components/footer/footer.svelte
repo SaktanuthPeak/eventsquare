@@ -107,10 +107,7 @@
 		>
 			<p class="text-sm opacity-75">© 2025 EventSquare. All rights reserved.</p>
 			<div class="flex gap-4 mt-4 md:mt-0">
-				<a href="#" class="opacity-75 hover:opacity-100">Twitter</a>
-				<a href="#" class="opacity-75 hover:opacity-100">LinkedIn</a>
-				<a href="#" class="opacity-75 hover:opacity-100">Facebook</a>
-				<a href="#" class="opacity-75 hover:opacity-100">Instagram</a>
+				
 			</div>
 		</div>
 	</div>
