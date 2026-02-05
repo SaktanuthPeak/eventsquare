@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { Check } from 'phosphor-svelte';
 	import type { PageData } from './$types';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
@@ -75,4 +75,4 @@
 		</div>
 	</div>
 {/if}
-
+ -->

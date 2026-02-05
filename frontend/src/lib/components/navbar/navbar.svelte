@@ -146,7 +146,15 @@
 								onclick={() => (menuOpen = false)}>My tickets</a
 							>
 						</li>
-						
+						{#if  userData.user.roles.includes('admin')}
+							<li>
+								<a
+									href="/admin"
+									class="block px-4 py-2 hover:bg-base-200"
+									onclick={() => (menuOpen = false)}>Admin</a
+								>
+							</li>
+						{/if}
 						<li>
 							<a
 								href="/account/logout"
@@ -233,7 +241,7 @@
 						>Check in History</a
 					>
 
-					{#if Array.isArray(userData?.user?.roles) && userData.user.roles.includes('admin')}
+					{#if  userData.user.roles.includes('admin')}
 						<a
 							href="/admin"
 							class="block rounded-xl px-4 py-3 hover:bg-base-200"
