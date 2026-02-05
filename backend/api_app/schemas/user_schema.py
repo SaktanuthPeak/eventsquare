@@ -3,6 +3,7 @@ import typing as t
 from pydantic import BaseModel, EmailStr, Field
 
 from .base_schema import BaseSchema, FindBase
+from typing import List
 
 
 class BaseUser(BaseModel):
@@ -55,6 +56,7 @@ class ResetedPassword(BaseModel):
 
 
 class RegisteredUser(BaseUser):
+    roles: list[str] = Field(default_factory=lambda: ["user"])
     password: str = Field(example="password")
     confirm_password: str = Field(example="confirm_password")
 
