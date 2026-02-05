@@ -114,6 +114,20 @@ export const Body_login_for_access_token_v1_auth_token_postSchema = {
     title: 'Body_login_for_access_token_v1_auth_token_post'
 } as const;
 
+export const Body_upload_image_v1_images_upload_postSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary',
+            title: 'File',
+            description: 'Image file to upload'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_upload_image_v1_images_upload_post'
+} as const;
+
 export const ChangedPasswordSchema = {
     properties: {
         current_password: {
@@ -291,6 +305,25 @@ export const EventResponseSchema = {
     title: 'EventResponse'
 } as const;
 
+export const FilePathSchema = {
+    properties: {
+        file_name: {
+            type: 'string',
+            title: 'File Name'
+        },
+        content_type: {
+            type: 'string',
+            title: 'Content Type'
+        },
+        file_id: {
+            '$ref': '#/components/schemas/PydanticObjectId'
+        }
+    },
+    type: 'object',
+    required: ['file_name', 'content_type', 'file_id'],
+    title: 'FilePath'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         errors: {
@@ -303,6 +336,32 @@ export const HTTPValidationErrorSchema = {
     },
     type: 'object',
     title: 'HTTPValidationError'
+} as const;
+
+export const ImageUploadResponseSchema = {
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/PydanticObjectId'
+        },
+        document_id: {
+            '$ref': '#/components/schemas/PydanticObjectId'
+        },
+        file_path: {
+            '$ref': '#/components/schemas/FilePath'
+        },
+        content_type: {
+            type: 'string',
+            title: 'Content Type'
+        },
+        upload_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Upload Date'
+        }
+    },
+    type: 'object',
+    required: ['id', 'document_id', 'file_path', 'content_type', 'upload_date'],
+    title: 'ImageUploadResponse'
 } as const;
 
 export const Page_EventResponse_Schema = {
@@ -422,46 +481,6 @@ export const RegisteredUserSchema = {
     type: 'object',
     required: ['email', 'username', 'first_name', 'last_name', 'status', 'credit', 'password', 'confirm_password'],
     title: 'RegisteredUser'
-} as const;
-
-export const TicketBookingSchema = {
-    properties: {
-        event_id: {
-            type: 'string',
-            title: 'Event Id',
-            description: 'Event ID'
-        },
-        ticket_type_name: {
-            type: 'string',
-            title: 'Ticket Type Name',
-            description: 'Ticket name'
-        },
-        ticket_type_id: {
-            type: 'string',
-            title: 'Ticket Type Id',
-            description: 'Ticket type ID'
-        },
-        quantity: {
-            type: 'integer',
-            maximum: 10,
-            exclusiveMinimum: 0,
-            title: 'Quantity',
-            description: 'Number of tickets (max 10 per booking)'
-        },
-        price_per_ticket: {
-            type: 'integer',
-            title: 'Price Per Ticket',
-            description: 'Price per ticket'
-        },
-        total_price: {
-            type: 'integer',
-            title: 'Total Price',
-            description: 'Total price for the booking'
-        }
-    },
-    type: 'object',
-    required: ['event_id', 'ticket_type_name', 'ticket_type_id', 'quantity', 'price_per_ticket', 'total_price'],
-    title: 'TicketBooking'
 } as const;
 
 export const TicketTypeDBSchema = {

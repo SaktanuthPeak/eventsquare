@@ -34,12 +34,7 @@
 				You don't have any active tickets yet. If you have already purchased a ticket, please check
 				your purchase history or wait for approval.
 			</p>
-			<div class="flex gap-4 flex-col md:flex-row">
-				<a href="/menu/purchase-history" class="btn btn-outline btn-primary">
-					Check Purchase History
-				</a>
-				<a href="/events" class="btn btn-primary"> Browse Events </a>
-			</div>
+
 		</div>
 	{/if}
 </div>

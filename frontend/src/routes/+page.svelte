@@ -54,10 +54,10 @@
 	<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 p-2 max-w-screen w- mx-auto">
 		{#if data.events && data.events
 				.slice(0, 16)
-				.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_category?.includes(selectedCategory)).length > 0}
+				.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_type?.includes(selectedCategory)).length > 0}
 			{#each data.events
 				.slice(0, 16)
-				.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_category?.includes(selectedCategory)) as event}
+				.filter((cat) => !selectedCategory || selectedCategory === 'All' || cat.event_type?.includes(selectedCategory)) as event}
 				<EventCards {event} />
 			{/each}
 		{:else}

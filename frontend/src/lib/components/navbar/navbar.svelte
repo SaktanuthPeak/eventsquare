@@ -146,13 +146,7 @@
 								onclick={() => (menuOpen = false)}>My tickets</a
 							>
 						</li>
-						<li>
-							<a
-								href="/menu/purchase-history"
-								class="block px-4 py-2 hover:bg-base-200"
-								onclick={() => (menuOpen = false)}>Order</a
-							>
-						</li>
+						
 						<li>
 							<a
 								href="/account/logout"
@@ -231,12 +225,7 @@
 						onclick={closeMobileMenu}
 						>My tickets</a
 					>
-					<a
-						href="/menu/purchase-history"
-						class="block rounded-xl px-4 py-3 hover:bg-base-200"
-						onclick={closeMobileMenu}
-						>Order</a
-					>
+					
 					<a
 						href="/menu/check-in-history"
 						class="block rounded-xl px-4 py-3 hover:bg-base-200"

@@ -34,14 +34,9 @@
 		}
 		submitStatus = true;
 		goto(
-			`/events/${data.eventData.id}/checkout?ticket=${selectedTicketType}&quantity=${ticketQuantities[selectedTicketType]}`
+			`/events/${data?.eventData?.id}/checkout?ticket=${selectedTicketType}&quantity=${ticketQuantities[selectedTicketType]}`
 		);
 	}
-
-	let selectedTicket = $derived(
-		data.eventData?.ticket_types?.find((t) => t.id === selectedTicketType)
-	);
-
 	$effect(() => {
 		if (selectedTicketType && !ticketQuantities[selectedTicketType]) {
 			ticketQuantities[selectedTicketType] = 1;
@@ -52,12 +47,12 @@
 <div class="flex flex-col items-center w-full">
 	<!-- Hero Banner Section -->
 	<div class="w-full h-[60vh] relative">
-		{#if data.eventData?.images && data.eventData.images.length > 0}
+		{#if data.eventData?.images && data.eventData?.images.length > 0}
 			<div class="absolute inset-0 overflow-hidden">
 				<img
 					class="w-full h-full object-cover"
 					src={data.eventData?.images[0].url}
-					alt={data.eventData?.title}
+					alt={data.eventData?.name}
 					transition:fade={{ duration: 300 }}
 				/>
 				<div class="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent"></div>
@@ -79,7 +74,7 @@
 		>
 			<div class="container mx-auto">
 				<h1 class="text-3xl md:text-4xl font-bold mb-2" transition:fly={{ y: 20, duration: 400 }}>
-					{data.eventData?.title}
+					{data.eventData?.name}
 				</h1>
 				<div class="flex flex-wrap gap-3 items-center">
 					<div class="badge badge-accent">{data.eventData?.event_category || 'Event'}</div>
@@ -119,13 +114,15 @@
 			</div>
 
 			<!-- Organizer Details -->
-			<OrganizerDetail organizer={data.orgData?.organizer} />
+			{#if data?.orgData?.organizer}
+			<OrganizerDetail organizer={data?.orgData?.organizer} />
+			{/if}
 		</div>
 
 		<!-- Right Column: Ticket Selection -->
 		<div class={cn('w-full lg:w-2/7 hidden lg:block')}>
 			<div class="relative bottom-[340px]">
-				<EventDetailsCard eventData={data.eventData} />
+				<EventDetailsCard eventData={data?.eventData} />
 			</div>
 			<div
 				class={cn(
@@ -144,27 +141,27 @@
 
 					<!-- Ticket List -->
 					<div class="divide-y">
-						{#if data.eventData?.ticket_types && data.eventData.ticket_types.length > 0}
-							{#each data.eventData?.ticket_types as ticket}
+						{#if data?.eventData?.ticket_types && data?.eventData.ticket_types.length > 0}
+							{#each data?.eventData?.ticket_types as ticket}
 								<div class="p-4 hover:bg-base-100 transition-colors">
 									<div class="flex justify-between items-start">
 										<div class="space-y-1">
-											<h3 class="font-bold text-lg">{ticket.name}</h3>
-											<p class="text-sm text-base-content/70">{ticket.description}</p>
+											<h3 class="font-bold text-lg">{ticket?.name}</h3>
+											<p class="text-sm text-base-content/70">{ticket?.description}</p>
 
-											{#if ticket.allowed_dates}
+											{#if ticket?.allowed_dates}
 												<div class="mt-2 flex items-center gap-1 text-xs text-primary/60">
 													<Calendar size={14} />
 													<span>
-														{#if ticket.allowed_dates.date_range}
+														{#if ticket?.allowed_dates.date_range}
 															{new Date(
-																ticket.allowed_dates.date_range.start_date
+																ticket?.allowed_dates.date_range.start_date
 															).toLocaleDateString()} -
 															{new Date(
-																ticket.allowed_dates.date_range.end_date
+																ticket?.allowed_dates.date_range.end_date
 															).toLocaleDateString()}
-														{:else if ticket.allowed_dates.single_date}
-															{new Date(ticket.allowed_dates.single_date).toLocaleDateString()}
+														{:else if ticket?.allowed_dates.single_date}
+															{new Date(ticket?.allowed_dates.single_date).toLocaleDateString()}
 														{/if}
 													</span>
 												</div>
@@ -187,8 +184,8 @@
 						<div class="form-control">
 							<select class="select select-bordered w-full" bind:value={selectedTicketType}>
 								<option value="" disabled selected>Choose a ticket type</option>
-								{#each data.eventData?.ticket_types || [] as ticket}
-									<option value={ticket.id}>{ticket.name} - ฿{ticket.price}</option>
+								{#each data?.eventData?.ticket_types || [] as ticket}
+									<option value={ticket?.id}>{ticket?.name} - ฿{ticket?.price}</option>
 								{/each}
 							</select>
 						</div>
@@ -227,7 +224,7 @@
 						<button
 							class="btn btn-primary w-full"
 							disabled={!selectedTicketType || !agreedToTerms}
-							onClick={() => handleSelectTicket(selectedTicketType)}
+							onclick={() => handleSelectTicket(selectedTicketType)}
 						>
 							Purchase Tickets
 						</button>

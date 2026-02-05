@@ -18,6 +18,13 @@ export type BodyLoginForAccessTokenV1AuthTokenPost = {
     client_secret?: string | null;
 };
 
+export type BodyUploadImageV1ImagesUploadPost = {
+    /**
+     * Image file to upload
+     */
+    file: Blob | File;
+};
+
 export type ChangedPassword = {
     current_password: string;
     new_password: string;
@@ -50,8 +57,22 @@ export type EventResponse = {
     ticket_types?: Array<TicketTypeDb>;
 };
 
+export type FilePath = {
+    file_name: string;
+    content_type: string;
+    file_id: PydanticObjectId;
+};
+
 export type HttpValidationError = {
     errors?: Array<ValidationError>;
+};
+
+export type ImageUploadResponse = {
+    id: PydanticObjectId;
+    document_id: PydanticObjectId;
+    file_path: FilePath;
+    content_type: string;
+    upload_date: Date;
 };
 
 export type PageEventResponse = {
@@ -73,33 +94,6 @@ export type RegisteredUser = {
     credit: number;
     password: string;
     confirm_password: string;
-};
-
-export type TicketBooking = {
-    /**
-     * Event ID
-     */
-    event_id: string;
-    /**
-     * Ticket name
-     */
-    ticket_type_name: string;
-    /**
-     * Ticket type ID
-     */
-    ticket_type_id: string;
-    /**
-     * Number of tickets (max 10 per booking)
-     */
-    quantity: number;
-    /**
-     * Price per ticket
-     */
-    price_per_ticket: number;
-    /**
-     * Total price for the booking
-     */
-    total_price: number;
 };
 
 export type TicketTypeDb = {
@@ -259,73 +253,82 @@ export type RefreshTokenResponses = {
     200: unknown;
 };
 
-export type BookTicketsData = {
-    body: TicketBooking;
+export type UploadImageData = {
+    body: BodyUploadImageV1ImagesUploadPost;
     path?: never;
-    query?: never;
-    url: '/v1/tickets/book';
+    query?: {
+        /**
+         * Event ID to associate with the image
+         */
+        event_id?: string | null;
+    };
+    url: '/v1/images/upload';
 };
 
-export type BookTicketsErrors = {
+export type UploadImageErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type BookTicketsError = BookTicketsErrors[keyof BookTicketsErrors];
+export type UploadImageError = UploadImageErrors[keyof UploadImageErrors];
 
-export type BookTicketsResponses = {
+export type UploadImageResponses = {
     /**
      * Successful Response
      */
-    200: unknown;
+    201: ImageUploadResponse;
 };
 
-export type SyncInventoryData = {
+export type UploadImageResponse = UploadImageResponses[keyof UploadImageResponses];
+
+export type DeleteImageData = {
     body?: never;
     path: {
-        event_id: string;
+        image_id: string;
     };
     query?: never;
-    url: '/v1/tickets/sync/{event_id}';
+    url: '/v1/images/{image_id}';
 };
 
-export type SyncInventoryErrors = {
+export type DeleteImageErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type SyncInventoryError = SyncInventoryErrors[keyof SyncInventoryErrors];
+export type DeleteImageError = DeleteImageErrors[keyof DeleteImageErrors];
 
-export type SyncInventoryResponses = {
+export type DeleteImageResponses = {
     /**
      * Successful Response
      */
-    200: unknown;
+    204: void;
 };
 
-export type CheckSyncStatusData = {
+export type DeleteImageResponse = DeleteImageResponses[keyof DeleteImageResponses];
+
+export type GetImageData = {
     body?: never;
     path: {
-        event_id: string;
+        image_id: string;
     };
     query?: never;
-    url: '/v1/tickets/check-sync/{event_id}';
+    url: '/v1/images/{image_id}';
 };
 
-export type CheckSyncStatusErrors = {
+export type GetImageErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type CheckSyncStatusError = CheckSyncStatusErrors[keyof CheckSyncStatusErrors];
+export type GetImageError = GetImageErrors[keyof GetImageErrors];
 
-export type CheckSyncStatusResponses = {
+export type GetImageResponses = {
     /**
      * Successful Response
      */
