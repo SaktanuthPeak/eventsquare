@@ -1,0 +1,51 @@
+version: '3.8'
+
+# Development override configuration
+services:
+  mongodb:
+    ports:
+      - "27017:27017"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: poetry run fastapi dev api_app/cmd/api.py --host 0.0.0.0 --port 9000
+    environment:
+      APP_ENV: dev
+      DEBUG: "True"
+      LOGGING_LEVEL: 10
+    volumes:
+      - ./backend:/app
+    ports:
+      - "9000:9000"
+
+  worker:
+    environment:
+      APP_ENV: dev
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: builder
+    command: npm run dev -- --host 0.0.0.0 --port 3000
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+      - "5173:5173"  # Vite HMR port
+
+  # Nginx is disabled by default
+  # nginx:
+  #   profiles:
+  #     - production
