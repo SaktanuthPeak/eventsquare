@@ -16,7 +16,7 @@
 		onResult: async ({ result }) => {
 			if (result?.data?.success === true) {
 				toast.success('Successfully login');
-				await goto('/admin/home', { invalidateAll: true });
+				await goto('/', { invalidateAll: true });
 			} else if (result.status === 400) {
 				toast.error('ไม่สามารถเข้าสู่ระบบได้', {
 					description: 'ข้อมูลที่ป้อนไม่ถูกต้อง กรุณาลองใหม่'
