@@ -4,6 +4,70 @@
 	import { env } from '$env/dynamic/public';
 
 	let { event } = $props();
+
+	function toValidDate(value: unknown): Date | null {
+		if (value instanceof Date) {
+			return Number.isNaN(value.getTime()) ? null : value;
+		}
+		if (typeof value === 'string' || typeof value === 'number') {
+			const parsed = new Date(value);
+			return Number.isNaN(parsed.getTime()) ? null : parsed;
+		}
+		return null;
+	}
+
+	function isSameUtcDay(a: Date, b: Date) {
+		return (
+			a.getUTCFullYear() === b.getUTCFullYear() &&
+			a.getUTCMonth() === b.getUTCMonth() &&
+			a.getUTCDate() === b.getUTCDate()
+		);
+	}
+
+	function formatEventDateRange(startDate: unknown, endDate: unknown) {
+		const start = toValidDate(startDate);
+		const end = toValidDate(endDate);
+
+		if (!start && !end) return 'Date TBA';
+		if (start && !end) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+				timeZone: 'UTC'
+			}).format(start);
+		}
+		if (!start && end) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+				timeZone: 'UTC'
+			}).format(end);
+		}
+
+		if (isSameUtcDay(start!, end!)) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+				timeZone: 'UTC'
+			}).format(start!);
+		}
+
+		const startFormatted = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric',
+			timeZone: 'UTC'
+		}).format(start!);
+		const endFormatted = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric',
+			timeZone: 'UTC'
+		}).format(end!);
+
+		return `${startFormatted} - ${endFormatted}`;
+	}
 </script>
 
 <a
@@ -15,7 +79,7 @@
 		{#if event?.image_url}
 			<img
 				src={`${env.PUBLIC_API_URL}/v1/events/image/${event?.image.file_id}`}
-				alt={event?.title}
+				alt={event?.name}
 				class="w-full h-full object-cover rounded-t-2xl"
 			/>
 		{:else}
@@ -27,32 +91,11 @@
 	<div
 		class="text-sm bg-gradient-to-tr from-accent to-purple-600 text-white h-[25px] w-[80%] px-2 flex text-center justify-center line-clamp-1 font-bold rounded-br-2xl py-0.5"
 	>
-		{#if new Date(event?.start_date).toISOString().split('T')[0] === new Date(event?.end_date)
-				.toISOString()
-				.split('T')[0]}
-			{new Intl.DateTimeFormat('en-UK', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric',
-				timeZone: 'UTC'
-			}).format(event?.start_date)}
-		{:else}
-			{new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric',
-				timeZone: 'UTC'
-			}).format(event?.start_date)} -
-
-			{new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric',
-				timeZone: 'UTC'
-			}).format(event?.end_date)}
-		{/if}
+		{formatEventDateRange(event?.start_date, event?.end_date)}
 	</div>
 	<div class="px-4 py-2 flex flex-col gap-2 h-[70px]">
 		<h2 class="text-md items-start line-clamp-2 font-bold h-[30px] leading-4">
-			{event?.title}
+			{event?.name}
 		</h2>
 
 		<div class="  flex flex-row items-center gap-1 h-[20px]">

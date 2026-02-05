@@ -1,37 +1,71 @@
 <script lang="ts">
-	import { Calendar, MapPin, Tag, Globe, Image } from 'phosphor-svelte';
+	import { CalendarIcon, MapPinIcon, TagIcon, GlobeIcon, ImageIcon } from 'phosphor-svelte';
 	import { cn } from '$lib/utils/tw-utils';
 	import { env } from '$env/dynamic/public';
 	import { fade, fly } from 'svelte/transition';
 
 	let { eventData } = $props();
 
-	function formatDate(startDate: string, endDate: string) {
-		const start = new Date(startDate);
-		const end = new Date(endDate);
+	function toValidDate(value: unknown): Date | null {
+		if (value instanceof Date) {
+			return Number.isNaN(value.getTime()) ? null : value;
+		}
+		if (typeof value === 'string' || typeof value === 'number') {
+			const parsed = new Date(value);
+			return Number.isNaN(parsed.getTime()) ? null : parsed;
+		}
+		return null;
+	}
 
-		const isSameDay = start.toISOString().split('T')[0] === end.toISOString().split('T')[0];
+	function isSameLocalDay(a: Date, b: Date) {
+		return (
+			a.getFullYear() === b.getFullYear() &&
+			a.getMonth() === b.getMonth() &&
+			a.getDate() === b.getDate()
+		);
+	}
 
-		if (isSameDay) {
-			return new Intl.DateTimeFormat('en-UK', {
+	function formatDate(startDate: unknown, endDate: unknown) {
+		const start = toValidDate(startDate);
+		const end = toValidDate(endDate);
+
+		if (!start && !end) return 'Date TBA';
+		if (start && !end) {
+			return new Intl.DateTimeFormat('en-GB', {
 				year: 'numeric',
 				month: 'long',
 				day: 'numeric'
 			}).format(start);
-		} else {
-			const startFormat = new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric'
-			}).format(start);
-
-			const endFormat = new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric',
-				year: 'numeric'
-			}).format(end);
-
-			return `${startFormat} - ${endFormat}`;
 		}
+		if (!start && end) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			}).format(end);
+		}
+
+		// start and end are both valid here
+		if (isSameLocalDay(start!, end!)) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			}).format(start!);
+		}
+
+		const startFormat = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric'
+		}).format(start!);
+
+		const endFormat = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric',
+			year: 'numeric'
+		}).format(end!);
+
+		return `${startFormat} - ${endFormat}`;
 	}
 
 	function getEventTypeBadge(eventType: string) {
@@ -50,14 +84,14 @@
 			<img
 				class="w-full h-full object-cover"
 				src={`${env.PUBLIC_API_URL}/v1/events/image/${eventData?.image.file_id}`}
-				alt={eventData?.title}
+				alt={eventData?.name}
 				transition:fade={{ duration: 200 }}
 			/>
 		{:else}
 			<div
 				class="w-full h-full bg-gradient-to-br from-base-200 to-base-300 flex flex-col items-center justify-center p-4"
 			>
-				<Image size={48} weight="thin" class="text-base-content/30 mb-2" />
+				<ImageIcon size={48} weight="thin" class="text-base-content/30 mb-2" />
 				<p class="text-base-content/50 text-center">No Image Available</p>
 			</div>
 		{/if}
@@ -75,7 +109,7 @@
 
 			<!-- Event Details -->
 			<div class="card-body p-5">
-				<h2 class="card-title text-xl font-bold">{eventData?.title}</h2>
+				<h2 class="card-title text-xl font-bold">{eventData?.name}</h2>
 
 				<div class="divider my-2"></div>
 
@@ -83,7 +117,7 @@
 					<!-- Date -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<Calendar size={18} weight="fill" class="text-primary" />
+							<CalendarIcon size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="text-sm">
 							{formatDate(eventData?.start_date, eventData?.end_date)}
@@ -93,7 +127,7 @@
 					<!-- Location -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<MapPin size={18} weight="fill" class="text-primary" />
+							<MapPinIcon size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="text-sm line-clamp-1">{eventData?.location}</span>
 					</div>
@@ -101,7 +135,7 @@
 					<!-- Category -->
 					<div class="flex items-center gap-2">
 						<div class="bg-primary/5 p-1.5 rounded-full">
-							<Tag size={18} weight="fill" class="text-primary" />
+							<TagIcon size={18} weight="fill" class="text-primary" />
 						</div>
 						<span class="badge badge-accent text-accent-content">{eventData?.event_category}</span>
 					</div>

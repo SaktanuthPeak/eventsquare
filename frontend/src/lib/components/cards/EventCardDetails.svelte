@@ -6,35 +6,70 @@
 
 	let { eventData } = $props();
 
-	function formatDateRange(startDate: string, endDate: string) {
-		const start = new Date(startDate);
-		const end = new Date(endDate);
+	function toValidDate(value: unknown): Date | null {
+		if (value instanceof Date) {
+			return Number.isNaN(value.getTime()) ? null : value;
+		}
+		if (typeof value === 'string' || typeof value === 'number') {
+			const parsed = new Date(value);
+			return Number.isNaN(parsed.getTime()) ? null : parsed;
+		}
+		return null;
+	}
 
-		const isSameDay = start.toISOString().split('T')[0] === end.toISOString().split('T')[0];
+	function isSameUtcDay(a: Date, b: Date) {
+		return (
+			a.getUTCFullYear() === b.getUTCFullYear() &&
+			a.getUTCMonth() === b.getUTCMonth() &&
+			a.getUTCDate() === b.getUTCDate()
+		);
+	}
 
-		if (isSameDay) {
-			return new Intl.DateTimeFormat('en-UK', {
+	function formatDateRange(startDate: unknown, endDate: unknown) {
+		const start = toValidDate(startDate);
+		const end = toValidDate(endDate);
+
+		if (!start && !end) return 'Date TBA';
+		if (start && !end) {
+			return new Intl.DateTimeFormat('en-GB', {
 				year: 'numeric',
 				month: 'long',
 				day: 'numeric',
 				timeZone: 'UTC'
 			}).format(start);
-		} else {
-			const startFormat = new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric',
-				timeZone: 'UTC'
-			}).format(start);
-
-			const endFormat = new Intl.DateTimeFormat('en-UK', {
-				month: 'short',
-				day: 'numeric',
+		}
+		if (!start && end) {
+			return new Intl.DateTimeFormat('en-GB', {
 				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
 				timeZone: 'UTC'
 			}).format(end);
-
-			return `${startFormat} - ${endFormat}`;
 		}
+
+		if (isSameUtcDay(start!, end!)) {
+			return new Intl.DateTimeFormat('en-GB', {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				timeZone: 'UTC'
+			}).format(start!);
+		}
+
+		const startFormat = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric',
+			timeZone: 'UTC'
+		}).format(start!);
+
+		const endFormat = new Intl.DateTimeFormat('en-GB', {
+			month: 'short',
+			day: 'numeric',
+			year: 'numeric',
+			timeZone: 'UTC'
+		}).format(end!);
+
+		return `${startFormat} - ${endFormat}`;
 	}
 
 	function getEventTypeBadge(eventType: string) {
@@ -54,7 +89,7 @@
 					<img
 						class="w-full h-full object-cover hover:scale-105 transition-all duration-500"
 						src={`${env.PUBLIC_API_URL}/v1/events/image/${eventData?.image.file_id}`}
-						alt={eventData?.title}
+						alt={eventData?.name}
 					/>
 				{:else}
 					<div
@@ -84,7 +119,7 @@
 				<!-- Header with Title and Type -->
 				<div class="mb-4">
 					<div class="flex flex-wrap justify-between items-start gap-3 mb-2">
-						<h2 class="text-2xl font-bold leading-tight">{eventData?.title || 'Event Title'}</h2>
+						<h2 class="text-2xl font-bold leading-tight">{eventData?.name || 'Event Title'}</h2>
 					</div>
 					<span class={getEventTypeBadge(eventData?.event_type)}>
 						{eventData?.event_type === 'public' ? 'Public Event' : 'Private Event'}
