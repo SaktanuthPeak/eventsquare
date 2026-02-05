@@ -1,5 +1,7 @@
-import {  getEvents, type EventResponse } from '$lib/client';
+import { getEvents, type EventResponse } from '$lib/client';
+import { get } from 'svelte/store';
 import type { PageServerLoad } from './$types';
+import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ params, url, locals }) => {
     const { client } = locals;
@@ -23,6 +25,28 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
             const res = await getEvents({client: client});
             events = res.data?.items ?? [];
         }
+
+        return { events };
+        // const eventsWithImages = [];
+        // for (const event of events) {
+        //     if (event?.image?.file_id) {
+        //         try {
+        //             eventsWithImages.push({
+        //                 ...event,
+        //                 image_url: `${env.API_URL}/v1/events/image/${event?.image?.file_id}`
+        //             });
+        //         } catch (error) {
+        //             console.log(error);
+        //         }
+        //     } else {
+        //         eventsWithImages.push({
+        //             ...event,
+        //             image_url: null
+        //         });
+        //     }
+        // }
+
+        // return { events: eventsWithImages.filter((event) => event.event_status === 'active') };
 
     } catch (err) {
         console.error("Error loading events:", err);
