@@ -55,16 +55,44 @@ build-no-cache:
 
 # Development
 dev:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+	@echo "Starting development environment..."
+	@echo "Setting development environment variables..."
+	APP_ENV=dev \
+	DEBUG=True \
+	LOGGING_LEVEL=10 \
+	BACKEND_COMMAND="poetry run fastapi dev api_app/cmd/api.py --host 0.0.0.0 --port 9000" \
+	BACKEND_VOLUME=./backend \
+	WORKER_VOLUME=./backend \
+	FRONTEND_TARGET=builder \
+	FRONTEND_COMMAND="npm run dev -- --host 0.0.0.0 --port 3000" \
+	FRONTEND_VOLUME=./frontend \
+	NODE_ENV=development \
+	docker-compose up -d
 	@echo "Development environment started!"
 	@echo "Frontend: http://localhost:3000"
 	@echo "Backend API: http://localhost:9000/docs"
+	@echo "MongoDB: localhost:27017"
+	@echo "Redis: localhost:6379"
 
 dev-logs:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml logs -f
+	docker-compose logs -f
 
 dev-down:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+	docker-compose down
+
+dev-rebuild:
+	@echo "Rebuilding development environment..."
+	APP_ENV=dev \
+	DEBUG=True \
+	LOGGING_LEVEL=10 \
+	BACKEND_COMMAND="poetry run fastapi dev api_app/cmd/api.py --host 0.0.0.0 --port 9000" \
+	BACKEND_VOLUME=./backend \
+	WORKER_VOLUME=./backend \
+	FRONTEND_TARGET=builder \
+	FRONTEND_COMMAND="npm run dev -- --host 0.0.0.0 --port 3000" \
+	FRONTEND_VOLUME=./frontend \
+	NODE_ENV=development \
+	docker-compose up -d --build
 
 # Production
 prod: build
