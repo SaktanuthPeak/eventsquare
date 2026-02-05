@@ -141,7 +141,7 @@
 						</li>
 						<li>
 							<a
-								href="/menu/my-tickets/active-tickets"
+								href="/menu/my-tickets"
 								class="block px-4 py-2 hover:bg-base-200"
 								onclick={() => (menuOpen = false)}>My tickets</a
 							>
@@ -228,7 +228,7 @@
 						>Profile</a
 					>
 					<a
-						href="/menu/my-tickets/active-tickets"
+						href="/menu/my-tickets"
 						class="block rounded-xl px-4 py-3 hover:bg-base-200"
 						onclick={closeMobileMenu}
 						>My tickets</a

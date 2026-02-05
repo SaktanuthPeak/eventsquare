@@ -6,28 +6,26 @@
 </script>
 
 <div
-	class="card w-full bg-gradient-to-tr from-base-200 hover:shadow-lg transition-all border border-base-200"
+	class="card w-full bg-gradient-to-tr from-pink-100 to-40% hover:shadow-lg transition-all border border-base-200"
 >
 	<div class="flex flex-col sm:flex-row">
 		<!-- Ticket Details -->
 		<div class="p-4 flex flex-col gap-1 w-full">
 			<div class="flex justify-between items-center">
 				<h2 class="card-title text-lg font-bold truncate w-[60%]">
-					{ticket?.event_name || '**Event Name**'}
+					{ticket?.event?.name || '**Event Name**'}
 				</h2>
-				<div class="badge badge-error">Expired</div>
+				<div class="badge badge-primary">
+					{ticket.status?.charAt(0).toUpperCase() + ticket.status?.slice(1)}
+				</div>
 			</div>
 
 			<div class=" space-y-1">
 				<div class="flex items-center gap-2">
 					<User size={18} class="text-primary/60" />
-					<span class="text-sm">Owner: {ticket?.owner_name || 'Ticket Owner'}</span>
+ 					<span class="text-sm">Owner: {`${ticket?.first_name} ${ticket?.last_name}` || 'Ticket Owner'}</span>
 				</div>
 
-				<div class="flex items-center gap-2">
-					<UserCirclePlus size={18} class="text-primary/60" />
-					<span class="text-sm">Co-owner: {ticket?.co_owner_name || 'Ticket Owner'}</span>
-				</div>
 
 				<div class="flex items-center gap-2">
 					<Calendar size={18} class="text-primary/60" />
@@ -38,7 +36,7 @@
 
 				<div class="flex items-center gap-2">
 					<MapPin size={18} class="text-primary/60" />
-					<span class="text-sm">{ticket?.location || 'Event Location'}</span>
+					<span class="text-sm">{ticket?.event?.location || 'Event Location'}</span>
 				</div>
 			</div>
 
@@ -55,6 +53,13 @@
 					<p class="text-sm font-medium">Quantity:</p>
 					<p class="text-primary font-semibold">{ticket?.total_audience}</p>
 				</div>
+			</div>
+
+			<!-- todo make user can get the qr code for the ticket -->
+			<div class="card-actions md:justify-end md:gap-2 mt-2">
+				<a href={`/tickets/${ticket?.id || ''}`} class="btn btn-sm btn-secondary w-full"
+					>Get QR Code</a
+				>
 			</div>
 		</div>
 	</div>

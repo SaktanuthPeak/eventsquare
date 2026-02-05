@@ -14,7 +14,7 @@
 >
 	{#if userData.user}
 		<div
-			class="flex flex-col gap-2.5 w-full pt-[30px] pb-[20px] shadow-lg bg-primary justify-center place-items-center content-center items-center"
+			class="flex flex-col gap-2.5 w-full pt-7.5 pb-5 shadow-lg bg-primary justify-center place-items-center content-center items-center"
 		>
 			<div
 				class={'size-[40px] rounded-full overflow-hidden flex items-center justify-center ring-2 ring-white bg-white/20 '}
@@ -60,7 +60,7 @@
 			<li>Check-in History</li>
 		</a>
 		<a
-			href="/menu/my-tickets/active-tickets"
+			href="/menu/my-tickets"
 			onclick={() => {
 				toggleMenu();
 			}}
@@ -68,14 +68,6 @@
 		>
 			<li>My Tickets</li>
 		</a>
-		<a
-			href="/menu/purchase-history"
-			onclick={() => {
-				toggleMenu();
-			}}
-			class="p-2 w-full hover:bg-primary/10 rounded-xl cursor-pointer select-none"
-		>
-			<li>Purchase history</li>
-		</a>
+		
 	</ul>
 </container>
