@@ -32,7 +32,7 @@ class File:
 
     async def init(self):
 
-        self.db = beanie_client.db
+        self.db = beanie_client.client.get_default_database()
         self.fs = AsyncIOMotorGridFSBucket(
             self.db,
             bucket_name=self.bucket_name,

@@ -3,6 +3,7 @@ from .user_repo import UserRepository
 from .event_repo import EventRepository
 from .ticket_repo import TicketRepository
 from .user_ticket_repo import UserTicketRepository
+from .image_repo import ImageRepository
 
 
 __all__ = [
@@ -11,4 +12,5 @@ __all__ = [
     "EventRepository",
     "TicketRepository",
     "UserTicketRepository",
+    "ImageRepository",
 ]

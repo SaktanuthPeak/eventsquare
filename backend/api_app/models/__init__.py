@@ -1,6 +1,7 @@
 from .user_model import User
 from .event_model import Event
 from .user_ticket_model import UserTicket
+from .image_model import Image
 
 import sys
 from typing import Sequence, Type, TypeVar

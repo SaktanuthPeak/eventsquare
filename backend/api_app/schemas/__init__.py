@@ -26,3 +26,10 @@ from .user_ticket_schema import (
     UserTicketResponse,
     UserTicketDetailResponse,
 )
+
+from .image_schema import (
+    FilePath,
+    ImageUploadResponse,
+    ImageFileBase,
+    EventImageCreate,
+)
