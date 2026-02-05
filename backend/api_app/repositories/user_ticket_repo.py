@@ -16,7 +16,7 @@ class UserTicketRepository(BaseRepository):
         super().__init__(models.UserTicket)
 
     async def get_user_ticket_by_id(
-        self, user_ticket_id: str, fetch_links: bool
+        self, user_ticket_id: str, fetch_links: bool = False
     ) -> Document:
         if not ObjectId.is_valid(user_ticket_id):
             raise ValidationError("Invalid ObjectId")
@@ -28,15 +28,16 @@ class UserTicketRepository(BaseRepository):
             raise ValidationError(f"ObjectId('{user_ticket_id}') not found")
         return item
 
-    async def get_user_tickets(self) -> list[Document]:
-        items = await self.model.find().to_list()
-        return items
-
-    async def get_tickets_by_user_id(self, user_id: str) -> list[Document]:
-        if not ObjectId.is_valid(user_id):
+    async def get_user_tickets(
+        self, user_id: str = None, fetch_links: bool = False
+    ) -> list[Document]:
+        if user_id and not ObjectId.is_valid(user_id):
             raise ValidationError("Invalid ObjectId")
-
-        items = await self.model.find({"user": PydanticObjectId(user_id)}).to_list()
-        if not items:
-            raise ValidationError(f"ObjectId('{user_id}') not found")
+        if user_id:
+            items = await self.model.find(
+                {self.model.user.id: PydanticObjectId(user_id)},
+                fetch_links=fetch_links,
+            ).to_list()
+        else:
+            items = await self.model.find(fetch_links=fetch_links).to_list()
         return items

@@ -29,3 +29,13 @@ async def get_user_ticket_by_id(
             detail="User ticket not found",
         )
     return user_ticket
+
+
+@router.get("")
+async def get_user_tickets(
+    user_id: str = None,
+    current_user: models.User = Depends(dependencies.get_current_user),
+    service: UserTicketService = Depends(UserTicketService),
+) -> list[schemas.UserTicketDetailResponse]:
+    user_tickets = await service.get_user_tickets(user_id)
+    return user_tickets

@@ -27,3 +27,12 @@ class UserTicketService(BaseService):
             user_ticket_id, fetch_links=True
         )
         return user_ticket
+
+    async def get_user_tickets(
+        self,
+        user_id: str = None,
+    ) -> list[schemas.UserTicketDetailResponse]:
+        user_tickets = await self._repository.get_user_tickets(
+            user_id, fetch_links=True
+        )
+        return user_tickets
