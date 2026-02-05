@@ -95,6 +95,7 @@ class TicketBookingService(BaseService):
                 "success": True,
                 "message": "Booking successful",
                 "booking_details": {
+                    "event_name": event.name,
                     "event_id": booking.event_id,
                     "ticket_type_id": booking.ticket_type_id,
                     "quantity": booking.quantity,

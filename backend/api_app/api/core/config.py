@@ -8,6 +8,7 @@ ENV: str = os.getenv("APP_ENV", "")
 
 class Settings(BaseSettings):
     # base
+    GCP_PROJECT_ID: str = os.getenv("GCP_PROJECT_ID", "eventsquare-backend")
     APP_ENV: str = ENV
     DEBUG: bool = False
     DOCS_URL: str = "/docs"
