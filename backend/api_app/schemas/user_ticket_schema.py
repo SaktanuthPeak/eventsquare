@@ -47,5 +47,5 @@ class UserTicketDetailResponse(BaseModel):
     is_checked_in: bool
     checked_in_date: Optional[datetime.datetime]
     status: str
-    user: Optional[dict] = None
-    event: Optional[dict] = None
+    user: Optional[schemas.User] = None
+    event: Optional[schemas.EventResponse] = None
