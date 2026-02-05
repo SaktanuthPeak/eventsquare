@@ -1,33 +1,38 @@
 <script lang="ts" module>
-  import type { FormPath } from "sveltekit-superforms";
+	import type { FormPath } from 'sveltekit-superforms';
 </script>
 
-<script
-  lang="ts"
-  generics="T extends Record<string, unknown>, U extends FormPath<T>"
->
-  import { Label, type FieldProps } from "formsnap";
-  import FormField from "./FormField.svelte";
-  import type { BaseInputProps } from "$lib/models/baseInputProps";
+<script lang="ts" generics="T extends Record<string, unknown>, U extends FormPath<T>">
+	import { Label, type FieldProps } from 'formsnap';
+	import FormField from './FormField.svelte';
+	import type { BaseInputProps } from '$lib/types/baseInputProps';
+	import type { HTMLTextareaAttributes } from 'svelte/elements';
 
-  type InputProps = Omit<HTMLTextAreaElement, "form"> &
-    BaseInputProps &
-    FieldProps<T, U>;
+	type TextareaProps = Omit<HTMLTextareaAttributes, 'form'> &
+		BaseInputProps &
+		FieldProps<T, U> & {
+			class?: string;
+			value?: string;
+		};
 
-  let {
-    form,
-    label,
-    name,
-    description,
-    value = $bindable(),
-  }: InputProps = $props();
+	let {
+		form,
+		label,
+		name,
+		description,
+		value = $bindable(''),
+		class: className = '',
+		...attrs
+	}: TextareaProps = $props();
 </script>
 
 <FormField {form} {label} {name} {description}>
-  {#snippet formInput({ props })}
-    <div class="flex w-full flex-col gap-1">
-      <Label>{label}</Label>
-      <textarea class="textarea w-full" {...props} bind:value></textarea>
-    </div>
-  {/snippet}
+	{#snippet formInput({ props })}
+		<div class="flex h-fit w-full flex-col gap-1">
+			{#if label}
+				<Label class="text-lg text-black">{label}</Label>
+			{/if}
+			<textarea class="textarea w-full {className}" {...attrs} {...props} bind:value></textarea>
+		</div>
+	{/snippet}
 </FormField>

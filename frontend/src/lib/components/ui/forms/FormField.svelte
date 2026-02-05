@@ -13,11 +13,16 @@
 		Description
 	} from 'formsnap';
 	import type { ComponentProps, Snippet } from 'svelte';
-	import type { BaseInputProps } from '$lib/models/baseInputProps';
+	import type { BaseInputProps } from '$lib/types/baseInputProps';
 
 	type Props = {
-		formInput: Snippet<[{ props: Expand<ControlAttrs> }]>;
-		hideErrors?: boolean; // Add this prop
+		formInput: Snippet<
+			[
+				{
+					props: Expand<ControlAttrs>;
+				}
+			]
+		>;
 	} & BaseInputProps &
 		FieldProps<T, U> &
 		ComponentProps<typeof Control>;
@@ -28,7 +33,6 @@
 		description,
 		children: childrenProps,
 		formInput,
-		hideErrors = false, // Default to showing errors
 		...restProps
 	}: Props = $props();
 </script>
@@ -40,17 +44,13 @@
 		{/snippet}
 	</Control>
 	{#if description}
-		<Description>{description}</Description>
+		<Description>
+			{description}
+		</Description>
 	{/if}
-
-	<!-- Only show errors if hideErrors is false -->
-	{#if !hideErrors}
-		<FieldErrors>
-			{#snippet children({ errors, errorProps })}
-				<span class="text-error" {...errorProps}>
-					{errors.toString().replace(',', ', ')}
-				</span>
-			{/snippet}
-		</FieldErrors>
-	{/if}
+	<FieldErrors>
+		{#snippet children({ errors, errorProps })}
+			<span class="text-error" {...errorProps}>{errors.toString().replace(',', ', ')}</span>
+		{/snippet}
+	</FieldErrors>
 </Field>
