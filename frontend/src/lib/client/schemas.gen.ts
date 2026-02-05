@@ -136,16 +136,6 @@ export const EventCreateSchema = {
             type: 'string',
             title: 'Name'
         },
-        image_id: {
-            anyOf: [
-                {
-                    '$ref': '#/components/schemas/PydanticObjectId'
-                },
-                {
-                    type: 'null'
-                }
-            ]
-        },
         description: {
             anyOf: [
                 {
@@ -160,6 +150,31 @@ export const EventCreateSchema = {
         event_type: {
             type: 'string',
             title: 'Event Type'
+        },
+        location: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Location'
+        },
+        ticket_types: {
+            anyOf: [
+                {
+                    items: {
+                        '$ref': '#/components/schemas/TicketTypeInput'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Ticket Types'
         },
         start_date: {
             type: 'string',
@@ -180,20 +195,6 @@ export const EventCreateSchema = {
             type: 'string',
             format: 'date-time',
             title: 'Booking End Date'
-        },
-        ticket_types: {
-            anyOf: [
-                {
-                    items: {
-                        '$ref': '#/components/schemas/TicketTypeInput'
-                    },
-                    type: 'array'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Ticket Types'
         }
     },
     type: 'object',
@@ -232,6 +233,17 @@ export const EventResponseSchema = {
             type: 'string',
             title: 'Event Type'
         },
+        location: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Location'
+        },
         start_date: {
             type: 'string',
             format: 'date-time',
@@ -252,6 +264,16 @@ export const EventResponseSchema = {
             format: 'date-time',
             title: 'Booking End Date'
         },
+        created_by: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/PydanticObjectId'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
         id: {
             '$ref': '#/components/schemas/PydanticObjectId'
         },
@@ -267,61 +289,6 @@ export const EventResponseSchema = {
     type: 'object',
     required: ['name', 'description', 'event_type', 'start_date', 'end_date', 'booking_start_date', 'booking_end_date', 'id'],
     title: 'EventResponse'
-} as const;
-
-export const EventSearchSchema = {
-    properties: {
-        name: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Name',
-            example: 'Music Festival'
-        },
-        event_type: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Event Type',
-            example: 'concert'
-        },
-        start_date_from: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Start Date From',
-            example: '2025-01-01'
-        },
-        start_date_to: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Start Date To',
-            example: '2025-01-01'
-        }
-    },
-    type: 'object',
-    title: 'EventSearch'
 } as const;
 
 export const HTTPValidationErrorSchema = {
@@ -436,6 +403,11 @@ export const RegisteredUserSchema = {
             title: 'Status',
             example: 'active'
         },
+        credit: {
+            type: 'integer',
+            title: 'Credit',
+            example: 100
+        },
         password: {
             type: 'string',
             title: 'Password',
@@ -448,16 +420,21 @@ export const RegisteredUserSchema = {
         }
     },
     type: 'object',
-    required: ['email', 'username', 'first_name', 'last_name', 'status', 'password', 'confirm_password'],
+    required: ['email', 'username', 'first_name', 'last_name', 'status', 'credit', 'password', 'confirm_password'],
     title: 'RegisteredUser'
 } as const;
 
-export const TicketBookingRequestSchema = {
+export const TicketBookingSchema = {
     properties: {
         event_id: {
             type: 'string',
             title: 'Event Id',
             description: 'Event ID'
+        },
+        ticket_type_name: {
+            type: 'string',
+            title: 'Ticket Type Name',
+            description: 'Ticket name'
         },
         ticket_type_id: {
             type: 'string',
@@ -470,11 +447,21 @@ export const TicketBookingRequestSchema = {
             exclusiveMinimum: 0,
             title: 'Quantity',
             description: 'Number of tickets (max 10 per booking)'
+        },
+        price_per_ticket: {
+            type: 'integer',
+            title: 'Price Per Ticket',
+            description: 'Price per ticket'
+        },
+        total_price: {
+            type: 'integer',
+            title: 'Total Price',
+            description: 'Total price for the booking'
         }
     },
     type: 'object',
-    required: ['event_id', 'ticket_type_id', 'quantity'],
-    title: 'TicketBookingRequest'
+    required: ['event_id', 'ticket_type_name', 'ticket_type_id', 'quantity', 'price_per_ticket', 'total_price'],
+    title: 'TicketBooking'
 } as const;
 
 export const TicketTypeDBSchema = {
@@ -594,6 +581,11 @@ export const UpdatedUserSchema = {
             title: 'Status',
             example: 'active'
         },
+        credit: {
+            type: 'integer',
+            title: 'Credit',
+            example: 100
+        },
         roles: {
             items: {
                 type: 'string'
@@ -603,7 +595,7 @@ export const UpdatedUserSchema = {
         }
     },
     type: 'object',
-    required: ['email', 'username', 'first_name', 'last_name', 'status', 'roles'],
+    required: ['email', 'username', 'first_name', 'last_name', 'status', 'credit', 'roles'],
     title: 'UpdatedUser'
 } as const;
 
@@ -634,6 +626,11 @@ export const UserSchema = {
             title: 'Status',
             example: 'active'
         },
+        credit: {
+            type: 'integer',
+            title: 'Credit',
+            example: 100
+        },
         id: {
             '$ref': '#/components/schemas/PydanticObjectId'
         },
@@ -659,7 +656,7 @@ export const UserSchema = {
         }
     },
     type: 'object',
-    required: ['email', 'username', 'first_name', 'last_name', 'status', 'roles'],
+    required: ['email', 'username', 'first_name', 'last_name', 'status', 'credit', 'roles'],
     title: 'User'
 } as const;
 
@@ -690,6 +687,92 @@ export const UserListSchema = {
     type: 'object',
     required: ['users', 'count'],
     title: 'UserList'
+} as const;
+
+export const UserTicketDetailResponseSchema = {
+    properties: {
+        id: {
+            '$ref': '#/components/schemas/PydanticObjectId'
+        },
+        ticket_type_id: {
+            type: 'string',
+            title: 'Ticket Type Id'
+        },
+        ticket_name: {
+            type: 'string',
+            title: 'Ticket Name'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        price_per_ticket: {
+            type: 'integer',
+            title: 'Price Per Ticket'
+        },
+        total_price: {
+            type: 'integer',
+            title: 'Total Price'
+        },
+        event_start_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Event Start Date'
+        },
+        event_end_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Event End Date'
+        },
+        purchase_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Purchase Date'
+        },
+        is_checked_in: {
+            type: 'boolean',
+            title: 'Is Checked In'
+        },
+        checked_in_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Checked In Date'
+        },
+        status: {
+            type: 'string',
+            title: 'Status'
+        },
+        user: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/User'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        event: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/EventResponse'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        }
+    },
+    type: 'object',
+    required: ['id', 'ticket_type_id', 'ticket_name', 'quantity', 'price_per_ticket', 'total_price', 'event_start_date', 'event_end_date', 'purchase_date', 'is_checked_in', 'checked_in_date', 'status'],
+    title: 'UserTicketDetailResponse'
 } as const;
 
 export const ValidationErrorSchema = {

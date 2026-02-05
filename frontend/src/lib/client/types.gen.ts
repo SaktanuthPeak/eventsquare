@@ -25,14 +25,14 @@ export type ChangedPassword = {
 
 export type EventCreate = {
     name: string;
-    image_id?: PydanticObjectId | null;
     description: string | null;
     event_type: string;
+    location?: string | null;
+    ticket_types?: Array<TicketTypeInput> | null;
     start_date: Date;
     end_date: Date;
     booking_start_date: Date;
     booking_end_date: Date;
-    ticket_types?: Array<TicketTypeInput> | null;
 };
 
 export type EventResponse = {
@@ -40,19 +40,14 @@ export type EventResponse = {
     image_id?: PydanticObjectId | null;
     description: string | null;
     event_type: string;
+    location?: string | null;
     start_date: Date;
     end_date: Date;
     booking_start_date: Date;
     booking_end_date: Date;
+    created_by?: PydanticObjectId | null;
     id: PydanticObjectId;
     ticket_types?: Array<TicketTypeDb>;
-};
-
-export type EventSearch = {
-    name?: string | null;
-    event_type?: string | null;
-    start_date_from?: string | null;
-    start_date_to?: string | null;
 };
 
 export type HttpValidationError = {
@@ -75,15 +70,20 @@ export type RegisteredUser = {
     first_name: string;
     last_name: string;
     status: string;
+    credit: number;
     password: string;
     confirm_password: string;
 };
 
-export type TicketBookingRequest = {
+export type TicketBooking = {
     /**
      * Event ID
      */
     event_id: string;
+    /**
+     * Ticket name
+     */
+    ticket_type_name: string;
     /**
      * Ticket type ID
      */
@@ -92,6 +92,14 @@ export type TicketBookingRequest = {
      * Number of tickets (max 10 per booking)
      */
     quantity: number;
+    /**
+     * Price per ticket
+     */
+    price_per_ticket: number;
+    /**
+     * Total price for the booking
+     */
+    total_price: number;
 };
 
 export type TicketTypeDb = {
@@ -125,6 +133,7 @@ export type UpdatedUser = {
     first_name: string;
     last_name: string;
     status: string;
+    credit: number;
     roles: Array<string>;
 };
 
@@ -134,6 +143,7 @@ export type User = {
     first_name: string;
     last_name: string;
     status: string;
+    credit: number;
     id?: PydanticObjectId;
     last_login_date?: Date | null;
     roles: Array<string>;
@@ -144,6 +154,23 @@ export type UserList = {
     count: number;
     current_page?: number;
     total_page?: number;
+};
+
+export type UserTicketDetailResponse = {
+    id: PydanticObjectId;
+    ticket_type_id: string;
+    ticket_name: string;
+    quantity: number;
+    price_per_ticket: number;
+    total_price: number;
+    event_start_date: Date;
+    event_end_date: Date;
+    purchase_date: Date;
+    is_checked_in: boolean;
+    checked_in_date: Date | null;
+    status: string;
+    user?: User | null;
+    event?: EventResponse | null;
 };
 
 export type ValidationError = {
@@ -233,7 +260,7 @@ export type RefreshTokenResponses = {
 };
 
 export type BookTicketsData = {
-    body: TicketBookingRequest;
+    body: TicketBooking;
     path?: never;
     query?: never;
     url: '/v1/tickets/book';
@@ -255,55 +282,109 @@ export type BookTicketsResponses = {
     200: unknown;
 };
 
-export type GetEventInventoryData = {
+export type SyncInventoryData = {
     body?: never;
     path: {
         event_id: string;
     };
     query?: never;
-    url: '/v1/tickets/{event_id}/inventory';
+    url: '/v1/tickets/sync/{event_id}';
 };
 
-export type GetEventInventoryErrors = {
+export type SyncInventoryErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type GetEventInventoryError = GetEventInventoryErrors[keyof GetEventInventoryErrors];
+export type SyncInventoryError = SyncInventoryErrors[keyof SyncInventoryErrors];
 
-export type GetEventInventoryResponses = {
+export type SyncInventoryResponses = {
     /**
      * Successful Response
      */
     200: unknown;
 };
 
-export type DebugRedisInventoryData = {
+export type CheckSyncStatusData = {
     body?: never;
     path: {
         event_id: string;
     };
     query?: never;
-    url: '/v1/tickets/debug/redis/{event_id}';
+    url: '/v1/tickets/check-sync/{event_id}';
 };
 
-export type DebugRedisInventoryErrors = {
+export type CheckSyncStatusErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type DebugRedisInventoryError = DebugRedisInventoryErrors[keyof DebugRedisInventoryErrors];
+export type CheckSyncStatusError = CheckSyncStatusErrors[keyof CheckSyncStatusErrors];
 
-export type DebugRedisInventoryResponses = {
+export type CheckSyncStatusResponses = {
     /**
      * Successful Response
      */
     200: unknown;
 };
+
+export type GetUserTicketByIdData = {
+    body?: never;
+    path: {
+        user_ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/user_tickets/{user_ticket_id}';
+};
+
+export type GetUserTicketByIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetUserTicketByIdError = GetUserTicketByIdErrors[keyof GetUserTicketByIdErrors];
+
+export type GetUserTicketByIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: UserTicketDetailResponse;
+};
+
+export type GetUserTicketByIdResponse = GetUserTicketByIdResponses[keyof GetUserTicketByIdResponses];
+
+export type GetUserTicketsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        user_id?: string;
+    };
+    url: '/v1/user_tickets';
+};
+
+export type GetUserTicketsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetUserTicketsError = GetUserTicketsErrors[keyof GetUserTicketsErrors];
+
+export type GetUserTicketsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<UserTicketDetailResponse>;
+};
+
+export type GetUserTicketsResponse = GetUserTicketsResponses[keyof GetUserTicketsResponses];
 
 export type GetEventsData = {
     body?: never;
@@ -394,40 +475,6 @@ export type GetEventByIdResponses = {
 };
 
 export type GetEventByIdResponse = GetEventByIdResponses[keyof GetEventByIdResponses];
-
-export type SearchEventsData = {
-    body: EventSearch;
-    path?: never;
-    query?: {
-        /**
-         * Page number
-         */
-        page?: number;
-        /**
-         * Page size
-         */
-        size?: number;
-    };
-    url: '/v1/events/search';
-};
-
-export type SearchEventsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type SearchEventsError = SearchEventsErrors[keyof SearchEventsErrors];
-
-export type SearchEventsResponses = {
-    /**
-     * Successful Response
-     */
-    200: PageEventResponse;
-};
-
-export type SearchEventsResponse = SearchEventsResponses[keyof SearchEventsResponses];
 
 export type GetMeData = {
     body?: never;
