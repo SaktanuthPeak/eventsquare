@@ -105,7 +105,7 @@
 					<div class="bg-white rounded-lg p-3 shadow-sm">
 						<p class="text-sm text-primary/60">Total Spending</p>
 						<p class="text-2xl font-bold text-secondary">
-							{data?.totalSpent ? data.totalSpent : 0}
+							{data?.totalSpent ? data?.totalSpent : 0}
 						</p>
 					</div>
 				</div>

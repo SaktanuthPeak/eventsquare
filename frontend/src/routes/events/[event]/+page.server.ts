@@ -1,9 +1,9 @@
-import { getEventById, } from '$lib/client';
+import { getEvents, } from '$lib/client';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({params , locals}) => {
 
-    const res = await getEventById({
+    const res = await getEvents({
         path:{
             event_id:params.event
         }
