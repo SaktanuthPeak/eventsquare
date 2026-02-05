@@ -1,69 +1,66 @@
-<script lang="ts">
-  import { Popover, Portal } from "bits-ui";
-  import Calendar from "../Calendar.svelte";
-  import {
-    CalendarDateTime,
-    DateFormatter,
-    getLocalTimeZone,
-    parseDate,
-    type DateValue,
-  } from "@internationalized/date";
-  import CalendarBlank from "phosphor-svelte/lib/CalendarBlank";
-
-  const df = new DateFormatter("en-GB", {
-    dateStyle: "short",
-  });
-
-  type Props = {
-    locale?: string;
-    value?: string; // Now expects ISO string instead of DateValue
-    placeholder?: string;
-    formatter?: DateFormatter;
-    selectableYears?: number[];
-    selectable?: boolean;
-    onValueChange?: (value: string | undefined) => void; // Emits ISO string
-  };
-
-  let {
-    locale = $bindable("en-GB"),
-    value = $bindable(), // Now binds to ISO string
-    placeholder = "Pick a date",
-    formatter = df,
-    onValueChange,
-  }: Props = $props();
-
-  // Convert ISO string to DateValue for Calendar
-  let calendarValue = $derived(
-    value ? parseDate(new Date(value).toISOString().split("T")[0]) : undefined
-  );
-
-  // Handle Calendar changes and emit ISO string
-  function handleValueChange(newValue: DateValue | undefined) {
-    const isoString = newValue?.toDate(getLocalTimeZone()).toISOString();
-    value = isoString; // Update bound value
-    onValueChange?.(isoString); // Notify parent
-  }
+<script lang="ts" module>
+	import type { FormPath } from 'sveltekit-superforms';
 </script>
 
-<div>
-  <Popover.Root>
-    <Popover.Trigger class="input cursor-pointer items-center">
-      <CalendarBlank class="size-5" />
-      {#if value}
-        {formatter.format(new Date(value))}
-        <!-- Display formatted ISO string -->
-      {:else}
-        {placeholder}
-      {/if}
-    </Popover.Trigger>
-    <Popover.Portal>
-      <Popover.Content class="bits-popover-content">
-        <Calendar
-          bind:locale
-          bind:value={calendarValue}
-          onValueChange={handleValueChange}
-        />
-      </Popover.Content>
-    </Popover.Portal>
-  </Popover.Root>
-</div>
+<script lang="ts" generics="T extends Record<string, unknown>, U extends FormPath<T>">
+	import FormField from './FormField.svelte';
+	import type { HTMLInputAttributes } from 'svelte/elements';
+	import type { BaseInputProps } from '$lib/models/baseInputProps';
+	import { Label, type FieldProps } from 'formsnap';
+	import { onMount } from 'svelte';
+	import { getLocalISOString } from '$lib/utils/date-utils';
+
+	type DatePickerProps = Omit<HTMLInputAttributes, 'form'> & BaseInputProps & FieldProps<T, U> & {};
+
+	let {
+		form,
+		name,
+		label,
+		description,
+		class: className = '',
+		value = $bindable(''),
+		...attrs
+	}: DatePickerProps = $props();
+
+	function onChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const dateValue = input.value ? new Date(input.value) : null;
+		value = dateValue ? dateValue.toISOString() : '';
+	}
+
+	let defaultValue = $state<string | undefined>(undefined);
+	onMount(() => {
+		if (value) {
+			const date = new Date(value);
+			defaultValue = getLocalISOString(date);
+		} else {
+			defaultValue = undefined;
+		}
+	});
+</script>
+
+<FormField {form} {label} {name} {description}>
+	{#snippet formInput({ props })}
+		<div>
+			<div class="flex w-full flex-col gap-1">
+				<div class="flex gap-1">
+					<Label>{label}</Label>
+					{#if attrs.required}
+						<span class="text-error">*</span>
+					{/if}
+				</div>
+				<input
+					type="datetime-local"
+					class={`input w-full ${className}`}
+					{...attrs}
+					{...props}
+					value={defaultValue}
+					onchange={onChange}
+					onclick={(e) => {
+						(e.target as HTMLInputElement).showPicker?.();
+					}}
+				/>
+			</div>
+		</div>
+	{/snippet}
+</FormField>

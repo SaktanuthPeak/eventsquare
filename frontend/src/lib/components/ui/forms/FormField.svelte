@@ -13,7 +13,7 @@
 		Description
 	} from 'formsnap';
 	import type { ComponentProps, Snippet } from 'svelte';
-	import type { BaseInputProps } from '$lib/types/baseInputProps';
+	import type { BaseInputProps } from '$lib/models/baseInputProps';
 
 	type Props = {
 		formInput: Snippet<
