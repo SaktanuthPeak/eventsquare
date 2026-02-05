@@ -15,6 +15,13 @@ export function logout(cookies: Cookies) {
 	cookies.delete('refresh_token', { path: '' });
 
 	// Set empty values as additional measure
-	cookies.set('access_token', '', constructCookieOptions(0));
-	cookies.set('refresh_token', '', constructCookieOptions(0));
+	const baseOptions = constructCookieOptions(0);
+	cookies.set('access_token', '', baseOptions);
+	cookies.set('refresh_token', '', baseOptions);
+
+	// Also clear using both secure modes, in case cookies were previously set incorrectly
+	cookies.set('access_token', '', { ...baseOptions, secure: true });
+	cookies.set('refresh_token', '', { ...baseOptions, secure: true });
+	cookies.set('access_token', '', { ...baseOptions, secure: false });
+	cookies.set('refresh_token', '', { ...baseOptions, secure: false });
 }

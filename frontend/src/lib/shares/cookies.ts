@@ -21,7 +21,7 @@ export const constructCookieOptions: {
 
 
     // only sent over HTTPS in production
-    secure: isDev,
+    secure: !isDev,
 
     // set cookie to expire after a given time
     maxAge: expires

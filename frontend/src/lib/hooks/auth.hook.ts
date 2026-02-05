@@ -9,32 +9,40 @@ interface RefreshTokenResponse {
 	access_token?: string;
 }
 
-// --- HELPER FUNCTIONS (TOP LEVEL) ---
+function isAdminRoute(routeId?: string | null): boolean {
+	return Boolean(routeId && routeId.includes('(admin)'));
+}
+
+function hasAdminRole(user: unknown): boolean {
+	const roles = (user as { roles?: unknown })?.roles;
+	return Array.isArray(roles) && roles.includes('admin');
+}
+
 
 function isProtectedRoute(path: string | null): boolean {
 	if (!path) return false;
 
-	return path.split('/').includes('(auth)');
+	return (
+		path.startsWith('/menu') ||
+		path.includes('/checkout') ||
+		path.includes('/check-in')
+	);
 }
 
 export const authHandler: Handle = async ({ event, resolve }) => {
 	const { route, url, cookies, locals } = event;
 	const { client } = locals;
-
-	// Helper function to handle authentication failures
 	function handleAuthFailure() {
 		logger.debug('Authentication failed, clearing cookies and redirecting to login');
 		logout(cookies);
 		locals.user = undefined;
 
 		if (route.id?.includes('api')) {
-			// If it's an API route, return a 401 Unauthorized response
 			return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 				status: 401,
 				headers: { 'Content-Type': 'application/json' },
 			});
 		} else {
-			// Avoid redirect loops - don't redirect if already on login page
 			if (url.pathname === '/account/login') {
 				return resolve(event);
 			}
@@ -44,26 +52,39 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	const isProtected = isProtectedRoute(route.id);
-
-	// Handle public routes (login, register, etc.)
-	if (!isProtected) {
-		return resolve(event);
+	function handleAdminForbidden() {
+		if (route.id?.includes('api')) {
+			return new Response(JSON.stringify({ error: 'Forbidden' }), {
+				status: 403,
+				headers: { 'Content-Type': 'application/json' },
+			});
+		}
+		return Response.redirect(new URL('/', url), 302);
 	}
+
+	const isAdminPath = isAdminRoute(route.id) || url.pathname.startsWith('/admin');
+	const isProtected = isProtectedRoute(url.pathname) || isAdminPath;
 
 	const accessToken = cookies.get('access_token');
 	const refreshToken = cookies.get('refresh_token');
+
+	if (!accessToken && !refreshToken) {
+		locals.user = undefined;
+		return isProtected ? handleAuthFailure() : resolve(event);
+	}
+
 	const isExpired = isTokenExpired(accessToken);
-	client.setConfig({
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		}
-	})
+	if (accessToken) {
+		client.setConfig({
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			}
+		});
+	}
 	logger.debug(`Access token expired: ${isTokenExpired(accessToken)}`);
 	logger.debug(`Refresh token expired: ${isTokenExpired(refreshToken)}`);
 	if (isExpired) {
 		logger.debug('Access token is expired, checking refresh token');
-		// ตรงนี้ควรจะลอง get refresh token และขอ access token ใหม่
 		if (!isTokenExpired(refreshToken)) {
 			try {
 				const { data } = await verifyRefreshToken({
@@ -82,12 +103,16 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 					});
 				}
 			} catch (err) {
-				logger.debug('error refreshing token:', err);
-				return handleAuthFailure();
+				logger.debug({ err }, 'error refreshing token');
+				logout(cookies);
+				locals.user = undefined;
+				return isProtected ? handleAuthFailure() : resolve(event);
 			}
 		} else {
 			logger.debug('Access token & Refresh Token expired, delete cookies and redirecting to login');
-			return handleAuthFailure();
+			logout(cookies);
+			locals.user = undefined;
+			return isProtected ? handleAuthFailure() : resolve(event);
 		}
 	}
 
@@ -97,15 +122,19 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 		});
 		locals.user = data;
 	} catch (err) {
-		logger.debug('Error getting user details:', err);
-		return handleAuthFailure();
+		logger.debug({ err }, 'Error getting user details');
+		logout(cookies);
+		locals.user = undefined;
+		return isProtected ? handleAuthFailure() : resolve(event);
+	}
+
+	if (isAdminPath && !hasAdminRole(locals.user)) {
+		return handleAdminForbidden();
 	}
 
 	return resolve(event);
 }
 
-// This function checks if the JWT token is expired based on its payload and a buffer time
-// bufferTime is the time in seconds before expiration to consider the token as expired
 function isTokenExpired(token?: string, bufferTime = 300): boolean {
 	if (!token) return true;
 	try {
@@ -113,7 +142,7 @@ function isTokenExpired(token?: string, bufferTime = 300): boolean {
 		if (!decoded || !decoded.exp) return true;
 		return Date.now() / 1000 >= decoded.exp - bufferTime;
 	} catch (error) {
-		logger.error('Error decoding token:', error);
+		logger.error({ err: error }, 'Error decoding token');
 		return true;
 	}
 }
