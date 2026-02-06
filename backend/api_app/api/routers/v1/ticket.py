@@ -31,16 +31,16 @@ async def book_tickets(
 
     booking_details = result.get("booking_details", {})
 
-    payload = schemas.TicketPayloadSchema(
-        event_name=booking_details.get("event_name", ""),
-        ticket_type_name=booking.ticket_type_name,
-        quantity=booking.quantity,
-        total_price=booking.total_price,
-        price_per_ticket=booking.price_per_ticket,
-        first_name=current_user.first_name,
-        last_name=current_user.last_name,
-        email=current_user.email,
-    )
+    payload = {
+        "event_name": booking_details.get("event_name", ""),
+        "ticket_type_name": booking.ticket_type_name,
+        "quantity": booking.quantity,
+        "total_price": booking.total_price,
+        "price_per_ticket": booking.price_per_ticket,
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name,
+        "email": current_user.email,
+    }
     try:
         msg_id = pubsub_client.publish_message(
             topic_name="ticket-bookings",
@@ -78,6 +78,7 @@ async def check_sync_status(
     """
     service = TicketBookingService(redis)
     return await service.check_inventory_sync(event_id)
+
 
 @router.post("/check-in/{ticket_id}")
 async def check_in_ticket(
