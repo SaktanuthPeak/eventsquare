@@ -3,7 +3,7 @@
 	import type { LayoutData } from './$types';
 	import SideNavbar from '$lib/components/navbar/menuNavbar.svelte';
 	import { goto } from '$app/navigation';
-	import { CaretLeft, SignOutIcon } from 'phosphor-svelte';
+	import { CaretLeft, SignOut } from 'phosphor-svelte';
 	import MenuButton from '$lib/components/btn/ButtonMenuMobile.svelte';
 	import { fade } from 'svelte/transition';
 
@@ -40,7 +40,7 @@
 				href="/account/logout"
 				class="w-full btn btn-outline text-primary/80 md:flex flex-row gap-1 hidden"
 			>
-				Log out <SignOutIcon size={16} weight="bold" />
+				Log out <SignOut size={16} weight="bold" />
 			</a>
 			<MenuButton bind:isOpen={isMenuOpen} />
 		</nav>
