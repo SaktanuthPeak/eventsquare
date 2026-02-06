@@ -47,7 +47,7 @@ export const handleUserAuth: Handle = async ({ event, resolve }) => {
     if (route.id && isProtectedRoute(route.id) && !locals.user) {
         redirect(
             302,
-            `/${params.lang ?? 'en'}/account?redirect_from=${encodeURIComponent(url.pathname)}`
+            `/account/login?redirect_from=${encodeURIComponent(url.pathname)}`
         );
     }
 
