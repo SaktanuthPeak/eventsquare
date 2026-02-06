@@ -93,7 +93,7 @@ async def check_in_ticket(
 
     try:
         ticket = await models.UserTicket.find_one(
-            models.UserTicket.id == ObjectId(ticket_id)
+            models.UserTicket.id == ObjectId(ticket_id), fetch_links=True
         )
 
         if not ticket:
@@ -101,7 +101,9 @@ async def check_in_ticket(
 
         # ยกเลิก / คืนเงิน / หมดอายุ
         if ticket.status != "booked":
-            raise HTTPException(status_code=400, detail=f"Ticket status = {ticket.status}")
+            raise HTTPException(
+                status_code=400, detail=f"Ticket status = {ticket.status}"
+            )
 
         # สแกนซ้ำ
         if ticket.is_checked_in:
@@ -127,7 +129,6 @@ async def check_in_ticket(
             "checked_in_at": now,
         }
 
- 
     except HTTPException:
         raise
     except Exception as e:
