@@ -97,6 +97,25 @@ class EventService(BaseService):
         event_update: schemas.EventUpdate,
         redis: Optional[Redis] = None,
     ) -> schemas.EventResponse:
+        if event_update.ticket_types is not None:
+            import uuid
+
+            processed_ticket_types = []
+            for ticket in event_update.ticket_types:
+                if hasattr(ticket, "ticket_id") and ticket.ticket_id:
+                    processed_ticket_types.append(ticket)
+                else:
+                    ticket_db = schemas.TicketTypeDB(
+                        name=ticket.name,
+                        total=ticket.total,
+                        price=ticket.price,
+                        remaining=ticket.remaining,
+                        ticket_id=str(uuid.uuid4()),
+                    )
+                    processed_ticket_types.append(ticket_db)
+
+            event_update.ticket_types = processed_ticket_types
+
         event = await self._repository.update(event_id, event_update)
 
         if redis and event_update.ticket_types is not None:
@@ -106,6 +125,7 @@ class EventService(BaseService):
 
             for ticket_type in event.ticket_types:
                 try:
+                    # Sync from database to ensure Redis matches the updated values
                     await inventory.sync_from_database(
                         event_id=str(event.id),
                         ticket_type_id=ticket_type.ticket_id,

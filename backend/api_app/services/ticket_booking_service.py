@@ -49,7 +49,6 @@ class TicketBookingService(BaseService):
                 )
                 raise HTTPException(404, "Event not found")
 
-            # Find and update ticket type
             ticket_type_updated = False
             for ticket_type in event.ticket_types:
                 if ticket_type.ticket_id == booking.ticket_type_id:
@@ -58,7 +57,6 @@ class TicketBookingService(BaseService):
                     break
 
             if not ticket_type_updated:
-                # Release tickets back to Redis
                 await self.inventory.release_tickets(
                     booking.event_id,
                     booking.ticket_type_id,
@@ -67,7 +65,6 @@ class TicketBookingService(BaseService):
                 )
                 raise HTTPException(404, "Ticket type not found")
 
-            # Save to database
             await event.save()
 
             logger.info(
@@ -91,10 +88,13 @@ class TicketBookingService(BaseService):
             )
             await user_ticket.insert()
 
+            ticket_id = str(user_ticket.id) if user_ticket.id else None
+
             return {
                 "success": True,
                 "message": "Booking successful",
                 "booking_details": {
+                    "ticket_id": ticket_id,
                     "event_name": event.name,
                     "event_id": booking.event_id,
                     "ticket_type_id": booking.ticket_type_id,

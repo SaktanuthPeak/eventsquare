@@ -33,6 +33,8 @@ async def book_tickets(
 
     payload = {
         "event_name": booking_details.get("event_name", ""),
+        "event_id": booking.event_id,
+        "ticket_id": booking_details.get("ticket_id", ""),
         "ticket_type_name": booking.ticket_type_name,
         "quantity": booking.quantity,
         "total_price": booking.total_price,

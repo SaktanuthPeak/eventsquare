@@ -56,7 +56,7 @@ class EventUpdate(BaseModel):
     end_date: Optional[datetime.datetime] = None
     booking_start_date: Optional[datetime.datetime] = None
     booking_end_date: Optional[datetime.datetime] = None
-    ticket_types: Optional[t.List[TicketTypeInput]] = None
+    ticket_types: Optional[t.List[t.Union[TicketTypeInput, TicketTypeDB]]] = None
 
 
 class EventResponse(EventBase):
