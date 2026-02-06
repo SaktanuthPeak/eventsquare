@@ -90,3 +90,38 @@ class EventService(BaseService):
 
         query = models.Event.find(query)
         return await beanie_paginate(query, params)
+
+    async def update_event(
+        self,
+        event_id: str,
+        event_update: schemas.EventUpdate,
+        redis: Optional[Redis] = None,
+    ) -> schemas.EventResponse:
+        event = await self._repository.update(event_id, event_update)
+
+        if redis and event_update.ticket_types is not None:
+            from ..api.core.redis_lock import TicketInventory
+
+            inventory = TicketInventory(redis)
+
+            for ticket_type in event.ticket_types:
+                try:
+                    await inventory.sync_from_database(
+                        event_id=str(event.id),
+                        ticket_type_id=ticket_type.ticket_id,
+                        remaining_tickets=ticket_type.remaining,
+                    )
+                    logger.info(
+                        f"Synced inventory after update: event={event.id}, "
+                        f"ticket={ticket_type.ticket_id}, remaining={ticket_type.remaining}"
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to sync inventory after update: {str(e)}")
+
+        return event
+
+    async def delete_event(
+        self,
+        event_id: str,
+    ) -> None:
+        await self._repository.delete_by_id(event_id)

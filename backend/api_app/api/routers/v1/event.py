@@ -51,3 +51,36 @@ async def get_events(
     events = await service.get_events(params, search_params=search_params)
 
     return events
+
+
+@router.put("/{event_id}")
+async def update_event(
+    event_id: str,
+    event_update: schemas.EventUpdate,
+    current_user: models.User = Depends(dependencies.get_current_user),
+    service: EventService = Depends(EventService),
+    redis: Redis = Depends(get_redis),
+) -> schemas.EventResponse:
+    event = await service.update_event(event_id, event_update, redis=redis)
+    if not event:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event not found",
+        )
+    return event
+
+
+@router.delete("/{event_id}")
+async def delete_event(
+    event_id: str,
+    current_user: models.User = Depends(dependencies.get_current_user),
+    service: EventService = Depends(EventService),
+    redis: Redis = Depends(get_redis),
+) -> dict:
+    result = await service.delete_event(event_id, redis=redis)
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Event not found",
+        )
+    return result

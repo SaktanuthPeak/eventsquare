@@ -47,15 +47,15 @@ class EventCreate(BaseModel):
 
 
 class EventUpdate(BaseModel):
-    name: Optional[str]
-    image_id: Optional[PydanticObjectId]
-    description: Optional[str]
-    location: Optional[str]
-    event_type: Optional[str]
-    start_date: Optional[datetime.datetime]
-    end_date: Optional[datetime.datetime]
-    booking_start_date: Optional[datetime.datetime]
-    booking_end_date: Optional[datetime.datetime]
+    name: Optional[str] = None
+    image_id: Optional[PydanticObjectId] = None
+    description: Optional[str] = None
+    location: Optional[str] = None
+    event_type: Optional[str] = None
+    start_date: Optional[datetime.datetime] = None
+    end_date: Optional[datetime.datetime] = None
+    booking_start_date: Optional[datetime.datetime] = None
+    booking_end_date: Optional[datetime.datetime] = None
     ticket_types: Optional[t.List[TicketTypeInput]] = None
 
 
