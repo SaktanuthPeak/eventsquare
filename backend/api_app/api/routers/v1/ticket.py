@@ -85,17 +85,11 @@ async def check_sync_status(
 @router.post("/check-in/{ticket_id}")
 async def check_in_ticket(
     ticket_id: str,
-    redis: Redis = Depends(get_redis),
+    # current_user: models.User = Depends(dependencies.get_current_user),
 ):
     """
     Check-in ticket by QR scan
     """
-
-    lock_key = f"lock:ticket:{ticket_id}"
-    lock = await redis.set(lock_key, "1", ex=5, nx=True)
-
-    if not lock:
-        raise HTTPException(status_code=429, detail="Ticket is being processed")
 
     try:
         ticket = await models.UserTicket.find_one(
@@ -103,30 +97,23 @@ async def check_in_ticket(
         )
 
         if not ticket:
-            return {"status": "invalid", "message": "Ticket not found "}
+            raise HTTPException(status_code=404, detail="Ticket not found")
 
         # ยกเลิก / คืนเงิน / หมดอายุ
         if ticket.status != "booked":
-            return {"status": "invalid", "message": f"Ticket status = {ticket.status}"}
+            raise HTTPException(status_code=400, detail=f"Ticket status = {ticket.status}")
 
         # สแกนซ้ำ
         if ticket.is_checked_in:
             return {
                 "status": "already_used",
-                "message": "Ticket already checked in ",
+                "message": "Ticket already checked in",
                 "checked_in_at": ticket.checked_in_date,
             }
 
         now = datetime.now()
 
-        # # สแกนก่อนเวลางาน
-        # if now < ticket.event_start_date:
-        #     return {"status": "too_early", "message": "Event has not started yet"}
-
-        # # สแกนหลังงานจบ
-        # if now > ticket.event_end_date:
-        #     return {"status": "expired", "message": "Event has ended"}
-
+        # อัพเดท ticket
         ticket.is_checked_in = True
         ticket.checked_in_date = now
         await ticket.save()
@@ -134,10 +121,14 @@ async def check_in_ticket(
         return {
             "status": "success",
             "message": "Check-in successful",
-            "ticket_id": ticket_id,
+            "ticket_id": str(ticket.id),
             "ticket_name": ticket.ticket_name,
+            "event_name": ticket.event.name if ticket.event else "Unknown Event",
             "checked_in_at": now,
         }
 
-    finally:
-        await redis.delete(lock_key)
+ 
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

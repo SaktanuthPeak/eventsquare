@@ -71,7 +71,7 @@
 						✓ Checked In
 					</button>
 				{:else}
-					<a href={`/events/${ticket?.event?.id || ''}/check-in/${ticket?.id || ''}`} class="btn btn-sm btn-secondary flex-1">
+					<a href={`/events/${ticket?.event?.id}/check-in/${ticket?.id}`} class="btn btn-sm btn-secondary flex-1">
 						Check-in
 					</a>
 				{/if}

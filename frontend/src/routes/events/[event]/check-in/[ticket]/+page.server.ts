@@ -1,5 +1,5 @@
 import { superValidate } from 'sveltekit-superforms';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, Actions } from './$types';
 import  { checkInSchema }  from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { getEventById, getUserTicketById } from '$lib/client';
@@ -14,10 +14,6 @@ export const load = (async (event) => {
             event_id: event.params.event
         }
     })
-
-    if(res.data?.event_type !== "public"){
-        throw redirect(302, `/events/${event.params.event}`);
-    }
     
     // Fetch ticket details
     let ticketData = null;
@@ -33,6 +29,7 @@ export const load = (async (event) => {
         console.error('Error fetching ticket:', err);
     }
     
+    console.log("Loaded ticket data:", ticketData);
     return {
         eventId: event.params.event,
         ticket: event.params.ticket,
@@ -42,10 +39,10 @@ export const load = (async (event) => {
     };
 }) satisfies PageServerLoad;
 
-export const actions = {
+export const actions: Actions = {
     default: async (event) => {
-        const { client } = event.locals;
         const form = await superValidate(event, zod(checkInSchema));
+        
         if (!form.valid) {
             return fail(400, { form });
         }
@@ -55,34 +52,37 @@ export const actions = {
         }
 
         try {
-            const res = await publicCheckIn({
-                client: client,
-                headers:{
-                    Authorization: `Bearer ${event.cookies.get("access_token")}`
-                },
-                path:{
-                    event_id: event.params.event
+            // Call check-in API endpoint
+            const token = event.cookies.get("access_token");
+            const response = await fetch(`http://localhost:9000/v1/tickets/check-in/${event.params.ticket}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
-            if(!res.response.ok){
-                return fail(res.response.status, {
+            if (!response.ok) {
+                const errorData = await response.json() as { detail?: string };
+                return fail(response.status, {
                     form,
-                    error: `Failed to check-in: ${res.error?.errors?.[0] || 'Unknown error'}`
+                    error: errorData.detail || 'Failed to check-in'
                 });
             }
 
+            const checkInResult = await response.json();
+
             return {
                 form,
-                returnData: res.data,
+                returnData: checkInResult,
                 success: true
             };
         } catch (error) {
             console.error("Check-in error:", error);
             return fail(500, {
                 form,
-                error: 'Failed to create ticket'
+                error: 'Failed to check-in: ' + String(error)
             });
         }
     }
-};
+} satisfies Actions;
