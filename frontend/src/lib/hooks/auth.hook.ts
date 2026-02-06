@@ -66,7 +66,11 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 					const nextAccessToken: string | undefined = data?.access_token;
 					if (nextAccessToken) {
 						effectiveAccessToken = nextAccessToken;
-						cookies.set('access_token', nextAccessToken, constructCookieOptions(30 * 60));
+						cookies.set(
+							'access_token',
+							nextAccessToken,
+							constructCookieOptions(30 * 60, url)
+						);
 						locals.client?.setConfig?.({
 							headers: { Authorization: `Bearer ${nextAccessToken}` }
 						});
@@ -86,11 +90,18 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 
 		// Fetch user profile (best-effort for non-admin routes)
 		try {
-			const { data } = await getMe({
-				client: locals.client,
-				headers: effectiveAccessToken ? { Authorization: `Bearer ${effectiveAccessToken}` } : undefined
+			const meRes = await getMe({
+				client: locals.client
 			});
-			locals.user = data as any;
+
+			if (!meRes.response.ok) {
+				logger.debug({ status: meRes.response.status }, 'Error getting user details');
+				logout(cookies);
+				locals.user = undefined;
+				return enforceAuth ? redirectToLogin() : undefined;
+			}
+
+			locals.user = (meRes.data ?? undefined) as any;
 		} catch (err) {
 			logger.debug({ err }, 'Error getting user details');
 			logout(cookies);
