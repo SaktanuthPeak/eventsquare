@@ -305,6 +305,136 @@ export const EventResponseSchema = {
     title: 'EventResponse'
 } as const;
 
+export const EventUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        image_id: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/PydanticObjectId'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        location: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Location'
+        },
+        event_type: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Event Type'
+        },
+        start_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Start Date'
+        },
+        end_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'End Date'
+        },
+        booking_start_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Booking Start Date'
+        },
+        booking_end_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Booking End Date'
+        },
+        ticket_types: {
+            anyOf: [
+                {
+                    items: {
+                        anyOf: [
+                            {
+                                '$ref': '#/components/schemas/TicketTypeInput'
+                            },
+                            {
+                                '$ref': '#/components/schemas/TicketTypeDB'
+                            }
+                        ]
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Ticket Types'
+        }
+    },
+    type: 'object',
+    title: 'EventUpdate'
+} as const;
+
 export const FilePathSchema = {
     properties: {
         file_name: {
@@ -466,6 +596,13 @@ export const RegisteredUserSchema = {
             type: 'integer',
             title: 'Credit',
             example: 100
+        },
+        roles: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Roles'
         },
         password: {
             type: 'string',

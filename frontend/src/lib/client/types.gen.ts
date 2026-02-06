@@ -57,6 +57,19 @@ export type EventResponse = {
     ticket_types?: Array<TicketTypeDb>;
 };
 
+export type EventUpdate = {
+    name?: string | null;
+    image_id?: PydanticObjectId | null;
+    description?: string | null;
+    location?: string | null;
+    event_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    booking_start_date?: Date | null;
+    booking_end_date?: Date | null;
+    ticket_types?: Array<TicketTypeInput | TicketTypeDb> | null;
+};
+
 export type FilePath = {
     file_name: string;
     content_type: string;
@@ -92,6 +105,7 @@ export type RegisteredUser = {
     last_name: string;
     status: string;
     credit: number;
+    roles?: Array<string>;
     password: string;
     confirm_password: string;
 };
@@ -186,96 +200,6 @@ export type HealthResponses = {
      */
     200: unknown;
 };
-
-export type GetEventsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * Page number
-         */
-        page?: number;
-        /**
-         * Page size
-         */
-        size?: number;
-        name?: string | null;
-        event_type?: string | null;
-        start_date_from?: string | null;
-        start_date_to?: string | null;
-    };
-    url: '/v1/events';
-};
-
-export type GetEventsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetEventsError = GetEventsErrors[keyof GetEventsErrors];
-
-export type GetEventsResponses = {
-    /**
-     * Successful Response
-     */
-    200: PageEventResponse;
-};
-
-export type GetEventsResponse = GetEventsResponses[keyof GetEventsResponses];
-
-export type CreateEventData = {
-    body: EventCreate;
-    path?: never;
-    query?: never;
-    url: '/v1/events';
-};
-
-export type CreateEventErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateEventError = CreateEventErrors[keyof CreateEventErrors];
-
-export type CreateEventResponses = {
-    /**
-     * Successful Response
-     */
-    200: EventResponse;
-};
-
-export type CreateEventResponse = CreateEventResponses[keyof CreateEventResponses];
-
-export type GetEventByIdData = {
-    body?: never;
-    path: {
-        event_id: string;
-    };
-    query?: never;
-    url: '/v1/events/{event_id}';
-};
-
-export type GetEventByIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetEventByIdError = GetEventByIdErrors[keyof GetEventByIdErrors];
-
-export type GetEventByIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: EventResponse;
-};
-
-export type GetEventByIdResponse = GetEventByIdResponses[keyof GetEventByIdResponses];
 
 export type LoginForAccessTokenData = {
     body: BodyLoginForAccessTokenV1AuthTokenPost;
@@ -424,6 +348,206 @@ export type GetImageResponses = {
      */
     200: unknown;
 };
+
+export type GetUserTicketByIdData = {
+    body?: never;
+    path: {
+        user_ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/user_tickets/{user_ticket_id}';
+};
+
+export type GetUserTicketByIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetUserTicketByIdError = GetUserTicketByIdErrors[keyof GetUserTicketByIdErrors];
+
+export type GetUserTicketByIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: UserTicketDetailResponse;
+};
+
+export type GetUserTicketByIdResponse = GetUserTicketByIdResponses[keyof GetUserTicketByIdResponses];
+
+export type GetUserTicketsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        user_id?: string;
+    };
+    url: '/v1/user_tickets';
+};
+
+export type GetUserTicketsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetUserTicketsError = GetUserTicketsErrors[keyof GetUserTicketsErrors];
+
+export type GetUserTicketsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<UserTicketDetailResponse>;
+};
+
+export type GetUserTicketsResponse = GetUserTicketsResponses[keyof GetUserTicketsResponses];
+
+export type GetEventsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Page number
+         */
+        page?: number;
+        /**
+         * Page size
+         */
+        size?: number;
+        name?: string | null;
+        event_type?: string | null;
+        start_date_from?: string | null;
+        start_date_to?: string | null;
+    };
+    url: '/v1/events';
+};
+
+export type GetEventsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetEventsError = GetEventsErrors[keyof GetEventsErrors];
+
+export type GetEventsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PageEventResponse;
+};
+
+export type GetEventsResponse = GetEventsResponses[keyof GetEventsResponses];
+
+export type CreateEventData = {
+    body: EventCreate;
+    path?: never;
+    query?: never;
+    url: '/v1/events';
+};
+
+export type CreateEventErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateEventError = CreateEventErrors[keyof CreateEventErrors];
+
+export type CreateEventResponses = {
+    /**
+     * Successful Response
+     */
+    200: EventResponse;
+};
+
+export type CreateEventResponse = CreateEventResponses[keyof CreateEventResponses];
+
+export type DeleteEventData = {
+    body?: never;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/events/{event_id}';
+};
+
+export type DeleteEventErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteEventError = DeleteEventErrors[keyof DeleteEventErrors];
+
+export type DeleteEventResponses = {
+    /**
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type DeleteEventResponse = DeleteEventResponses[keyof DeleteEventResponses];
+
+export type GetEventByIdData = {
+    body?: never;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/events/{event_id}';
+};
+
+export type GetEventByIdErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetEventByIdError = GetEventByIdErrors[keyof GetEventByIdErrors];
+
+export type GetEventByIdResponses = {
+    /**
+     * Successful Response
+     */
+    200: EventResponse;
+};
+
+export type GetEventByIdResponse = GetEventByIdResponses[keyof GetEventByIdResponses];
+
+export type UpdateEventData = {
+    body: EventUpdate;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/events/{event_id}';
+};
+
+export type UpdateEventErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateEventError = UpdateEventErrors[keyof UpdateEventErrors];
+
+export type UpdateEventResponses = {
+    /**
+     * Successful Response
+     */
+    200: EventResponse;
+};
+
+export type UpdateEventResponse = UpdateEventResponses[keyof UpdateEventResponses];
 
 export type GetMeData = {
     body?: never;
@@ -635,60 +759,6 @@ export type SetRoleResponses = {
 };
 
 export type SetRoleResponse = SetRoleResponses[keyof SetRoleResponses];
-
-export type GetUserTicketByIdData = {
-    body?: never;
-    path: {
-        user_ticket_id: string;
-    };
-    query?: never;
-    url: '/v1/user_tickets/{user_ticket_id}';
-};
-
-export type GetUserTicketByIdErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetUserTicketByIdError = GetUserTicketByIdErrors[keyof GetUserTicketByIdErrors];
-
-export type GetUserTicketByIdResponses = {
-    /**
-     * Successful Response
-     */
-    200: UserTicketDetailResponse;
-};
-
-export type GetUserTicketByIdResponse = GetUserTicketByIdResponses[keyof GetUserTicketByIdResponses];
-
-export type GetUserTicketsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        user_id?: string;
-    };
-    url: '/v1/user_tickets';
-};
-
-export type GetUserTicketsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetUserTicketsError = GetUserTicketsErrors[keyof GetUserTicketsErrors];
-
-export type GetUserTicketsResponses = {
-    /**
-     * Successful Response
-     */
-    200: Array<UserTicketDetailResponse>;
-};
-
-export type GetUserTicketsResponse = GetUserTicketsResponses[keyof GetUserTicketsResponses];
 
 export type ClientOptions = {
     baseUrl: 'http://localhost:9000' | (string & {});
