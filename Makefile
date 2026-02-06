@@ -24,6 +24,9 @@ help:
 	@echo "  make logs       - View logs (all services)"
 	@echo "  make ps         - Show container status"
 	@echo "  make clean      - Remove containers and volumes"
+	@echo "  make clean-images - Remove EventSquare images only"
+	@echo "  make clean-all  - Remove containers, volumes, and images"
+	@echo "  make fresh-start - Clean everything and rebuild from scratch"
 	@echo "  make prune      - Clean up Docker system"
 	@echo ""
 	@echo "Rebuild Commands:"
@@ -159,6 +162,21 @@ frontend-shell:
 clean:
 	docker compose down -v
 	@echo "Containers and volumes removed"
+
+clean-images:
+	@echo "Removing EventSquare images..."
+	docker compose down
+	docker rmi eventsquare-backend eventsquare-frontend eventsquare-worker 2>/dev/null || true
+	@echo "Images removed!"
+
+clean-all: clean-images
+	@echo "Removing all containers, volumes, and images..."
+	docker compose down -v --rmi all
+	@echo "Everything cleaned!"
+
+fresh-start: clean-all build up
+	@echo "Fresh start complete!"
+	@echo "All images rebuilt and containers started!"
 
 prune:
 	docker system prune -af --volumes
