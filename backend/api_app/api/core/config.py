@@ -38,7 +38,7 @@ class Settings(BaseSettings):
 
     # auth
     SECRET_KEY: str = "secret_key"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10  # 10 mins
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1000  # 10 mins
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 30 * 24 * 60  # 30 days
     OTP_INTERVAL: int = 30
 
