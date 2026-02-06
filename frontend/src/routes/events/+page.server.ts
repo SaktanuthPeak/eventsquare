@@ -1,5 +1,5 @@
-import { getEvents, type EventResponse } from '$lib/client';
-import { get } from 'svelte/store';
+import { getEvents,getImage, type EventResponse } from '$lib/client';
+
 import type { PageServerLoad } from './$types';
 import { env } from '$env/dynamic/private';
 
@@ -25,28 +25,32 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
             const res = await getEvents({client: client});
             events = res.data?.items ?? [];
         }
+        console.log(events);
 
-        return { events };
-        // const eventsWithImages = [];
-        // for (const event of events) {
-        //     if (event?.image?.file_id) {
-        //         try {
-        //             eventsWithImages.push({
-        //                 ...event,
-        //                 image_url: `${env.API_URL}/v1/events/image/${event?.image?.file_id}`
-        //             });
-        //         } catch (error) {
-        //             console.log(error);
-        //         }
-        //     } else {
-        //         eventsWithImages.push({
-        //             ...event,
-        //             image_url: null
-        //         });
-        //     }
-        // }
+        const eventsWithImages = [];
+        for (const event of events) {
+            if (event?.image_id) {
+                try {
+                    const imageRes = await getImage({
+                        client: client,
+                        path: { image_id: event?.image_id }
+                    });
+                    eventsWithImages.push({
+                        ...event,
+                        image_url: `${env.API_URL}/v1/images/${imageRes?.data}`
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                eventsWithImages.push({
+                    ...event,
+                    image_url: null
+                });
+            }
+        }
 
-        // return { events: eventsWithImages.filter((event) => event.event_status === 'active') };
+        return { events: eventsWithImages };
 
     } catch (err) {
         console.error("Error loading events:", err);

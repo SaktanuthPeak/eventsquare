@@ -76,9 +76,9 @@
 	transition:fade={{ duration: 200 }}
 >
 	<div class="h-[240px]">
-		{#if event?.image_url}
+		{#if event?.image_id}
 			<img
-				src={`${env.PUBLIC_API_URL}/v1/events/image/${event?.image.file_id}`}
+				src={`${env.PUBLIC_API_URL}/v1/images/${event?.image_id}`}
 				alt={event?.name}
 				class="w-full h-full object-cover rounded-t-2xl"
 			/>

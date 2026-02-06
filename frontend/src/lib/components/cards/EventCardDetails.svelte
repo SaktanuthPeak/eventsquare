@@ -85,10 +85,10 @@
 		<div class="flex flex-col">
 			<!-- Event Image Section -->
 			<div class="w-full aspect-[4/3] overflow-hidden">
-				{#if eventData?.image}
+				{#if eventData?.image_id}
 					<img
 						class="w-full h-full object-cover hover:scale-105 transition-all duration-500"
-						src={`${env.PUBLIC_API_URL}/v1/events/image/${eventData?.image.file_id}`}
+						src={`${env.PUBLIC_API_URL}/v1/images/${eventData?.image_id}`}
 						alt={eventData?.name}
 					/>
 				{:else}
@@ -121,12 +121,8 @@
 					<div class="flex flex-wrap justify-between items-start gap-3 mb-2">
 						<h2 class="text-2xl font-bold leading-tight">{eventData?.name || 'Event Title'}</h2>
 					</div>
-					<span class={getEventTypeBadge(eventData?.event_type)}>
-						{eventData?.event_type === 'public' ? 'Public Event' : 'Private Event'}
-					</span>
-
 					<div class="badge badge-accent text-xs font-medium">
-						{eventData?.event_category || 'Uncategorized'}
+						{eventData?.event_type || 'Uncategorized'}
 					</div>
 				</div>
 

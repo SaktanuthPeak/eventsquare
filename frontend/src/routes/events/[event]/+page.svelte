@@ -2,22 +2,19 @@
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
-	import { setContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { Calendar, Ticket, Info, Warning } from 'phosphor-svelte';
 	import EventDetailsCard from '$lib/components/cards/EventCardDetails.svelte';
 	import MobileEventDetailsCard from '$lib/components/cards/EventCardDetailsMobile.svelte';
 	import { cn } from '$lib/utils/tw-utils';
-	import OrganizerDetail from '$lib/components/cards/OrganizerCardsDetail.svelte';
 	import { fade, fly } from 'svelte/transition';
+	import { env } from '$env/dynamic/public';
 
 	let { data }: { data: PageData } = $props();
-	let eventData = data.eventData;
 	let selectedTicketType: string = $state('');
 	let ticketQuantities: Record<string, number> = $state({});
 	let submitStatus = $state(false);
 	let agreedToTerms = $state(false);
-	setContext('eventData', eventData);
 
 	function handleSelectTicket(selectedTicketType: any) {
 		if (!selectedTicketType) {
@@ -47,11 +44,11 @@
 <div class="flex flex-col items-center w-full">
 	<!-- Hero Banner Section -->
 	<div class="w-full h-[60vh] relative">
-		{#if data.eventData?.images && data.eventData?.images.length > 0}
+		{#if data.eventData?.image_id}
 			<div class="absolute inset-0 overflow-hidden">
 				<img
 					class="w-full h-full object-cover"
-					src={data.eventData?.images[0].url}
+					src={`${env.PUBLIC_API_URL}/v1/images/${data.eventData.image_id}`}
 					alt={data.eventData?.name}
 					transition:fade={{ duration: 300 }}
 				/>
@@ -77,7 +74,7 @@
 					{data.eventData?.name}
 				</h1>
 				<div class="flex flex-wrap gap-3 items-center">
-					<div class="badge badge-accent">{data.eventData?.event_category || 'Event'}</div>
+					<div class="badge badge-accent">{(data.eventData as any)?.event_type || 'Event'}</div>
 					<div
 						class={cn(
 							'badge ',
@@ -113,13 +110,8 @@
 				</div>
 			</div>
 
-			<!-- Organizer Details -->
-			{#if data?.orgData?.organizer}
-			<OrganizerDetail organizer={data?.orgData?.organizer} />
-			{/if}
 		</div>
 
-		<!-- Right Column: Ticket Selection -->
 		<div class={cn('w-full lg:w-2/7 hidden lg:block')}>
 			<div class="relative bottom-[340px]">
 				<EventDetailsCard eventData={data?.eventData} />
@@ -147,21 +139,21 @@
 									<div class="flex justify-between items-start">
 										<div class="space-y-1">
 											<h3 class="font-bold text-lg">{ticket?.name}</h3>
-											<p class="text-sm text-base-content/70">{ticket?.description}</p>
+											<p class="text-sm text-base-content/70">{(ticket as any)?.description}</p>
 
-											{#if ticket?.allowed_dates}
+											{#if (ticket as any)?.allowed_dates}
 												<div class="mt-2 flex items-center gap-1 text-xs text-primary/60">
 													<Calendar size={14} />
 													<span>
-														{#if ticket?.allowed_dates.date_range}
+														{#if (ticket as any)?.allowed_dates?.date_range}
 															{new Date(
-																ticket?.allowed_dates.date_range.start_date
+																(ticket as any)?.allowed_dates?.date_range?.start_date
 															).toLocaleDateString()} -
 															{new Date(
-																ticket?.allowed_dates.date_range.end_date
+																(ticket as any)?.allowed_dates?.date_range?.end_date
 															).toLocaleDateString()}
-														{:else if ticket?.allowed_dates.single_date}
-															{new Date(ticket?.allowed_dates.single_date).toLocaleDateString()}
+														{:else if (ticket as any)?.allowed_dates?.single_date}
+															{new Date((ticket as any)?.allowed_dates?.single_date).toLocaleDateString()}
 														{/if}
 													</span>
 												</div>
@@ -185,7 +177,7 @@
 							<select class="select select-bordered w-full" bind:value={selectedTicketType}>
 								<option value="" disabled selected>Choose a ticket type</option>
 								{#each data?.eventData?.ticket_types || [] as ticket}
-									<option value={ticket?.id}>{ticket?.name} - ฿{ticket?.price}</option>
+									<option value={(ticket as any)?.id ?? (ticket as any)?.ticket_id}>{ticket?.name} - ฿{ticket?.price}</option>
 								{/each}
 							</select>
 						</div>

@@ -80,10 +80,10 @@
 
 <div class="flex flex-col gap-4">
 	<div class="w-full aspect-[2/3] overflow-hidden">
-		{#if eventData?.image}
+		{#if eventData?.image_id}
 			<img
 				class="w-full h-full object-cover"
-				src={`${env.PUBLIC_API_URL}/v1/events/image/${eventData?.image.file_id}`}
+				src={`${env.PUBLIC_API_URL}/v1/images/${eventData?.image_id}`}
 				alt={eventData?.name}
 				transition:fade={{ duration: 200 }}
 			/>
@@ -137,7 +137,7 @@
 						<div class="bg-primary/5 p-1.5 rounded-full">
 							<Tag size={18} weight="fill" class="text-primary" />
 						</div>
-						<span class="badge badge-accent text-accent-content">{eventData?.event_category}</span>
+						<span class="badge badge-accent text-accent-content">{eventData?.event_type}</span>
 					</div>
 				</div>
 			</div>
