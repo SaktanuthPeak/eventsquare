@@ -30,7 +30,6 @@ async def create_event(
 @router.get("/{event_id}")
 async def get_event_by_id(
     event_id: str,
-    current_user: models.User = Depends(dependencies.get_current_user),
     service: EventService = Depends(EventService),
 ) -> schemas.EventResponse:
     event = await service.get_event_by_id(event_id)
