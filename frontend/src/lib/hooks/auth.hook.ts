@@ -99,14 +99,14 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	function redirectToLogin(): Response {
+	async function redirectToLogin(): Promise<Response> {
 		logger.debug('Authentication failed, clearing cookies and redirecting to login');
 		logout(cookies);
 		locals.user = undefined;
 
 		// Allow rendering the login page without redirect loop
 		if (pathname === '/account/login') {
-			return resolve(event);
+			return await resolve(event);
 		}
 
 		const redirectUrl = new URL('/account/login', url);
