@@ -228,12 +228,6 @@ export const deleteEvent = <ThrowOnError extends boolean = false>(options: Optio
  */
 export const getEventById = <ThrowOnError extends boolean = false>(options: Options<GetEventByIdData, ThrowOnError>) => {
     return (options.client ?? _heyApiClient).get<GetEventByIdResponse, GetEventByIdError, ThrowOnError>({
-        security: [
-            {
-                scheme: 'bearer',
-                type: 'http'
-            }
-        ],
         responseTransformer: getEventByIdResponseTransformer,
         url: '/v1/events/{event_id}',
         ...options
