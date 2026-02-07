@@ -24,6 +24,8 @@ const ticketTypesFromForm = (value: unknown) => {
 };
 
 export const ticketTypeInputSchema = z.object({
+	// Optional for edit-event; backend will generate one if missing
+	ticket_id: z.union([z.string(), z.number()]).nullable().optional(),
   name: z.string().min(1),
   total: z.number().int().positive(),
   price: z.number().nonnegative(),
