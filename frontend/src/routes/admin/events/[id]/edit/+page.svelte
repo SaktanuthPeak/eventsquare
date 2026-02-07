@@ -5,7 +5,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { eventFormSchema } from '$lib/schemas/eventSchema';
 	import { toast } from 'svelte-sonner';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import TicketTypeManager from '$lib/components/admin/TicketTypeManager.svelte';
 
 	let { data }: { data: PageData } = $props();
@@ -25,6 +25,7 @@
 			}
 		})
 	);
+
 </script>
 
 <div class="mx-auto py-16 px-4 md:px-12 lg:px-50">
@@ -38,7 +39,7 @@
 		<div class="mt-10">
 			<div class="mb-4">
 				<h2 class="text-2xl font-bold">Tickets</h2>
-				<p class="mt-1 text-base-content/70">View ticket types for this event.</p>
+				<p class="mt-1 text-base-content/70">Created ticket types (read-only).</p>
 			</div>
 			<TicketTypeManager ticketTypes={data.event.ticket_types ?? []} />
 		</div>
