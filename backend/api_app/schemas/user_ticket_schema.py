@@ -49,3 +49,11 @@ class UserTicketDetailResponse(BaseModel):
     status: str
     user: Optional[schemas.User] = None
     event: Optional[schemas.EventResponse] = None
+
+
+class CheckedInUserResponse(BaseModel):
+    ticket_id: str
+    ticket_owner_name: str
+    quantity: int
+    email: str
+    check_in_date: datetime.datetime

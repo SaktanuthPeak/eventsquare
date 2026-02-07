@@ -91,3 +91,19 @@ class TicketPayloadSchema(BaseModel):
     email: str
     first_name: str
     last_name: str
+
+
+class TicketTypeStats(BaseModel):
+    ticket_type_name: str
+    total_seats: int
+    seats_sold: int
+    revenue: int
+
+
+class EventStatsResponse(BaseModel):
+    event_id: str
+    total_seats: int
+    total_seats_sold: int
+    total_revenue: int
+    ticket_type_stats: t.List[TicketTypeStats]
+    total_checked_in: int

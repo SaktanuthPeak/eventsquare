@@ -39,3 +39,13 @@ async def get_user_tickets(
 ) -> list[schemas.UserTicketDetailResponse]:
     user_tickets = await service.get_user_tickets(user_id)
     return user_tickets
+
+
+@router.get("/checked_in/{event_id}")
+async def get_checked_in_users(
+    event_id: str,
+    current_user: models.User = Depends(dependencies.get_current_user),
+    service: UserTicketService = Depends(UserTicketService),
+) -> t.List[schemas.CheckedInUserResponse]:
+    checked_in_users = await service.get_checked_in_users(event_id)
+    return checked_in_users

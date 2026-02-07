@@ -19,6 +19,7 @@ from .event_schema import (
     EventSearch,
     TicketBooking,
     TicketPayloadSchema,
+    EventStatsResponse,
 )
 
 from .user_ticket_schema import (
@@ -26,6 +27,7 @@ from .user_ticket_schema import (
     UserTicketCreate,
     UserTicketResponse,
     UserTicketDetailResponse,
+    CheckedInUserResponse,
 )
 
 from .image_schema import (

@@ -41,3 +41,19 @@ class UserTicketRepository(BaseRepository):
         else:
             items = await self.model.find(fetch_links=fetch_links).to_list()
         return items
+
+    async def get_checked_in_users_query(
+        self,
+        event_id: str,
+    ) -> list[Document]:
+        if not ObjectId.is_valid(event_id):
+            raise ValidationError("Invalid ObjectId")
+
+        query = models.UserTicket.find(
+            {
+                (self.model.event.id): PydanticObjectId(event_id),
+                "is_checked_in": True,
+            },
+            fetch_links=True,
+        )
+        return query
