@@ -23,7 +23,7 @@
 <div class="flex flex-col items-center justify-center bg-base-100 w-screen">
 
 	<div
-		class="flex justify-center w-screen items-center py-20 md:p-20 lg:grid-cols-2 bg-gradient-to-br from-[#6900FF] to-[#19003C]"
+		class="flex justify-center w-screen items-center py-20 md:p-20 lg:grid-cols-2 bg-linear-to-br from-secondary to-accent"
 	>
 		<div
 			class=" md:flex-5/7 px-10 w-screen md:w-full text-white font-medium md:text-xl md:p-4"
@@ -68,7 +68,7 @@
 	</div>
 	<a
 		href="/events"
-		class="btn border-0 my-10 text-base-100 bg-gradient-to-t from-[#6900FF] to-accent hover:bg-gradient-to-t hover:from-[#5700D2] hover:to-[#6900FF] transition-colors duration-200 delay-100"
+		class="btn border-0 my-10 text-base-100 bg-linear-to-t from-secondary to-accent hover:bg-linear-to-t hover:from-accent hover:to-secondary transition-colors duration-200 delay-100"
 	>
 		Explore More
 	</a>

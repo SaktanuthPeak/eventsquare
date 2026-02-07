@@ -89,7 +89,7 @@
 		{/if}
 	</div>
 	<div
-		class="text-sm bg-gradient-to-tr from-accent to-purple-600 text-white h-[25px] w-[80%] px-2 flex text-center justify-center line-clamp-1 font-bold rounded-br-2xl py-0.5"
+		class="text-sm bg-linear-to-tr from-accent to-secondary text-white h-[25px] w-[80%] px-2 flex text-center justify-center line-clamp-1 font-bold rounded-br-2xl py-0.5"
 	>
 		{formatEventDateRange(event?.start_date, event?.end_date)}
 	</div>

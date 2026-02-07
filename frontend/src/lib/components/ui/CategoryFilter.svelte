@@ -92,8 +92,8 @@
 			<button
 				class="snap-start rounded-full w-fit p-1.5 flex flex-row items-center justify-center gap-2 transition-colors duration-200 delay-100 cursor-pointer
   {selectedCategory === cat.title
-					? 'bg-gradient-to-l from-[#5700D2] to-[#6900FF] text-white'
-					: 'bg-accent/25 hover:bg-gradient-to-l hover:from-[#5700D2] hover:to-[#6900FF] hover:text-white'}"
+					? 'bg-linear-to-l from-secondary to-accent text-white'
+					: 'bg-accent/25 hover:bg-linear-to-l hover:from-secondary hover:to-accent hover:text-white'}"
 				onclick={() => handleCategoryClick(cat.title)}
 			>
 				<div
