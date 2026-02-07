@@ -14,6 +14,10 @@
 	}: Props = $props();
 </script>
 
+<svelte:head>
+	<title>EventSquare</title>
+</svelte:head>
+
 <div class="w-full overflow-x-hidden scroll-smooth min-h-screen hidescroll">
 	<Navbar userData={data} />
 	<Toaster richColors position="top-center" />
