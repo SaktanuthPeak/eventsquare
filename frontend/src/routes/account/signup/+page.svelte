@@ -5,8 +5,8 @@
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import TextInput from '$lib/components/ui/forms/TextInput.svelte';
+	import FormErrorSummary from '$lib/components/ui/forms/FormErrorSummary.svelte';
 	import { userSchema } from '$lib/schemas/userSchema';
-	import { XCircle } from 'phosphor-svelte';
 
 	let { data }: { data: PageData } = $props();
 	let acceptTerms = $state(false);
@@ -122,34 +122,7 @@
 							</div>
 						</div>
 					</div>
-			{#if $allErrors.length}
-				<div class="rounded-lg border border-red-100 bg-red-50 p-4">
-					<div class="flex">
-						<div class="flex-shrink-0">
-							<XCircle size={22} weight="fill" class="text-red-500" />
-						</div>
-						<div class="ml-1">
-							<h3 class="text-sm font-medium text-red-800">
-								Please fix the following {$allErrors.length === 1 ? 'error' : 'errors'}:
-							</h3>
-							<div class="mt-2 text-sm text-red-700">
-								<ul class="list-disc space-y-1 pl-5">
-									{#each $allErrors as error}
-										<li>
-											{#if error.path.includes('checkInRange')}
-												Check-in range: {error.messages.join('. ')}
-											{:else if error.path[0] === '_errors'}{error.messages.join('. ')}
-											{:else}
-												{error.messages.join('. ')}
-											{/if}
-										</li>
-									{/each}
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			{/if}
+			<FormErrorSummary errors={$allErrors} />
 
 			<div class="flex items-start gap-3">
 				<input

@@ -6,6 +6,7 @@
 	import { checkoutSchema } from './schema';
 	import TextInput from '$lib/components/ui/forms/TextInput.svelte';
 	import FileInput from '$lib/components/ui/forms/FileInput.svelte';
+	import FormErrorSummary from '$lib/components/ui/forms/FormErrorSummary.svelte';
 	import type { AllEventInfo } from '$lib/client';
 	import { getContext } from 'svelte';
 	let { data }: { data: PageData } = $props();
@@ -150,16 +151,7 @@
 			</div>
 
 			<div class="pt-4">
-				{#if $allErrors.length}
-					<div class="bg-error/10 p-3 rounded-lg mb-4 border border-error/20">
-						<h4 class="font-semibold text-error">Please fix the following errors:</h4>
-						<ul class="list-disc ml-4 mt-2 text-sm text-start">
-							{#each $allErrors as error}
-								<li class="text-error">{error.messages.join('. ')}</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
+				<FormErrorSummary errors={$allErrors} />
 			</div>
 			<div>
 				<button type="submit" class="btn btn-primary mt-4"> Submit </button>
