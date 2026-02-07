@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 </script>
 
 <div class="flex flex-col text-center h-screen">

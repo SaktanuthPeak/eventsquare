@@ -57,8 +57,12 @@ export const actions = {
 			const accessTokenMaxAge = 60 * 10;
 			const refreshTokencookieMaxAge = 60 * 60 * 24 * 10;
 
-			cookies.set('access_token', access_token, constructCookieOptions(accessTokenMaxAge));
-			cookies.set('refresh_token', refresh_token, constructCookieOptions(refreshTokencookieMaxAge));
+			cookies.set('access_token', access_token, constructCookieOptions(accessTokenMaxAge, context.url));
+			cookies.set(
+				'refresh_token',
+				refresh_token,
+				constructCookieOptions(refreshTokencookieMaxAge, context.url)
+			);
 
 			// You can also redirect or return a success message
 			return {

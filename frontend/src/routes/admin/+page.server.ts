@@ -1,16 +1,13 @@
 import { getEvents, type EventResponse } from '$lib/client';
 import type { PageServerLoad } from './$types';
-import { env } from '$env/dynamic/private';
-export const load = (async ({
-    locals
-}) => {
-    const { client } = locals
-    console.log(env.API_URL)
-    const res = await getEvents({
-        client: client
-    })
-        let events: EventResponse[] | undefined
-    events = res.data?.items ?? []
 
-    return { events: events };
-}) satisfies PageServerLoad;
+export const load: PageServerLoad = async ({ locals }) => {
+	try {
+		const res = await getEvents({ client: locals.client });
+		const events = (res.data?.items ?? []) as EventResponse[];
+		return { events };
+	} catch (err) {
+		console.error('Error loading events (admin root):', err);
+		return { events: [] as EventResponse[], apiError: 'Backend unavailable' };
+	}
+};

@@ -1,41 +1,63 @@
 import { z } from "zod";
 import { eventCategories } from "$lib/static/event";
 
-export const eventSchema = z.object({
-  name: z.string().min(1, "Event name is required"),
-  description: z.string().min(1, "Event description is required"),
-  location: z.string().min(1, "Event location is required"),
-  event_type: z.enum(
-    eventCategories as [string, ...string[]],
+const emptyStringToNull = (value: unknown) => {
+  if (typeof value === 'string' && value.trim().length === 0) return null;
+  return value;
+};
+
+const ticketTypesFromForm = (value: unknown) => {
+  // HTML forms will submit hidden JSON as string; accept array/null too.
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (trimmed.length === 0) return [];
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return value;
+    }
+  }
+  return value;
+};
+
+export const ticketTypeInputSchema = z.object({
+  name: z.string().min(1),
+  total: z.number().int().positive(),
+  price: z.number().nonnegative(),
+  remaining: z.number().int().nonnegative().optional()
+});
+
+// Matches Swagger/OpenAPI EventCreate shape
+export const eventCreateSchema = z.object({
+  name: z.string().min(1, 'Event name is required'),
+  description: z.preprocess(emptyStringToNull, z.string().nullable()),
+  event_type: z.enum(eventCategories as [string, ...string[]]),
+  location: z.preprocess(emptyStringToNull, z.string().nullable()).optional(),
+  ticket_types: z.preprocess(
+    ticketTypesFromForm,
+    z.array(ticketTypeInputSchema).nullable().optional()
   ),
-  startDate: z
-    .string()
-    .datetime("Invalid datetime format")
-    .refine((date) => new Date(date) >= new Date(new Date().setHours(0,0,0,0)), {
-      message: "Start date must be in the future",
-    }),
-  endDate: z
-    .string()
-    .datetime("Invalid datetime format")
-    .refine((date) => new Date(date) >= new Date(new Date().setHours(0,0,0,0)), {
-      message: "End date must be in the future",
-    }),
+  start_date: z.string().datetime('Invalid datetime format'),
+  end_date: z.string().datetime('Invalid datetime format'),
+  booking_start_date: z.string().datetime('Invalid datetime format'),
+  booking_end_date: z.string().datetime('Invalid datetime format')
+});
 
-  image: z
-    .instanceof(File, { message: 'Event image is required' }),
-
+export const eventFormSchema = z.object({
+  name: z.string().min(1, 'Event name is required'),
+  description: z.string().optional().default(''),
+  event_type: z.enum(eventCategories as [string, ...string[]]),
+  location: z.string().optional().default(''),
+  ticket_types: z.preprocess(ticketTypesFromForm, z.array(ticketTypeInputSchema).nullable().optional()).default('[]'),
+  start_date: z.string().datetime('Invalid datetime format'),
+  end_date: z.string().datetime('Invalid datetime format'),
+  booking_start_date: z.string().datetime('Invalid datetime format'),
+  booking_end_date: z.string().datetime('Invalid datetime format'),
   image_id: z.string().optional(),
-  eventStatus: z.enum(["draft", "pending", "active"]).optional().default("active"),
-  booking_start_date: z
-    .string()
-    .datetime("Invalid datetime format")
-    .refine((date) => new Date(date) >= new Date(new Date().setHours(0,0,0,0)), {
-      message: "Start date must be in the future",
-    }),
-  booking_end_date: z
-    .string()
-    .datetime("Invalid datetime format")
-    .refine((date) => new Date(date) >= new Date(new Date().setHours(0,0,0,0)), {
-      message: "End date must be in the future",
-    })
-})
+  eventStatus: z.enum(['draft', 'pending', 'active']).optional().default('active')
+});
+
+export const eventSchema = eventFormSchema;

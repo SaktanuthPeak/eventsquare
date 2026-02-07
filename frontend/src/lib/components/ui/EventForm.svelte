@@ -18,15 +18,61 @@
     mode?: "create" | "edit";
   }>();
 
-  const { form: formData, allErrors, enhance } = form;
-  const file = fileProxy(form, "image");
+  const formData = $derived(form.form);
+  const enhance = $derived(form.enhance);
+  const allErrors = $derived(form.allErrors);
+
+  const file = $derived(fileProxy(form, "image"));
+
+  type TicketDraft = {
+    name: string;
+    total: number;
+    price: number;
+  };
+
+  let ticketDrafts = $state<TicketDraft[]>([
+    { name: '', total: 1, price: 0 }
+  ]);
+
+  function addTicketDraft() {
+    ticketDrafts = [...ticketDrafts, { name: '', total: 1, price: 0 }];
+  }
+
+  function removeTicketDraft(index: number) {
+    ticketDrafts = ticketDrafts.filter((_, i) => i !== index);
+    if (ticketDrafts.length === 0) ticketDrafts = [{ name: '', total: 1, price: 0 }];
+  }
+
+  function ticketTypesJsonValue(): string {
+    return JSON.stringify(normalizedTicketTypes());
+  }
+
+  function normalizedTicketTypes(): Array<{ name: string; total: number; price: number; remaining: number }> {
+    return ticketDrafts
+      .map((t) => ({
+        name: String(t.name ?? '').trim(),
+        total: Number(t.total ?? 0),
+        price: Number(t.price ?? 0),
+        remaining: Number(t.total ?? 0)
+      }))
+      .filter((t) => t.name.length > 0);
+  }
+
+  // Store-only submission to avoid duplicate keys when using use:enhance
+  $effect(() => {
+    const json = ticketTypesJsonValue();
+    if ($formData.ticket_types !== json) {
+      $formData.ticket_types = json;
+    }
+  });
+
 </script>
 
 <div
   class="mx-auto bg-white rounded-xl shadow-sm border border-base-200 overflow-hidden"
 >
   <div
-    class="bg-gradient-to-r from-primary/5 to-secondary/5 p-6 border-b border-base-200"
+    class="bg-linear-to-r from-primary/5 to-secondary/5 p-6 border-b border-base-200"
   >
     <h2 class="text-2xl font-bold">
       {mode === "create" ? "Create New Event" : "Edit Event"}
@@ -43,7 +89,8 @@
     class="p-6 space-y-6"
     enctype="multipart/form-data"
   >
-    
+    <!-- ticket_types is submitted via the superforms store (see $effect above) -->
+
     <!-- Details Section -->
       <div class="space-y-6 p-6 border border-primary/20 rounded-lg">
         <div class="flex gap-1 text-gray-700">
@@ -112,17 +159,17 @@
         <div class="w-full flex gap-6">
             <DatePicker
               {form}
-              bind:value={$formData.startDate}
-              name="startDate"
+              bind:value={$formData.start_date}
+              name="start_date"
               placeholder="Select start date"
               required
               label="Start Date"
             />
             <DatePicker
               {form}
-              bind:value={$formData.endDate}
+              bind:value={$formData.end_date}
               label="End Date"
-              name="endDate"
+              name="end_date"
               placeholder="Select end date"
               required
             />
@@ -167,11 +214,87 @@
         />
       </div>
 
+    {#if mode === 'create'}
+      <!-- Tickets -->
+      <div class="space-y-4 p-6 border border-primary/20 rounded-lg">
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="text-lg font-semibold text-gray-700">Ticket Types</h3>
+          <button type="button" class="btn btn-sm btn-outline" onclick={addTicketDraft}>
+            Add ticket
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          {#each ticketDrafts as t, i (i)}
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-12 items-end">
+              <div class="md:col-span-6">
+                <label class="block text-sm font-medium text-gray-700 mb-1" for={`ticket-name-${i}`}>Name</label>
+                <input
+                  id={`ticket-name-${i}`}
+                  class="input input-bordered w-full"
+                  placeholder="e.g. VIP"
+                  value={t.name}
+                  oninput={(e) => {
+                    const value = (e.target as HTMLInputElement).value;
+                    ticketDrafts = ticketDrafts.map((x, idx) => (idx === i ? { ...x, name: value } : x));
+                  }}
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1" for={`ticket-total-${i}`}>Total</label>
+                <input
+                  id={`ticket-total-${i}`}
+                  class="input input-bordered w-full"
+                  type="number"
+                  min="1"
+                  value={t.total}
+                  oninput={(e) => {
+                    const value = Number((e.target as HTMLInputElement).value);
+                    ticketDrafts = ticketDrafts.map((x, idx) =>
+                      idx === i ? { ...x, total: Number.isFinite(value) ? value : 0 } : x
+                    );
+                  }}
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-1" for={`ticket-price-${i}`}>Price</label>
+                <input
+                  id={`ticket-price-${i}`}
+                  class="input input-bordered w-full"
+                  type="number"
+                  min="0"
+                  value={t.price}
+                  oninput={(e) => {
+                    const value = Number((e.target as HTMLInputElement).value);
+                    ticketDrafts = ticketDrafts.map((x, idx) =>
+                      idx === i ? { ...x, price: Number.isFinite(value) ? value : 0 } : x
+                    );
+                  }}
+                />
+              </div>
+              <div class="md:col-span-2 flex justify-end">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-ghost text-error"
+                  onclick={() => removeTicketDraft(i)}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          {/each}
+        </div>
+        <p class="text-sm text-base-content/60">
+          You can add more than 1 ticket type. Remaining will start equal to Total.
+        </p>
+      </div>
+    {/if}
+
       <!-- Error Messages -->
       {#if $allErrors.length}
         <div class="bg-red-50 p-4 rounded-lg border border-red-100">
           <div class="flex">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <XCircle size={22} weight="fill" class="text-red-500" />
             </div>
             <div class="ml-1">
@@ -221,6 +344,6 @@
           {/if}
         </button>
       </div>
-      <SuperDebug data={$formData} />
+      <!-- <SuperDebug data={{ ...$formData, ticket_types: normalizedTicketTypes() }} /> -->
   </form>
 </div>

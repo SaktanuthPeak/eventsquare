@@ -9,7 +9,7 @@
 
 <div class="flex flex-col w-full">
 	<div class="flex flex-row justify-between items-center my-2">
-		<h1 class="text-2xl font-bold">My Active Tickets</h1>
+		<h1 class="text-2xl font-bold">My Tickets</h1>
 	</div>
 
 	{#if data?.tickets?.length}
@@ -29,9 +29,9 @@
 			<div class="bg-primary/5 p-6 rounded-full mb-6">
 				<WarningOctagon size={64} weight="light" class="text-primary/40" />
 			</div>
-			<h3 class="text-xl font-semibold mb-2">No Active Tickets</h3>
+			<h3 class="text-xl font-semibold mb-2">No Tickets</h3>
 			<p class="text-base-content/70 text-center max-w-md mb-6">
-				You don't have any active tickets yet. If you have already purchased a ticket, please check
+				You don't have any tickets yet. If you have already purchased a ticket, please check
 				your purchase history or wait for approval.
 			</p>
 
