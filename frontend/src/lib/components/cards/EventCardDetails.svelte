@@ -72,9 +72,6 @@
 		return `${startFormat} - ${endFormat}`;
 	}
 
-	function getEventTypeBadge(eventType: string) {
-		return cn('badge font-medium', eventType === 'public' ? 'badge-success' : 'badge-secondary');
-	}
 </script>
 
 <div class="md:flex md:flex-col items-center justify-center hidden z-10">

@@ -1,7 +1,48 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import ConfirmActionDialog from '$lib/components/ui/ConfirmActionDialog.svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	type PendingDelete = { id: string; name: string } | null;
+	let pendingDelete: PendingDelete = $state(null);
+	let confirmDeleteDialog: { open: () => void; close: () => void } | null = $state(null);
+
+	function openDeleteModal(event: { id: string; name?: string | null }) {
+		pendingDelete = { id: event.id, name: event.name ?? 'this event' };
+		confirmDeleteDialog?.open();
+	}
+
+	function closeDeleteModal() {
+		confirmDeleteDialog?.close();
+		pendingDelete = null;
+	}
+
+	const onDeleteEnhanced: SubmitFunction = () => {
+		return async ({ result }: any) => {
+			if (result?.type === 'success') {
+				const payload = result.data as any;
+				if (payload?.success) {
+					toast.success(payload?.message ?? 'Event deleted');
+					closeDeleteModal();
+					await invalidateAll();
+					return;
+				}
+				toast.error(payload?.message ?? 'Failed to delete event');
+				return;
+			}
+
+			if (result?.type === 'failure') {
+				toast.error((result.data as any)?.message ?? 'Failed to delete event');
+				return;
+			}
+
+			toast.error('Failed to delete event');
+		};
+	};
 
 	function toValidDate(value: unknown): Date | null {
 		if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
@@ -77,6 +118,13 @@
 									<a class="btn btn-sm btn-ghost" href={`/events/${event.id}`}>View</a>
 									<a class="btn btn-sm btn-outline" href={`/admin/events/${event.id}/tickets`}>Tickets</a>
 									<a class="btn btn-sm btn-secondary" href={`/admin/events/${event.id}/edit`}>Edit</a>
+									<button
+										type="button"
+										class="btn btn-sm btn-error"
+										onclick={() => openDeleteModal(event)}
+									>
+										Delete
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -86,3 +134,16 @@
 		</table>
 	</div>
 </div>
+
+<ConfirmActionDialog
+	bind:this={confirmDeleteDialog}
+	title="Delete event"
+	description={`Are you sure you want to delete ${pendingDelete?.name ?? 'this event'}? This action cannot be undone.`}
+	action="?/delete"
+	hiddenFields={[{ name: 'event_id', value: pendingDelete?.id ?? '' }]}
+	confirmText="Delete"
+	cancelText="Cancel"
+	confirmClass="btn btn-error"
+	confirmDisabled={!pendingDelete?.id}
+	onResult={onDeleteEnhanced}
+/>
