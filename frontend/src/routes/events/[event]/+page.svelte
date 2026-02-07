@@ -25,13 +25,16 @@
 			toast.error('Please accept the terms of service.');
 			return;
 		}
-		if (ticketQuantities[selectedTicketType] <= 0) {
+		const quantity = Number(ticketQuantities[selectedTicketType] ?? 0);
+		if (!Number.isFinite(quantity) || quantity <= 0) {
 			toast.error('Please select a valid quantity.');
 			return;
 		}
 		submitStatus = true;
 		goto(
-			`/events/${data?.eventData?.id}/checkout?ticket=${selectedTicketType}&quantity=${ticketQuantities[selectedTicketType]}`
+			`/events/${data?.eventData?.id}/checkout?ticketId=${encodeURIComponent(
+				String(selectedTicketType)
+			)}&quantity=${encodeURIComponent(String(quantity))}`
 		);
 	}
 	$effect(() => {
@@ -52,11 +55,11 @@
 					alt={data.eventData?.name}
 					transition:fade={{ duration: 300 }}
 				/>
-				<div class="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent"></div>
+				<div class="absolute inset-0 bg-linear-to-b from-black/60 to-transparent"></div>
 			</div>
 		{:else}
 			<div
-				class="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center"
+				class="absolute inset-0 bg-linear-to-br from-primary/10 to-secondary/10 flex items-center justify-center"
 			>
 				<div class="text-center p-8 rounded-xl">
 					<Warning size={64} weight="light" class="mx-auto text-primary/30 mb-4" />
@@ -67,7 +70,7 @@
 
 		<!-- Event Title Overlay -->
 		<div
-			class="hidden md:block absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/50 to-transparent text-white"
+			class="hidden md:block absolute bottom-0 left-0 w-full p-8 bg-linear-to-t from-black/50 to-transparent text-white"
 		>
 			<div class="container mx-auto">
 				<h1 class="text-3xl md:text-4xl font-bold mb-2" transition:fly={{ y: 20, duration: 400 }}>
@@ -93,7 +96,7 @@
 	<!-- Main Content Area -->
 	<div class="container mx-auto px-4 py-8 flex flex-col-reverse lg:flex-row gap-8">
 		<!-- Left Column: Event Details -->
-		<div class="w-full relative bottom-[470px] md:bottom-0 lg:w-5/7 space-y-8">
+		<div class="w-full relative bottom-117.5 md:bottom-0 lg:w-5/7 space-y-8">
 			<!-- Desktop Event Details Card -->
 			<div class=" md:hidden w-full">
 				<MobileEventDetailsCard eventData={data.eventData} />
@@ -113,12 +116,12 @@
 		</div>
 
 		<div class={cn('w-full lg:w-2/7 hidden lg:block')}>
-			<div class="relative bottom-[340px]">
+			<div class="relative bottom-85">
 				<EventDetailsCard eventData={data?.eventData} />
 			</div>
 			<div
 				class={cn(
-					'relative bottom-[320px] ',
+					'relative bottom-80 ',
 					data?.eventData?.event_type === 'public' ? 'hidden' : ''
 				)}
 			>
@@ -177,7 +180,13 @@
 							<select class="select select-bordered w-full" bind:value={selectedTicketType}>
 								<option value="" disabled selected>Choose a ticket type</option>
 								{#each data?.eventData?.ticket_types || [] as ticket}
-									<option value={(ticket as any)?.id ?? (ticket as any)?.ticket_id}>{ticket?.name} - ฿{ticket?.price}</option>
+								{#if (ticket as any)?.remaining > 0}
+									<option value={(ticket as any)?.id ?? (ticket as any)?.ticket_id} >{ticket?.name} - ฿{ticket?.price}</option>
+								{:else}
+									<option value={(ticket as any)?.id ?? (ticket as any)?.ticket_id} disabled>
+										{ticket?.name} - Sold Out
+									</option>
+								{/if}
 								{/each}
 							</select>
 						</div>
