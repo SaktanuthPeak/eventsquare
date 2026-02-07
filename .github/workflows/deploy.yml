@@ -18,7 +18,7 @@ jobs:
         key: ${{ secrets.GCP_SSH_KEY }}
         port: 22
         script: |
-          cd /home/${{ secrets.GCP_USERNAME }}/your-project-folder
+          cd /home/${{ secrets.GCP_USERNAME }}/eventsquare
           git pull origin main
           docker compose up -d --build
           docker image prune -f
