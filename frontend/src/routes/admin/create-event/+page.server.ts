@@ -4,7 +4,6 @@ import { zod } from "sveltekit-superforms/adapters";
 import { eventFormSchema } from "$lib/schemas/eventSchema";
 import { createEvent } from "$lib/client";
 import { fail } from "@sveltejs/kit";
-import { env } from '$env/dynamic/public';
 import type { z } from 'zod';
 
 const createEventAdapter = zod(eventFormSchema as any) as any;
@@ -49,8 +48,6 @@ export const actions: Actions = {
     bookingEndDate.setUTCHours(23,59,59,999);
 
 	  const ticketTypes = (form.data as any).ticket_types as any[] | null | undefined;
-    console.log('[DEBUG] ticket_types raw from form.data:', ticketTypes);
-    console.log('[DEBUG] ticket_types type:', typeof ticketTypes, Array.isArray(ticketTypes));
     try {
       const createEventRes = await createEvent({
         client: client,
@@ -76,33 +73,6 @@ export const actions: Actions = {
       }
 
       const createdEventId = createEventRes.data?.id;
-      const accessToken = event.cookies.get('access_token');
-      const imageFile = (form.data as any).image as File | undefined;
-
-      if (createdEventId && accessToken && imageFile instanceof File) {
-        const baseUrl = env.PUBLIC_BASE_API_URL || 'http://localhost:9000';
-        const uploadUrl = new URL('/v1/images/upload', baseUrl);
-        uploadUrl.searchParams.set('event_id', createdEventId);
-
-        const body = new FormData();
-        body.set('file', imageFile);
-
-        const uploadRes = await fetch(uploadUrl, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          },
-          body
-        });
-
-        if (!uploadRes.ok) {
-          return fail(400, {
-            ...withFiles({ form }),
-            type: 'error',
-            message: 'Image upload failed'
-          });
-        }
-      }
        
       return {
         ...withFiles({ form }),

@@ -32,7 +32,7 @@
           toast.error(result.data?.message || 'Failed to create event.');
         }
       },
-      dataType: 'json'
+       dataType:  'json' 
     })
   );
 </script>
