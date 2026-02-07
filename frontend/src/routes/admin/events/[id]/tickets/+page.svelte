@@ -1,11 +1,38 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import TicketTypeManager from '$lib/components/admin/TicketTypeManager.svelte';
+	import { fileProxy, superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { imageUploadSchema } from '$lib/schemas/imageUploadSchema';
+	import FileInput from '$lib/components/ui/forms/FileInput.svelte';
+	import FormErrorSummary from '$lib/components/ui/forms/FormErrorSummary.svelte';
+	import { toast } from 'svelte-sonner';
+	import { invalidateAll } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 
 	const event = $derived(data.event);
 	const tickets = $derived(data.event?.ticket_types ?? []);
+
+	const imageForm = $derived.by(() =>
+		superForm(data.imageForm as any, {
+			validators: zodClient(imageUploadSchema as any),
+			customValidity: true,
+			dataType: 'form',
+			onResult: async ({ result }) => {
+				if (result.type === 'success') {
+					toast.success('Image uploaded');
+					await invalidateAll();
+				} else if (result.type === 'failure') {
+					toast.error((result.data as any)?.message || 'Image upload failed');
+				}
+			}
+		})
+	);
+
+	const enhance = $derived(imageForm.enhance);
+	const allErrors = $derived(imageForm.allErrors);
+	const file = $derived(fileProxy(imageForm, 'image'));
 </script>
 
 <div class="container mx-auto px-4 py-10">
@@ -27,6 +54,31 @@
 	{#if !event}
 		<div class="mt-8 alert alert-error">Event not found.</div>
 	{:else}
+		<div class="mt-8 rounded-lg border border-base-200 bg-base-100 p-6">
+			<h2 class="text-xl font-bold">Upload event image</h2>
+			<p class="mt-1 text-sm text-base-content/70">
+				This is a separate step after creating the event.
+			</p>
+
+			<form
+				method="POST"
+				action="?/uploadImage"
+				enctype="multipart/form-data"
+				use:enhance
+				class="mt-4 space-y-3"
+			>
+				<FileInput
+					form={imageForm}
+					bind:files={$file}
+					name="image"
+					label="Event image"
+					description="JPEG/PNG/WebP, max 10MB"
+				/>
+				<FormErrorSummary errors={$allErrors} />
+				<button type="submit" class="btn btn-primary">Upload image</button>
+			</form>
+		</div>
+
 		<div class="mt-8">
 			<TicketTypeManager ticketTypes={tickets} />
 		</div>
