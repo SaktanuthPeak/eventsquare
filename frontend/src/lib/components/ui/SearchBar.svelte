@@ -41,6 +41,8 @@
 	<button
 		class="flex items-center justify-center bg-secondary border-0 rounded-l-none rounded-r-lg h-full w-[60px] hover:bg-blend-saturation cursor-pointer transition-colors duration-50"
 		type="submit"
+		aria-label="Search"
+		title="Search"
 	>
 		<MagnifyingGlass size={24} class="text-secondary-content" weight="bold" />
 	</button>

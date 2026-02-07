@@ -79,6 +79,8 @@
 	<button
 		class="size-[32px] rounded-full shadow-lg bg-base-100 flex items-center justify-center cursor-pointer"
 		onclick={scrollLeft}
+		aria-label="Scroll categories left"
+		title="Scroll categories left"
 	>
 		<CaretLeft size={20} weight="bold" class="text-accent" />
 	</button>
@@ -139,6 +141,8 @@
 	<button
 		class="size-[32px] rounded-full shadow-lg bg-base-100 flex items-center justify-center cursor-pointer"
 		onclick={scrollRight}
+		aria-label="Scroll categories right"
+		title="Scroll categories right"
 	>
 		<CaretRight size={20} weight="bold" class="text-accent" />
 	</button>

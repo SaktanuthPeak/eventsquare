@@ -62,6 +62,8 @@
 			<!-- Mobile avatar shortcut -->
 			<button
 				class="md:hidden"
+				aria-label="Account menu"
+				title="Account menu"
 				onclick={() => closeMobileMenu()}
 			>
 				<div
