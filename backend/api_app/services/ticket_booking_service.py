@@ -24,7 +24,12 @@ class TicketBookingService(BaseService):
         booking: schemas.TicketBooking,
         user: models.User,
     ) -> dict:
-        # Reserve tickets in Redis (with lock)
+
+        if user.credit < booking.total_price:
+            raise HTTPException(400, "Insufficient credit for booking")
+        user.credit -= booking.total_price
+        await user.save()
+
         reservation_result = await self.inventory.reserve_tickets(
             event_id=booking.event_id,
             ticket_type_id=booking.ticket_type_id,
@@ -94,6 +99,7 @@ class TicketBookingService(BaseService):
                 "success": True,
                 "message": "Booking successful",
                 "booking_details": {
+                    "credit_remaining": user.credit,
                     "ticket_id": ticket_id,
                     "event_name": event.name,
                     "event_id": booking.event_id,
