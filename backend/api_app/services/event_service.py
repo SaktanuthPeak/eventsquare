@@ -6,6 +6,7 @@ from typing import Optional
 from loguru import logger
 
 from ..repositories import EventRepository
+from api_app.api.core.exceptions import ValidationError
 
 from .. import models, schemas
 from ..services import BaseService
@@ -143,5 +144,34 @@ class EventService(BaseService):
     async def delete_event(
         self,
         event_id: str,
-    ) -> None:
-        await self._repository.delete_by_id(event_id)
+        redis: Optional[Redis] = None,
+    ) -> dict:
+        try:
+            deleted = await self._repository.delete_by_id(event_id)
+        except ValidationError as e:
+            logger.warning(f"Failed to delete event {event_id}: {e}")
+            return {"success": False, "message": "Event not found"}
+
+        if redis:
+            try:
+                from ..api.core.redis_lock import TicketInventory
+
+                inventory = TicketInventory(redis)
+
+                for ticket_type in getattr(deleted, "ticket_types", []) or []:
+                    ticket_type_id = getattr(ticket_type, "ticket_id", None)
+                    if not ticket_type_id:
+                        continue
+
+                    inventory_key = inventory._get_ticket_key(
+                        str(deleted.id), ticket_type_id
+                    )
+                    lock_key = f"lock:{inventory._get_lock_key(str(deleted.id), ticket_type_id)}"
+                    await redis.delete(inventory_key)
+                    await redis.delete(lock_key)
+            except Exception as e:
+                logger.error(
+                    f"Failed to cleanup Redis inventory for deleted event {event_id}: {e}"
+                )
+
+        return {"success": True, "message": "Event deleted"}
