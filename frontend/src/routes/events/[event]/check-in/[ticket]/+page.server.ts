@@ -4,6 +4,7 @@ import  { checkInSchema }  from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { getEventById, getUserTicketById } from '$lib/client';
 import { fail, redirect } from '@sveltejs/kit';
+import { env } from '$env/dynamic/public';
 
 export const load = (async (event) => {
     const { client } = event.locals;
@@ -52,9 +53,9 @@ export const actions: Actions = {
         }
 
         try {
-            // Call check-in API endpoint
+            const baseUrl = env.PUBLIC_BASE_API_URL || 'http://localhost:9000';
             const token = event.cookies.get("access_token");
-            const response = await fetch(`http://localhost:9000/v1/tickets/check-in/${event.params.ticket}`, {
+            const response = await fetch(`${baseUrl}/v1/tickets/check-in/${event.params.ticket}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
