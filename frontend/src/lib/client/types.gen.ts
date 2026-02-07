@@ -110,6 +110,33 @@ export type RegisteredUser = {
     confirm_password: string;
 };
 
+export type TicketBooking = {
+    /**
+     * Event ID
+     */
+    event_id: string;
+    /**
+     * Ticket name
+     */
+    ticket_type_name: string;
+    /**
+     * Ticket type ID
+     */
+    ticket_type_id: string;
+    /**
+     * Number of tickets (max 10 per booking)
+     */
+    quantity: number;
+    /**
+     * Price per ticket
+     */
+    price_per_ticket: number;
+    /**
+     * Total price for the booking
+     */
+    total_price: number;
+};
+
 export type TicketTypeDb = {
     name: string;
     total: number;
@@ -261,6 +288,104 @@ export type RefreshTokenData = {
 };
 
 export type RefreshTokenResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type BookTicketsData = {
+    body: TicketBooking;
+    path?: never;
+    query?: never;
+    url: '/v1/tickets/book';
+};
+
+export type BookTicketsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type BookTicketsError = BookTicketsErrors[keyof BookTicketsErrors];
+
+export type BookTicketsResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type SyncInventoryData = {
+    body?: never;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/sync/{event_id}';
+};
+
+export type SyncInventoryErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SyncInventoryError = SyncInventoryErrors[keyof SyncInventoryErrors];
+
+export type SyncInventoryResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type CheckSyncStatusData = {
+    body?: never;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/check-sync/{event_id}';
+};
+
+export type CheckSyncStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CheckSyncStatusError = CheckSyncStatusErrors[keyof CheckSyncStatusErrors];
+
+export type CheckSyncStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type CheckInTicketData = {
+    body?: never;
+    path: {
+        ticket_id: string;
+    };
+    query?: never;
+    url: '/v1/tickets/check-in/{ticket_id}';
+};
+
+export type CheckInTicketErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CheckInTicketError = CheckInTicketErrors[keyof CheckInTicketErrors];
+
+export type CheckInTicketResponses = {
     /**
      * Successful Response
      */
