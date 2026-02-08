@@ -129,14 +129,13 @@ services:
       PORT: 3000
       HOST: 0.0.0.0
       ORIGIN: ${FRONTEND_URL:-http://localhost:3000}
-      PUBLIC_API_URL: http://backend:9000
-      PUBLIC_BASE_API_URL: http://backend:9000
       API_ENDPOINT: http://backend:9000
+      PUBLIC_API_URL: ${PUBLIC_CLIENT_API_URL:-http://34.143.192.163:9000}
+      PUBLIC_BASE_API_URL: ${PUBLIC_CLIENT_API_URL:-http://34.143.192.163:9000}
       PUBLIC_CLIENT_API_URL: ${PUBLIC_CLIENT_API_URL:-http://34.143.192.163:9000}
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
       - "${VITE_HMR_PORT:-5173}:5173"
-
     networks:
       - eventsquare-network
     healthcheck:

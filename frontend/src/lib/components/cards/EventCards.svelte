@@ -78,7 +78,7 @@
 	<div class="h-[240px]">
 		{#if event?.image_id}
 			<img
-				src={`${env.PUBLIC_API_URL}/v1/images/${event?.image_id}`}
+				src={`${env.PUBLIC_CLIENT_API_URL || env.PUBLIC_BASE_API_URL}/v1/images/${event?.image_id}`}
 				alt={event?.name}
 				class="w-full h-full object-cover rounded-t-2xl"
 			/>

@@ -83,7 +83,7 @@
 		{#if eventData?.image_id}
 			<img
 				class="w-full h-full object-cover"
-				src={`${env.PUBLIC_API_URL}/v1/images/${eventData?.image_id}`}
+				src={`${env.PUBLIC_CLIENT_API_URL || env.PUBLIC_BASE_API_URL}/v1/images/${eventData?.image_id}`}
 				alt={eventData?.name}
 				transition:fade={{ duration: 200 }}
 			/>

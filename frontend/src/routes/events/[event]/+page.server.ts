@@ -19,7 +19,7 @@ export const load = (async ({params , locals}) => {
                     client: locals.client,
                     path: { image_id: res.data.image_id }
                 });
-                image_url = `${env.PUBLIC_API_URL}/v1/images/${imageRes?.data}`;
+                image_url = `${env.PUBLIC_CLIENT_API_URL || env.PUBLIC_BASE_API_URL}/v1/images/${imageRes?.data}`;
             } catch (error) {
                 console.error('Error loading event image:', error);
             }

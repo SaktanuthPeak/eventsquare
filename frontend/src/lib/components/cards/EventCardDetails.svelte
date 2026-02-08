@@ -85,7 +85,7 @@
 				{#if eventData?.image_id}
 					<img
 						class="w-full h-full object-cover hover:scale-105 transition-all duration-500"
-						src={`${env.PUBLIC_API_URL}/v1/images/${eventData?.image_id}`}
+						src={`${env.PUBLIC_CLIENT_API_URL || env.PUBLIC_BASE_API_URL}/v1/images/${eventData?.image_id}`}
 						alt={eventData?.name}
 					/>
 				{:else}
