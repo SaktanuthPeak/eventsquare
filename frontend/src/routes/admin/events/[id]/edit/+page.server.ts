@@ -11,8 +11,9 @@ import type { z } from 'zod';
 const editEventAdapter = zod(eventFormSchema as any) as any;
 
 function toIsoString(value: unknown): string {
-	const dt = new Date(value as any);
-	return Number.isNaN(dt.getTime()) ? new Date().toISOString() : dt.toISOString();
+    if (value === null || value === undefined || value === '') return '';
+    const dt = new Date(value as any);
+    return Number.isNaN(dt.getTime()) ? '' : dt.toISOString();
 }
 
 export const load: PageServerLoad = async ({ params, locals }) => {
