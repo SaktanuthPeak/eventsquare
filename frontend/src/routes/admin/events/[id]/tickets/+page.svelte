@@ -57,30 +57,7 @@
 	{#if !event}
 		<div class="mt-8 alert alert-error">Event not found.</div>
 	{:else}
-		<div class="mt-8 rounded-lg border border-base-200 bg-base-100 p-6">
-			<h2 class="text-xl font-bold">Upload event image</h2>
-			<p class="mt-1 text-sm text-base-content/70">
-				This is a separate step after creating the event.
-			</p>
 
-			<form
-				method="POST"
-				action="?/uploadImage"
-				enctype="multipart/form-data"
-				use:enhance
-				class="mt-4 space-y-3"
-			>
-				<FileInput
-					form={imageForm}
-					bind:files={$file}
-					name="image"
-					label="Event image"
-					description="JPEG/PNG/WebP, max 10MB"
-				/>
-				<FormErrorSummary errors={$allErrors} />
-				<button type="submit" class="btn btn-primary">Upload image</button>
-			</form>
-		</div>
 
 		<div class="mt-8">
 			<TicketTypeManager ticketTypes={tickets} />

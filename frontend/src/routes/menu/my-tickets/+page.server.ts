@@ -6,7 +6,7 @@ export const load: PageServerLoad = (async ({locals}) => {
         const { client } = locals;
         const ticketsRes = await getUserTickets({
             client: client,
-            path: {user_id: locals?.user?.id}
+            query: {user_id: locals?.user?.id}
         });
         
         const tickets = ticketsRes.data || [];
