@@ -57,3 +57,12 @@ class UserTicketRepository(BaseRepository):
             fetch_links=True,
         )
         return query
+
+    async def update_expired_tickets_status(self, now) -> list[Document]:
+        result = await self.model.find(
+            {
+                "is_checked_in": False,
+                "event_end_date": {"$lt": now},
+            }
+        ).update_many({"$set": {"status": "expired"}})
+        return result

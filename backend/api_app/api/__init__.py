@@ -10,6 +10,7 @@ from loguru import logger
 from .core.app_settings import AppSettings, get_app_settings
 from dotenv import load_dotenv
 import os
+from api_app.scheduler import setup_scheduler
 
 
 def create_app() -> FastAPI:
@@ -51,6 +52,10 @@ async def lifespan(app: FastAPI):
 
     await use_route_names_as_operation_ids(app)
     add_pagination(app)
+    logger.info("Setting up background scheduler")
+    scheduler = setup_scheduler()
+    scheduler.start()
+    logger.info("Background scheduler started")
 
     yield
 
