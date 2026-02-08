@@ -144,6 +144,35 @@ export const ChangedPasswordSchema = {
     title: 'ChangedPassword'
 } as const;
 
+export const CheckedInUserResponseSchema = {
+    properties: {
+        ticket_id: {
+            type: 'string',
+            title: 'Ticket Id'
+        },
+        ticket_owner_name: {
+            type: 'string',
+            title: 'Ticket Owner Name'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        email: {
+            type: 'string',
+            title: 'Email'
+        },
+        check_in_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Check In Date'
+        }
+    },
+    type: 'object',
+    required: ['ticket_id', 'ticket_owner_name', 'quantity', 'email', 'check_in_date'],
+    title: 'CheckedInUserResponse'
+} as const;
+
 export const EventCreateSchema = {
     properties: {
         name: {

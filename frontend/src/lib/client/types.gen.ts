@@ -30,6 +30,14 @@ export type ChangedPassword = {
     new_password: string;
 };
 
+export type CheckedInUserResponse = {
+    ticket_id: string;
+    ticket_owner_name: string;
+    quantity: number;
+    email: string;
+    check_in_date: Date;
+};
+
 export type EventCreate = {
     name: string;
     description: string | null;
@@ -527,6 +535,33 @@ export type GetUserTicketsResponses = {
 };
 
 export type GetUserTicketsResponse = GetUserTicketsResponses[keyof GetUserTicketsResponses];
+
+export type GetCheckedInUsersData = {
+    body?: never;
+    path: {
+        event_id: string;
+    };
+    query?: never;
+    url: '/v1/user_tickets/checked_in/{event_id}';
+};
+
+export type GetCheckedInUsersErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetCheckedInUsersError = GetCheckedInUsersErrors[keyof GetCheckedInUsersErrors];
+
+export type GetCheckedInUsersResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<CheckedInUserResponse>;
+};
+
+export type GetCheckedInUsersResponse = GetCheckedInUsersResponses[keyof GetCheckedInUsersResponses];
 
 export type GetEventsData = {
     body?: never;
