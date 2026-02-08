@@ -26,7 +26,7 @@
           if (createdEventId) {
             await goto(`/admin/events/${createdEventId}/tickets`, { invalidateAll: true });
           } else {
-            await goto('/admin', { invalidateAll: true });
+            await goto('/admin/events', { invalidateAll: true });
           }
         } else if (result.type === 'failure') {
           toast.error(result.data?.message || 'Failed to create event.');

@@ -151,7 +151,7 @@
 						{#if Array.isArray(userData?.user?.roles) && userData.user.roles.includes('admin')}
 							<li>
 								<a
-									href="/admin"
+									href="/admin/events"
 									class="block px-4 py-2 hover:bg-base-200"
 									onclick={() => (menuOpen = false)}>Admin</a
 								>
@@ -245,7 +245,7 @@
 
 					{#if Array.isArray(userData?.user?.roles) && userData.user.roles.includes('admin')}
 						<a
-							href="/admin"
+							href="/admin/events"
 							class="block rounded-xl px-4 py-3 hover:bg-base-200"
 							onclick={closeMobileMenu}
 							>Admin</a
