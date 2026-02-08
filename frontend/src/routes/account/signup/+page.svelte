@@ -34,13 +34,13 @@
 	const { form: formData, allErrors, submitting, enhance } = form;
 </script>
 
-<div class="min-h-screen w-full px-4 py-10 sm:py-12">
+<div class="min-h-screen w-full flex items-center">
 	<div class="mx-auto flex w-full max-w-2xl flex-col items-center justify-center">
 		<div class="card card-border w-full border-base-content/5 bg-white shadow">
-			<div class="card-body p-5 sm:p-8">
-				<div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+			<div class="card-body p-6 sm:p-8">
+				<div class="flex flex-col gap-1">
 					<h1 class="text-3xl font-extrabold leading-tight">EventSquare</h1>
-					<h2 class="text-lg font-medium sm:text-right">Register / สมัครสมาชิก</h2>
+					<p class="text-sm text-base-content/70">Register / สมัครสมาชิก</p>
 				</div>
 
 				<form method="POST" use:enhance class="mt-4 flex w-full flex-col gap-4">
