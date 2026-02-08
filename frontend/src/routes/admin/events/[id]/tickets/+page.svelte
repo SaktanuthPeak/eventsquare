@@ -46,6 +46,9 @@
 		<div class="flex gap-2">
 			<a class="btn btn-ghost" href="/admin/events">Back</a>
 			{#if event}
+				<a class="btn btn-outline" href={`/admin/events/${event.id}/edit/upload-image`}
+					>Upload image</a
+				>
 				<a class="btn btn-outline" href={`/admin/events/${event.id}/edit`}>Edit event</a>
 			{/if}
 		</div>

@@ -152,34 +152,13 @@
             />
         </div>
       </div>
-
-      {#if mode === 'edit'}
-        <!-- Event Image -->
-        <div class="p-6 border border-primary/20 rounded-lg flex flex-col gap-1">
-          <div class="flex gap-1 text-gray-700">
-            <h3 class="text-lg text-gray-700 font-semibold flex gap-2">
-              <Image size={24} weight="fill" />
-              Event Image
-            </h3>
-          </div>
-
-          <FileInput
-            {form}
-            bind:files={$file}
-            name="image"
-            label="Upload Image"
-            description="JPEG or PNG, max 5MB"
-          />
-        </div>
-      {:else}
         <div class="p-6 border border-base-200 rounded-lg bg-base-100">
           <h3 class="text-lg font-semibold text-gray-700">Event Image</h3>
           <p class="mt-1 text-sm text-base-content/70">
             Upload the image after creating the event (on the Ticket management page).
           </p>
         </div>
-      {/if}
-
+        
     {#if mode === 'create'}
       <!-- Tickets -->
       <TicketTypeDraftEditor bind:json={$formData.ticket_types} />

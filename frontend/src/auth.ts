@@ -51,8 +51,6 @@ export const handleUserAuth: Handle = async ({ event, resolve }) => {
         );
     }
 
-    // not sure, read from this guide https://docs.directus.io/blog/directus-auth-sveltekit.html#create-the-login-form
-    // this is needed so that the response headers from SvelteKit do include the correct header to allow the browser to parse json requests
     try {
         return await resolve(event, {
             filterSerializedResponseHeaders: (key) => {

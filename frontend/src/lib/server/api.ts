@@ -62,7 +62,6 @@ export async function apiFetch<T>(
 	try {
 		const res = await event.fetch(API_ENDPOINT + endpoint, config);
 
-		// Handle non-OK response
 		if (!res.ok) {
 			const contentType = res.headers.get('Content-Type') || '';
 			const data = contentType.includes('application/json')
@@ -79,9 +78,8 @@ export async function apiFetch<T>(
 			return { error: data.detail, response: res, status: res.status };
 		}
 
-		const data = await res.json(); // Assuming API always returns JSON when successful
+		const data = await res.json(); 
 		return { data, response: res, status: res.status, headers: res.headers };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (err: any) {
 		console.error('API Fetch Error:', err);
 		if (isRedirect(err)) {

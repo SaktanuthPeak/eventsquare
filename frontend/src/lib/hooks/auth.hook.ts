@@ -47,14 +47,12 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 			return;
 		}
 
-		// Configure API client with access token (if present)
 		if (accessToken) {
 			locals.client?.setConfig?.({
 				headers: { Authorization: `Bearer ${accessToken}` }
 			});
 		}
 
-		// Refresh token if access token is expired
 		if (isTokenExpired(accessToken)) {
 			if (!isTokenExpired(refreshToken)) {
 				try {
@@ -88,7 +86,6 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 			}
 		}
 
-		// Fetch user profile (best-effort for non-admin routes)
 		try {
 			const meRes = await getMe({
 				client: locals.client
@@ -115,7 +112,6 @@ export const authHandler: Handle = async ({ event, resolve }) => {
 		logout(cookies);
 		locals.user = undefined;
 
-		// Allow rendering the login page without redirect loop
 		if (pathname === '/account/login') {
 			return await resolve(event);
 		}
