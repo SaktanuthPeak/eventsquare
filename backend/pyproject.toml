@@ -24,6 +24,7 @@ redis = "^7.1.0"
 google-cloud-pubsub = "^2.34.0"
 google-cloud-storage = "^3.9.0"
 apscheduler = "^3.11.2"
+python-dateutil = "^2.9.0.post0"
 
 [tool.poetry.group.dev.dependencies]
 uvicorn = "^0.34.0"

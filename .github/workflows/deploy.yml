@@ -20,5 +20,8 @@ jobs:
         script: |
           cd /home/${{ secrets.GCP_USERNAME }}/eventsquare
           git pull origin main
+          cd backend
+          poetry lock
+          cd ..
           docker compose up -d --build
           docker image prune -f
