@@ -1,10 +1,10 @@
-import { API_URL } from '$env/static/private';
+import { PUBLIC_API_URL } from '$env/static/private';
 import type { Cookies } from '@sveltejs/kit';
 import type { JwtPayload } from 'jwt-decode';
 
 export const getUserProfile = async (access_token: string | null) => {
     try {
-        const response = await fetch(`${API_URL}/api/v1/auth/me`, {
+        const response = await fetch(`${PUBLIC_API_URL}/api/v1/auth/me`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export async function refreshAccessToken(cookies: Cookies) {
     if (cookies.get('refresh_token')) {
         try {
             // use refresh token
-            const response = await fetch(`${API_URL}/api/v1/auth/refresh_token`, {
+            const response = await fetch(`${PUBLIC_API_URL}/api/v1/auth/refresh_token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

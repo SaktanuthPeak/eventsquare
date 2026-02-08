@@ -36,7 +36,7 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
                     });
                     eventsWithImages.push({
                         ...event,
-                        image_url: `${env.API_URL}/v1/images/${imageRes?.data}`
+                        image_url: `${env.PUBLIC_API_URL}/v1/images/${imageRes?.data}`
                     });
                 } catch (error) {
                     console.log(error);
