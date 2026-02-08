@@ -25,7 +25,6 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
             const res = await getEvents({client: client});
             events = res.data?.items ?? [];
         }
-        console.log(events);
 
         const eventsWithImages = [];
         for (const event of events) {
