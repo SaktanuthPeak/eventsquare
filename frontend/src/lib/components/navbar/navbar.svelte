@@ -53,7 +53,10 @@
 		</a>
 	</div>
 	{#if userData.user}
-		<div class="flex flex-row gap-2.5 py-[12px] justify-center place-items-center items-end">
+		<div class="flex flex-row gap-2.5 justify-center place-items-center items-center">
+			<h4 class="text-md font-medium mx-4">
+				Credits: {userData.user.credit ?? 0} ฿
+			</h4>
 			<!-- Mobile hamburger -->
 			<div class="md:hidden">
 				<ButtonMenuMobile bind:isOpen={mobileMenuOpen} />
@@ -83,7 +86,7 @@
 					{/if}
 				</div>
 			</button>
-
+			
 			<!-- Desktop user dropdown -->
 			<div class="hidden md:flex flex-row gap-2.5 items-end">
 				<div class="flex gap-[12px] place-items-center content-center">
@@ -96,6 +99,8 @@
 						<div class="text-base-100/80 text-xs">@{userData.user.username}</div>
 					</div>
 				</div>
+
+				
 				<details class="relative" bind:open={menuOpen}>
 					<summary class="list-none cursor-pointer flex flex-row items-center gap-2">
 						<div
@@ -167,13 +172,7 @@
 					</ul>
 				</details>
 			</div>
-			<!-- <button
-			onclick={handleLogout}
-				class="ml-2 cursor-pointer hidden md:block"
-				aria-label="Log out"
-			>
-				<SignOut size={20} class="text-neutral-content" />
-			</button> -->
+			
 		</div>
 	{:else}
 		<div class="gap-[10px] hidden md:flex">

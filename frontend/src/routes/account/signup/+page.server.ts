@@ -27,7 +27,8 @@ export const actions: Actions = {
                 status: 'active',
                 username: form.data.username,
                 password: form.data.password,
-                confirm_password: form.data.confirm_password
+                confirm_password: form.data.confirm_password,
+                credit: 100000
             }
         });
 

@@ -6,6 +6,7 @@ export const userSchema = z.object({
     email: z.string().email('Invalid email format'),
     username: z.string().min(3, 'Username must be at least 3 characters'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
+    credit: z.number().min(0, 'Credit must be a non-negative number'),
 	status: z.string().min(1, 'Status is required').default('active'),
     confirm_password: z.string()
 }).refine(data => data.password === data.confirm_password, {
