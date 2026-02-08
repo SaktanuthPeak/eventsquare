@@ -10,8 +10,6 @@ export const load: PageServerLoad = (async ({locals}) => {
         });
         
         const tickets = ticketsRes.data || [];
-
-        console.log("User tickets response:", tickets);
         return { tickets };
 
     } catch (error) {

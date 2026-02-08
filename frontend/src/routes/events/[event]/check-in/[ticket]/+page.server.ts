@@ -29,8 +29,6 @@ export const load = (async (event) => {
     } catch (err) {
         console.error('Error fetching ticket:', err);
     }
-    
-    console.log("Loaded ticket data:", ticketData);
     return {
         eventId: event.params.event,
         ticket: event.params.ticket,

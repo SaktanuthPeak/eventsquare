@@ -15,11 +15,8 @@
     superForm<z.infer<typeof eventFormSchema>>(data.form as any, {
       validators: zodClient(eventFormSchema as any),
       customValidity: true,
-      onSubmit: async () => {
-        console.log('[DEBUG] Submitting create event form with data:', get(form.form));
-      },
+
       onResult: async ({ result }) => {
-        console.log(result);
         if (result.type === 'success') {
           toast.success('Event created successfully!');
           const createdEventId = (result.data as any)?.createdEventId as string | undefined;
