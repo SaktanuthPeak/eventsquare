@@ -39,3 +39,4 @@ htmlcov/
 # Docker
 *.dockerignore
 docker-compose.override.yml
+.python-version
